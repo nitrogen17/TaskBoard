@@ -1,0 +1,4 @@
+name=Kanban Board
+id=kanban_board
+description=Adds a Jira-style kanban board for managing tasks.
+version=1.0
