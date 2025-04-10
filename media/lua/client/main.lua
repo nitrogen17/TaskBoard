@@ -41,19 +41,21 @@ end
 function drawLeftHeaderSection()
     sectionLeftHeaderPanel = MISPanel:new(0, mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
     sectionLeftHeaderPanel:initialise()
-    sectionLeftHeaderPanel:setTitle("Hello World!")
+    sectionLeftHeaderPanel:setTitle("To Do")
     mainWindow:addChild(sectionLeftHeaderPanel)
 end
 
 function drawMiddleHeaderSection() 
-    sectionMiddleHeaderPanel = ISPanel:new(sectionLeftHeaderPanel:getWidth(), mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
+    sectionMiddleHeaderPanel = MISPanel:new(sectionLeftHeaderPanel:getWidth(), mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
     sectionMiddleHeaderPanel:initialise()
+    sectionMiddleHeaderPanel:setTitle("In Progress")
     mainWindow:addChild(sectionMiddleHeaderPanel)
 end
 
 function drawRightHeaderSection() 
-    sectionRightHeaderPanel = ISPanel:new(sectionLeftHeaderPanel:getWidth() * 2, mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
+    sectionRightHeaderPanel = MISPanel:new(sectionLeftHeaderPanel:getWidth() * 2, mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
     sectionRightHeaderPanel:initialise()
+    sectionRightHeaderPanel:setTitle("Done")
     mainWindow:addChild(sectionRightHeaderPanel)
 end
 
