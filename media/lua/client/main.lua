@@ -63,17 +63,35 @@ function drawLeftSection()
     childLeftPanel = ISPanel:new(0, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), mainWindowSplitIntoThree, mainWindow.height)
     childLeftPanel:initialise()
     --childLeftPanel.backgroundColor = {r=0.3, g=0, b=0, a=1}
+
+    leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    leftListBox:initialise()
+    leftListBox:addItem("Get Water", {})
+
+    childLeftPanel:addChild(leftListBox)
     mainWindow:addChild(childLeftPanel)
 end
 
 function drawMiddleSection()
     childMiddlePanel = ISPanel:new(mainWindowSplitIntoThree, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), mainWindowSplitIntoThree, mainWindow.height)
     childMiddlePanel:initialise()
+
+    middleListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    middleListBox:initialise()
+    middleListBox:addItem("Get Water", {})
+
+    childMiddlePanel:addChild(middleListBox)
     mainWindow:addChild(childMiddlePanel)
 end
 
 function drawRightSection()
     childRightPanel = ISPanel:new(mainWindowSplitIntoThree * 2, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), mainWindowSplitIntoThree, mainWindow.height)
     childRightPanel:initialise()
+
+    rightListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    rightListBox:initialise()
+    rightListBox:addItem("Get Water", {})
+
+    childRightPanel:addChild(rightListBox)
     mainWindow:addChild(childRightPanel)
 end
