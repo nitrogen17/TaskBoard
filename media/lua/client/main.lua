@@ -66,52 +66,9 @@ function drawLeftSection()
 
     leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
     leftListBox:initialise()
-    --leftListBox:addItem("Get Water", {})
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
-
-    leftListBox:addItem("Card Label", {
-        title = "Task Title",
-        description = "This is the description of the task."
-    })
+    leftListBox:addItem("Get Water", {})
+    leftListBox:addItem("Get Water", {})
+    leftListBox:addItem("Get Water", {})
 
     childLeftPanel:addChild(leftListBox)
     mainWindow:addChild(childLeftPanel)
