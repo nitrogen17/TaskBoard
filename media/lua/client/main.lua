@@ -28,8 +28,31 @@ end
 function drawSectionHeaderPanel() 
     sectionHeaderPanel = ISPanel:new(0, mainWindow:titleBarHeight(), mainWindow.width, mainWindow:titleBarHeight() * 2)
     sectionHeaderPanel:initialise()
-    sectionHeaderPanel.backgroundColor = {r=0, g=0, b=0.3, a=1}
-    mainWindow:addChild(sectionHeaderPanel)  
+    mainWindow:addChild(sectionHeaderPanel)
+
+    drawLeftHeaderSection()
+    drawMiddleHeaderSection()
+    drawRightHeaderSection() 
+end
+
+function drawLeftHeaderSection()
+    sectionHeaderPanelWidth = mainWindow.width / 3
+
+    sectionLeftHeaderPanel = ISPanel:new(0, mainWindow:titleBarHeight(), sectionHeaderPanelWidth, mainWindow:titleBarHeight() * 2)
+    sectionLeftHeaderPanel:initialise()
+    mainWindow:addChild(sectionLeftHeaderPanel)
+end
+
+function drawMiddleHeaderSection() 
+    sectionMiddleHeaderPanel = ISPanel:new(sectionLeftHeaderPanel:getWidth(), mainWindow:titleBarHeight(), sectionHeaderPanelWidth, mainWindow:titleBarHeight() * 2)
+    sectionMiddleHeaderPanel:initialise()
+    mainWindow:addChild(sectionMiddleHeaderPanel)
+end
+
+function drawRightHeaderSection() 
+    sectionRightHeaderPanel = ISPanel:new(sectionLeftHeaderPanel:getWidth() * 2, mainWindow:titleBarHeight(), sectionHeaderPanelWidth, mainWindow:titleBarHeight() * 2)
+    sectionRightHeaderPanel:initialise()
+    mainWindow:addChild(sectionRightHeaderPanel)
 end
 
 function drawLeftSection()
@@ -37,8 +60,7 @@ function drawLeftSection()
     
     childLeftPanel = ISPanel:new(0, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), sectionPanelWidth, mainWindow.height)
     childLeftPanel:initialise()
-    childLeftPanel.backgroundColor = {r=0.3, g=0, b=0, a=1}
-    
+    --childLeftPanel.backgroundColor = {r=0.3, g=0, b=0, a=1}
     mainWindow:addChild(childLeftPanel)
 end
 
