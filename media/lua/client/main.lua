@@ -71,6 +71,18 @@ function drawLeftSection()
 
     leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
     leftListBox:initialise()
+
+    -- Read directly on Persistency Manager
+    local tasks = PersistencyManager.data.tasks
+
+    if tasks then
+        for _, task in ipairs(tasks) do
+            print(task.title)
+        end
+    else
+        print("No tasks found.")
+    end
+
     leftListBox:addItem("Get Water", {})
     leftListBox:addItem("Get Water", {})
     leftListBox:addItem("Get Water", {})
