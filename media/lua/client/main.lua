@@ -1,7 +1,12 @@
 require('ISUI/ISPanel')
+require('PersistencyWorker')
 
 function main()
     drawKanbanBoard()
+
+    --PersistencyManager.readTasks()
+
+    PersistencyManager.readById("1000000005")  -- Read task by ID
 end
 
 function drawKanbanBoard()

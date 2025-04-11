@@ -6,6 +6,7 @@ PersistencyManager.data = ModData.getOrCreate("MyMod_TaskList")
 
 -- CREATE / ADD a single task
 function PersistencyManager.createTask(task)
+    print("[DEBUG] perform createTask")
     if PersistencyManager.data.tasks == nil then
         PersistencyManager.data.tasks = {}
     end
@@ -15,13 +16,12 @@ function PersistencyManager.createTask(task)
     task.updatedAt = now
 
     table.insert(PersistencyManager.data.tasks, task)
-    print("Added task: " .. task.title)
 end
 
 
 -- READ all tasks
 function PersistencyManager.readTasks()
-    print("Current Tasks:")
+    print("[DEBUG] perform readTasks")
     for _, task in ipairs(PersistencyManager.data.tasks) do
         print(string.format([[
 ID: %s
@@ -41,6 +41,7 @@ end
 
 -- READ a task by ID
 function PersistencyManager.readById(taskId)
+    print("[DEBUG] perform readById: ", taskId)
     for _, task in ipairs(PersistencyManager.data.tasks) do
         if task.id == taskId then
             print(string.format([[
@@ -59,11 +60,12 @@ Last Modified by: %s (%s)
             return
         end
     end
-    print("Task with ID " .. taskId .. " not found.")
+    print("[DEBUG] Task with ID " .. taskId .. " not found.")
 end
 
 -- UPDATE a task by ID
 function PersistencyManager.updateTaskById(taskId, updatedFields)
+    print("[DEBUG] perform updateTaskById: ", taskId)
     for _, task in ipairs(PersistencyManager.data.tasks) do
         if task.id == taskId then
             for key, value in pairs(updatedFields) do
@@ -74,11 +76,12 @@ function PersistencyManager.updateTaskById(taskId, updatedFields)
             return
         end
     end
-    print("Task with ID " .. taskId .. " not found for update.")
+    print("[DEBUG] Task with ID " .. taskId .. " not found for update.")
 end
 
 -- DELETE a task by ID
 function PersistencyManager.deleteTaskById(taskId)
+    print("[DEBUG] perform deleteTaskByID: ", taskId)
     for i = #PersistencyManager.data.tasks, 1, -1 do
         if PersistencyManager.data.tasks[i].id == taskId then
             table.remove(PersistencyManager.data.tasks, i)
@@ -86,7 +89,7 @@ function PersistencyManager.deleteTaskById(taskId)
             return
         end
     end
-    print("Task with ID " .. taskId .. " not found for deletion.")
+    print("[DEBUG] Task with ID " .. taskId .. " not found for deletion.")
 end
 
 return PersistencyWorker
