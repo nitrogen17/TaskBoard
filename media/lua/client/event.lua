@@ -8,5 +8,5 @@ require 'test'
 
 -- Event
 --Events.OnGameStart.Add(main)
-Events.OnGameStart.Add(test)
+Events.OnGameStart.Add(main)
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
