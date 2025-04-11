@@ -1,5 +1,4 @@
 require('ISUI/ISPanel')
-require('Helper')
 
 function main()
     drawKanbanBoard()
