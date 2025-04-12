@@ -20,16 +20,61 @@ function drawAllSections()
     renderDataToSections() 
 end
 
-function renderDataToSections() 
-    for id, todo in pairs(PersistencyManager.fetchTodos()) do
+function renderDataToSections()
+    local leftTodos = {}
+    local middleTodos = {}
+    local rightTodos = {}
+
+    -- Group todos by section
+    for _, todo in pairs(PersistencyManager.fetchTodos()) do
         if todo.sectionID == 1 then
-            leftListBox:addItem(todo.title, todo)
+            table.insert(leftTodos, todo)
         elseif todo.sectionID == 2 then
-            middleListBox:addItem(todo.title, todo)
+            table.insert(middleTodos, todo)
         elseif todo.sectionID == 3 then
-            rightListBox:addItem(todo.title, todo)
+            table.insert(rightTodos, todo)
         end
     end
+
+    -- -- Sort function by updatedAt descending
+    -- local function sortByUpdatedAtDesc(a, b)
+    --     return a.updatedAt > b.updatedAt
+    -- end
+
+    -- table.sort(leftTodos, sortByUpdatedAtDesc)
+    -- table.sort(middleTodos, sortByUpdatedAtDesc)
+    -- table.sort(rightTodos, sortByUpdatedAtDesc)
+
+    -- Sort function by updatedAt ascending (older updates first, newer last)
+    local function sortByUpdatedAtAsc(a, b)
+        return a.updatedAt < b.updatedAt
+    end
+
+    table.sort(leftTodos, sortByUpdatedAtAsc)
+    table.sort(middleTodos, sortByUpdatedAtAsc)
+    table.sort(rightTodos, sortByUpdatedAtAsc)
+
+
+    -- Clear existing items (optional, if your UI requires it)
+    leftListBox:clear()
+    middleListBox:clear()
+    rightListBox:clear()
+
+    -- Add sorted items to each list
+    for _, todo in ipairs(leftTodos) do
+        leftListBox:addItem(todo.title, todo)
+    end
+    for _, todo in ipairs(middleTodos) do
+        middleListBox:addItem(todo.title, todo)
+    end
+    for _, todo in ipairs(rightTodos) do
+        rightListBox:addItem(todo.title, todo)
+    end
+
+    -- Scroll to bottom of each list
+    -- leftListBox.scrollPosition = #leftTodos * leftListBox.itemheight
+    -- middleListBox.scrollPosition = #middleTodos * middleListBox.itemheight
+    -- rightListBox.scrollPosition = #rightTodos * rightListBox.itemheight
 end
 
 function clearDataToSections()
@@ -91,7 +136,7 @@ function drawLeftSection()
     childLeftPanel:initialise()
     --childLeftPanel.backgroundColor = {r=0.3, g=0, b=0, a=1}
 
-    leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight() - (mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight()))
     leftListBox:initialise()
 
     childLeftPanel:addChild(leftListBox)
@@ -102,7 +147,7 @@ function drawMiddleSection()
     childMiddlePanel = ISPanel:new(mainWindowSplitIntoThree, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), mainWindowSplitIntoThree, mainWindow.height)
     childMiddlePanel:initialise()
 
-    middleListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    middleListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight() - (mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight()))
     middleListBox:initialise()
 
     childMiddlePanel:addChild(middleListBox)
@@ -113,7 +158,7 @@ function drawRightSection()
     childRightPanel = ISPanel:new(mainWindowSplitIntoThree * 2, mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight(), mainWindowSplitIntoThree, mainWindow.height)
     childRightPanel:initialise()
 
-    rightListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    rightListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight() - (mainWindow:titleBarHeight() + sectionHeaderPanel:getHeight()))
     rightListBox:initialise()
 
     childRightPanel:addChild(rightListBox)

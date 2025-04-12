@@ -28,7 +28,7 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         context:addOption("Title: " .. task.title, self, self.onContextOption, itemIndex)
         context:addOption("View Task", self, self.onViewTask)
         context:addOption("Edit Task", self, self.onEditTask)
-        context:addOption("Delete", self, self.onDeleteTask)
+        context:addOption("Delete", self, self.onDeleteTask, task)
 
         local moveSubMenu = ISContextMenu:getNew(context)
         context:addSubMenu(context:addOption("Move", self, nil), moveSubMenu)
@@ -65,6 +65,21 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     newTask.sectionID = targetSection
 
     PersistencyManager.updateTodo(newTask.id, newTask)
+
+    clearDataToSections()
+    renderDataToSections() 
+end
+
+function MISScrollingListBox:onViewTask(item)
+    print("[CONTEXT] View Task clicked:")
+end
+
+function MISScrollingListBox:onEditTask(item)
+    print("[CONTEXT] Edit Task clicked:")
+end
+
+function MISScrollingListBox:onDeleteTask(task)
+    PersistencyManager.deleteTodo(task.id)
 
     clearDataToSections()
     renderDataToSections() 
