@@ -8,24 +8,20 @@ function MISScrollingListBox:initialise()
 end
 
 -- Overriding the addItem function
-function MISScrollingListBox:addItem(item)
-    table.insert(self.tableTasks, item)
-    print("Table insert")
-    ISScrollingListBox.addItem(self, item)  
+function MISScrollingListBox:addItem(title, todo)
+    table.insert(self.tableTasks, todo)
+    ISScrollingListBox.addItem(self, title)  
 end
 
 function MISScrollingListBox:onRightMouseDown(x, y)
     local itemIndex = self:rowAt(x, y)
-    print("[DEBUG] pressed right click")
-    print("[DEBUG@@@] ", self.tableName)
 
-    print("[#######]", self.tableTasks[itemIndex].description)
-
-
-    if itemIndex and self.items[itemIndex] then
+    if itemIndex and self.tableTasks[itemIndex] then
         local context = ISContextMenu.get(0, getMouseX(), getMouseY())
 
-        context:addOption("Title: ", self, self.onContextOption, itemIndex)
+        print("[#######]", self.tableTasks[itemIndex].title)
+
+        context:addOption("Title: " .. self.tableTasks[itemIndex].title, self, self.onContextOption, itemIndex)
         context:addOption("View Task", self, self.onViewTask)
         context:addOption("Edit Task", self, self.onEditTask)
         context:addOption("Delete", self, self.onDeleteTask)
@@ -42,8 +38,6 @@ end
 
 function MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
-    object.tableID = 0
-    object.tableName = ""
     object.tableTasks = {}
 
     -- Deselect any item initially
