@@ -18,10 +18,12 @@ function MISScrollingListBox:onRightMouseDown(x, y)
 
     if itemIndex and self.tableTasks[itemIndex] then
         local context = ISContextMenu.get(0, getMouseX(), getMouseY())
+        local task = self.tableTasks[itemIndex]
+        local sectionID = self.tableTasks[itemIndex].sectionID
 
-        print("[#######]", self.tableTasks[itemIndex].title)
+        print("[#######]", task.title)
 
-        context:addOption("Title: " .. self.tableTasks[itemIndex].title, self, self.onContextOption, itemIndex)
+        context:addOption("Title: " .. task.title, self, self.onContextOption, itemIndex)
         context:addOption("View Task", self, self.onViewTask)
         context:addOption("Edit Task", self, self.onEditTask)
         context:addOption("Delete", self, self.onDeleteTask)
@@ -29,8 +31,17 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         local moveSubMenu = ISContextMenu:getNew(context)
         context:addSubMenu(context:addOption("Move", self, nil), moveSubMenu)
 
-        moveSubMenu:addOption("In Progress", self, self.onMoveTask)
-        moveSubMenu:addOption("Done", self, self.onMoveTask)
+        if sectionID == 1 then
+            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task)
+            moveSubMenu:addOption("Done", self, self.onMoveTask, task)
+        elseif sectionID == 2 then
+            
+            moveSubMenu:addOption("Done", self, self.onMoveTask, task)
+            moveSubMenu:addOption("To Do", self, self.onMoveTask, task)
+        elseif sectionID == 3 then
+            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task)
+            moveSubMenu:addOption("To Do", self, self.onMoveTask, task)
+        end
     end
 
     return false -- safely handle empty space clicks
