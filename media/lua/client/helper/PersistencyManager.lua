@@ -112,7 +112,7 @@ function PersistencyManager.addMockTodos()
     local mockTodos = {
         {
             id = "1000000001",
-            title = "Scout the Area",
+            title = "1 - Scout the Area",
             description = "Explore the nearby houses for supplies.",
             color = "blue",
             sectionID = 1,
@@ -125,7 +125,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000002",
-            title = "Barricade Base",
+            title = "2 - Barricade Base",
             description = "Use planks and nails to secure windows.",
             color = "red",
             sectionID = 2,
@@ -138,7 +138,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000003",
-            title = "Collect Rainwater",
+            title = "3 - Collect Rainwater",
             description = "Set up rain collectors on the roof.",
             color = "green",
             sectionID = 3,
@@ -151,7 +151,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000004",
-            title = "Scavenge Grocery Store",
+            title = "4 - Scavenge Grocery Store",
             description = "Find canned goods and bottled water.",
             color = "orange",
             sectionID = 1,
@@ -164,7 +164,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000005",
-            title = "Repair Broken Door",
+            title = "5 - Repair Broken Door",
             description = "Replace the front door of the safehouse.",
             color = "red",
             sectionID = 2,
@@ -177,7 +177,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000006",
-            title = "Refuel Generator",
+            title = "6 - Refuel Generator",
             description = "Add gasoline to keep the generator running.",
             color = "blue",
             sectionID = 2,
@@ -190,7 +190,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000007",
-            title = "Explore Hardware Store",
+            title = "7 - Explore Hardware Store",
             description = "Search for nails, hammers, and tools.",
             color = "purple",
             sectionID = 1,
@@ -203,7 +203,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000008",
-            title = "Cook Dinner",
+            title = "8 - Cook Dinner",
             description = "Prepare a meal using available ingredients.",
             color = "green",
             sectionID = 3,
@@ -216,7 +216,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000009",
-            title = "Clean Up Blood",
+            title = "9 - Clean Up Blood",
             description = "Sanitize the floors to prevent infection.",
             color = "red",
             sectionID = 2,
@@ -229,7 +229,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000010",
-            title = "Set Up Perimeter Traps",
+            title = "10 - Set Up Perimeter Traps",
             description = "Lay traps around the base for defense.",
             color = "orange",
             sectionID = 1,
@@ -242,7 +242,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000011",
-            title = "Patch Roof Holes",
+            title = "11 - Patch Roof Holes",
             description = "Fix the leaking roof to keep out rain.",
             color = "blue",
             sectionID = 2,
@@ -255,7 +255,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000012",
-            title = "Organize Medical Supplies",
+            title = "12 - Organize Medical Supplies",
             description = "Sort and catalog all bandages and meds.",
             color = "green",
             sectionID = 3,
@@ -268,7 +268,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000013",
-            title = "Check Radio for Broadcasts",
+            title = "13 - Check Radio for Broadcasts",
             description = "Scan frequencies for survivor updates.",
             color = "purple",
             sectionID = 1,
@@ -281,7 +281,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000014",
-            title = "Harvest Crops",
+            title = "14 - Harvest Crops",
             description = "Collect tomatoes and potatoes from garden.",
             color = "green",
             sectionID = 3,
@@ -294,7 +294,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000015",
-            title = "Check Water Supply",
+            title = "15 - Check Water Supply",
             description = "Inspect rain barrels for usable water.",
             color = "blue",
             sectionID = 2,
@@ -307,7 +307,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000016",
-            title = "Craft More Bandages",
+            title = "16 - Craft More Bandages",
             description = "Rip clothing to make emergency bandages.",
             color = "red",
             sectionID = 2,
@@ -320,7 +320,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000017",
-            title = "Secure Second Floor",
+            title = "17 - Secure Second Floor",
             description = "Board up windows upstairs.",
             color = "orange",
             sectionID = 1,
@@ -333,7 +333,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000018",
-            title = "Train with Melee Weapons",
+            title = "18 - Train with Melee Weapons",
             description = "Practice using bats and knives.",
             color = "purple",
             sectionID = 3,
@@ -346,7 +346,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000019",
-            title = "Reinforce Main Gate",
+            title = "19 - Reinforce Main Gate",
             description = "Add scrap metal for extra protection.",
             color = "red",
             sectionID = 2,
@@ -359,7 +359,7 @@ function PersistencyManager.addMockTodos()
         },
         {
             id = "1000000020",
-            title = "Build Compost Bin",
+            title = "20 - Build Compost Bin",
             description = "Start converting waste into fertilizer.",
             color = "green",
             sectionID = 3,
@@ -369,138 +369,8 @@ function PersistencyManager.addMockTodos()
             lastUserModifiedID = "1253",
             lastUserModifiedName = "Nova",
             status = "Done"
-        },
-        {
-            id = "1000000021",
-            title = "Make Noise Trap",
-            description = "Create a sound distraction for zombies.",
-            color = "orange",
-            sectionID = 1,
-            tableIndex = 21,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1254",
-            lastUserModifiedName = "Kai",
-            status = "Requested"
-        },
-        {
-            id = "1000000022",
-            title = "Clear Nearby Forest",
-            description = "Cut trees for wood and improve sightlines.",
-            color = "blue",
-            sectionID = 2,
-            tableIndex = 22,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1255",
-            lastUserModifiedName = "Sage",
-            status = "In Progress"
-        },
-        {
-            id = "1000000023",
-            title = "Set Up Storage Room",
-            description = "Organize all food and supplies in one place.",
-            color = "purple",
-            sectionID = 1,
-            tableIndex = 23,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1256",
-            lastUserModifiedName = "Drew",
-            status = "Requested"
-        },
-        {
-            id = "1000000024",
-            title = "Clean Water Filters",
-            description = "Ensure filters are working properly.",
-            color = "green",
-            sectionID = 3,
-            tableIndex = 24,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1257",
-            lastUserModifiedName = "Quinn",
-            status = "Done"
-        },
-        {
-            id = "1000000025",
-            title = "Rescue Trapped Survivor",
-            description = "Check gas station basement for signs of life.",
-            color = "red",
-            sectionID = 2,
-            tableIndex = 25,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1258",
-            lastUserModifiedName = "Rae",
-            status = "In Progress"
-        },
-        {
-            id = "1000000026",
-            title = "Craft Metal Barriers",
-            description = "Forge makeshift armor for windows.",
-            color = "blue",
-            sectionID = 2,
-            tableIndex = 26,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1259",
-            lastUserModifiedName = "Blake",
-            status = "In Progress"
-        },
-        {
-            id = "1000000027",
-            title = "Build Chicken Coop",
-            description = "Raise chickens for sustainable food.",
-            color = "green",
-            sectionID = 3,
-            tableIndex = 27,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1260",
-            lastUserModifiedName = "Harper",
-            status = "Done"
-        },
-        {
-            id = "1000000028",
-            title = "Map Local Area",
-            description = "Document roads, buildings, and threats.",
-            color = "purple",
-            sectionID = 1,
-            tableIndex = 28,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1261",
-            lastUserModifiedName = "Jordan",
-            status = "Requested"
-        },
-        {
-            id = "1000000029",
-            title = "Craft Herbal Medicine",
-            description = "Use foraged herbs to create remedies.",
-            color = "green",
-            sectionID = 3,
-            tableIndex = 29,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1262",
-            lastUserModifiedName = "Emery",
-            status = "Done"
-        },
-        {
-            id = "1000000030",
-            title = "Dig Latrine",
-            description = "Set up a proper outdoor toilet system.",
-            color = "blue",
-            sectionID = 2,
-            tableIndex = 30,
-            createdAt = now,
-            updatedAt = now,
-            lastUserModifiedID = "1263",
-            lastUserModifiedName = "Charlie",
-            status = "In Progress"
         }
-    }    
+    }
 
     for _, todo in ipairs(mockTodos) do
         PersistencyManager.createTodo(todo)

@@ -32,6 +32,17 @@ function renderDataToSections()
     end
 end
 
+function clearDataToSections()
+    leftListBox.items = {}
+    leftListBox.tableTasks = {}
+
+    middleListBox.items = {}
+    middleListBox.tableTasks = {}
+
+    rightListBox.items = {}
+    rightListBox.tableTasks = {}
+end
+
 function drawMainWindow() 
     mainWindow = MISCollapsableWindow:new(0, 0, getCore():getScreenWidth() * 0.5, getCore():getScreenHeight() * 0.6)
     mainWindow:setX((getCore():getScreenWidth() * 0.5) - (mainWindow:getWidth() * 0.5))
