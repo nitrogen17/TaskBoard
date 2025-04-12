@@ -2,7 +2,9 @@ require('ISUI/ISScrollingListBox')
 require("main")
 
 MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
+
 local PersistencyManager = require("helper/PersistencyManager")
+local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
 
 function MISScrollingListBox:initialise()
     ISScrollingListBox.initialise(self)
@@ -25,8 +27,8 @@ function MISScrollingListBox:onRightMouseDown(x, y)
 
         print("[#######]", self.items[itemIndex].title)
 
-        context:addOption("Title: " .. task.title, self, self.onContextOption, itemIndex)
-        context:addOption("View Task", self, self.onViewTask)
+        context:addOption(task.title, self, self.onContextOption, itemIndex)
+        context:addOption("View Task", self, self.onViewTask, task)
         context:addOption("Edit Task", self, self.onEditTask)
         context:addOption("Delete", self, self.onDeleteTask, task)
 
@@ -70,8 +72,11 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     renderDataToSections() 
 end
 
-function MISScrollingListBox:onViewTask(item)
+function MISScrollingListBox:onViewTask(task)
     print("[CONTEXT] View Task clicked:")
+    local taskCard = TaskCardPanel:new()
+    taskCard:initialise(task)
+    taskCard:addToUIManager()
 end
 
 function MISScrollingListBox:onEditTask(item)
