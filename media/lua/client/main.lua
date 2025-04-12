@@ -1,6 +1,7 @@
 require('ISUI/ISPanel')
 
 local PersistencyManager = require("helper/PersistencyManager")
+local ISPlusIcon = require('client-ui/ISPanel/ISPlusIcon')
 
 function main()
     drawKanbanBoard()
@@ -114,7 +115,16 @@ function drawLeftHeaderSection()
     sectionLeftHeaderPanel = MISPanel:new(0, mainWindow:titleBarHeight(), mainWindowSplitIntoThree, mainWindow:titleBarHeight() * 2)
     sectionLeftHeaderPanel:initialise()
     sectionLeftHeaderPanel:setTitle("To Do")
+
+    drawPlusIcon()
+
     mainWindow:addChild(sectionLeftHeaderPanel)
+end
+
+function drawPlusIcon() 
+    local plusPanel = ISPlusIcon:new(0, 0, sectionLeftHeaderPanel:getHeight(), sectionLeftHeaderPanel:getHeight())
+    plusPanel:initialise();
+    sectionLeftHeaderPanel:addChild(plusPanel)
 end
 
 function drawMiddleHeaderSection() 
