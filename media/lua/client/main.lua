@@ -1,12 +1,9 @@
 require('ISUI/ISPanel')
-require('PersistencyWorker')
+
+local PersistencyManager = require("helper/PersistencyManager")
 
 function main()
     drawKanbanBoard()
-
-    --PersistencyManager.readTasks()
-
-    PersistencyManager.readById("1000000005")  -- Read task by ID
 end
 
 function drawKanbanBoard()
@@ -19,6 +16,20 @@ function drawAllSections()
     drawLeftSection()
     drawMiddleSection()
     drawRightSection()
+
+    renderDataToSections() 
+end
+
+function renderDataToSections() 
+    for id, todo in pairs(PersistencyManager.fetchTodos()) do
+        if todo.sectionID == 1 then
+            leftListBox:addItem(todo.title, todo)
+        elseif todo.sectionID == 2 then
+            middleListBox:addItem(todo.title, todo)
+        elseif todo.sectionID == 3 then
+            rightListBox:addItem(todo.title, todo)
+        end
+    end
 end
 
 function drawMainWindow() 
@@ -72,21 +83,6 @@ function drawLeftSection()
     leftListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
     leftListBox:initialise()
 
-    -- Read directly on Persistency Manager
-    local tasks = PersistencyManager.data.tasks
-
-    if tasks then
-        for _, task in ipairs(tasks) do
-            print(task.title)
-        end
-    else
-        print("No tasks found.")
-    end
-
-    leftListBox:addItem("Get Water", {})
-    leftListBox:addItem("Get Water", {})
-    leftListBox:addItem("Get Water", {})
-
     childLeftPanel:addChild(leftListBox)
     mainWindow:addChild(childLeftPanel)
 end
@@ -97,7 +93,6 @@ function drawMiddleSection()
 
     middleListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
     middleListBox:initialise()
-    middleListBox:addItem("Get Water", {})
 
     childMiddlePanel:addChild(middleListBox)
     mainWindow:addChild(childMiddlePanel)
@@ -109,7 +104,6 @@ function drawRightSection()
 
     rightListBox = MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
     rightListBox:initialise()
-    rightListBox:addItem("Get Water", {})
 
     childRightPanel:addChild(rightListBox)
     mainWindow:addChild(childRightPanel)
