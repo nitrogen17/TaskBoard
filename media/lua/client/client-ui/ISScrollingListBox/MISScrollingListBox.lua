@@ -71,9 +71,16 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         local task = self.tableTasks[itemIndex]
         local sectionID = self.tableTasks[itemIndex].sectionID
 
+        local o = context
+
         -- Store the selected item and its sectionID globally
         selectedData.x = sectionID
         selectedData.y = itemIndex
+
+        o.borderColor = {r=0.6, g=0.0, b=0.0, a=0.4}
+        o.backgroundColor = {r=0.2, g=0.0, b=0.0, a=0.9}
+        o.backgroundColorMouseOver = {r=0.4, g=0.0, b=0.0, a=1.0}
+        
 
         context:addOption("View Task", self, self.onViewTask, task)
         context:addOption("Edit Task", self, self.onEditTask, task)
@@ -82,6 +89,12 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         local moveSubMenu = ISContextMenu:getNew(context)
         context:addSubMenu(context:addOption("Move", self, nil), moveSubMenu)
 
+        o = moveSubMenu
+
+        o.borderColor = {r=0.7, g=0.1, b=0.1, a=0.5}
+        o.backgroundColor = {r=0.15, g=0.0, b=0.0, a=0.95}
+        o.backgroundColorMouseOver = {r=0.5, g=0.0, b=0.0, a=1.0}
+        
         if sectionID == 1 then
             moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
             moveSubMenu:addOption("Done", self, self.onMoveTask, task, 3)
