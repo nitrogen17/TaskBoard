@@ -7,16 +7,61 @@ local PersistencyManager = require("helper/PersistencyManager")
 
 local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
 local TaskFormPanel = require('client-ui/ISPanel/TaskFormPanel')
+ 
+-- Global selected data
+selectedData = { x = -1, y = -1 }
+
+Events.OnMouseDown.Add(onGlobalMouseDown)
 
 function MISScrollingListBox:initialise()
     ISScrollingListBox.initialise(self)
     self:setCapture(true)
 end
 
+function MISScrollingListBox:doDrawItem(y, item, alt)
+    self.selected = -1
+
+    -- if item.index == selectedData.y and self.tableTasks[1].sectionID == selectedData.x then
+    --     self:drawRect(0, y, self.width, item.height, 1, 0.25, 0, 0)
+    -- end
+
+    if item.index == selectedData.y and self.tableTasks[1].sectionID == selectedData.x then
+        self:drawRectBorder(0, y, self.width, item.height, 1, 0.2, 1.0, 0.2)
+        self:drawRect(0, y, self.width, item.height, 0.25, 0.2, 1.0, 0.1) -- subtle green overlay
+    end
+
+    -- Optional: White border when selected
+    if self.selected == item.index then
+        self:drawRectBorder(0, y, self.width, item.height, 1, 1, 1, 1)
+    end
+
+    -- Custom selected highlight (e.g. green)
+    if self.selected == item.index then
+        self:drawRectBorder(0, y, self.width, item.height, 1, 0.2, 1.0, 0.2) -- green border
+        self:drawRect(0, y, self.width, item.height, 0.25, 0.2, 1.0, 0.2) -- subtle green overlay
+    end
+
+    -- Call default drawing (text, border, selection highlight)
+    ISScrollingListBox.doDrawItem(self, y, item, alt)
+
+    return y + item.height
+end
+
 function MISScrollingListBox:addItem(title, todo)
     table.insert(self.tableTasks, todo)
     ISScrollingListBox.addItem(self, title)  
 end
+
+function MISScrollingListBox:onMouseDown(x, y)
+    selectedData = { x = -1, y = -1 }
+    ISScrollingListBox.onMouseDown(self, x, y)
+end
+
+-- Global mouse listener function (to detect clicks outside the listbox)
+function onGlobalMouseDown(x, y)
+    selectedData = { x = -1, y = -1 }
+end
+
 
 function MISScrollingListBox:onRightMouseDown(x, y)
     local itemIndex = self:rowAt(x, y)
@@ -26,7 +71,10 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         local task = self.tableTasks[itemIndex]
         local sectionID = self.tableTasks[itemIndex].sectionID
 
-        context:addOption(task.title, self, self.onContextOption, itemIndex)
+        -- Store the selected item and its sectionID globally
+        selectedData.x = sectionID
+        selectedData.y = itemIndex
+
         context:addOption("View Task", self, self.onViewTask, task)
         context:addOption("Edit Task", self, self.onEditTask, task)
         context:addOption("Delete", self, self.onDeleteTask, task)
@@ -45,7 +93,6 @@ function MISScrollingListBox:onRightMouseDown(x, y)
             moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
         end
     end
-
     return false
 end
 
@@ -61,6 +108,8 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     local newTask = task
     newTask.sectionID = targetSection
 
+    selectedData = { x = -1, y = -1 }
+
     PersistencyManager.updateTodo(newTask.id, newTask)
 
     clearDataToSections()
@@ -72,6 +121,8 @@ function MISScrollingListBox:onViewTask(task)
     local taskCard = TaskCardPanel:new()
     taskCard:initialise(task)
     taskCard:addToUIManager()
+
+    selectedData = { x = -1, y = -1 }
 end
 
 function MISScrollingListBox:onEditTask(task)
@@ -87,6 +138,8 @@ function MISScrollingListBox:onEditTask(task)
     )
     panel:initialise()
     panel:addToUIManager()
+
+    selectedData = { x = -1, y = -1 }
 end
 
 function MISScrollingListBox:onDeleteTask(task)
@@ -94,4 +147,6 @@ function MISScrollingListBox:onDeleteTask(task)
 
     clearDataToSections()
     renderDataToSections() 
+
+    selectedData = { x = -1, y = -1 }
 end
