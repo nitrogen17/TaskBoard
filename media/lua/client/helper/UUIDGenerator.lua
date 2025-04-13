@@ -16,26 +16,18 @@
 --     }
 -- }
 
-function generateUUIDWithRetries(tbl, maxRetries)
+function generateUUIDWithRetries(tbl)
     local retryCount = 0
+    local maxRetries = 5
+
     local value = tostring(ZombRand(1000000000, 9999999999)) -- Start with a random value
 
     while retryCount < maxRetries do
-        local found = false
-
-        -- Check if the value exists in the table
-        for _, val in pairs(tbl) do
-            if val == value then
-                found = true
-                break
-            end
-        end
-
-        if not found then
-            -- Value not found, return it
+        if not tbl[value] then
+            -- Value not found in the table, return it
             return value
         else
-            -- Value exists, increment retry count and generate a new value
+            -- Value exists, retry with a new one
             retryCount = retryCount + 1
             print("[$$] Attempt " .. retryCount .. ": Value exists. Retrying...")
             value = tostring(ZombRand(1000000000, 9999999999))
@@ -43,5 +35,5 @@ function generateUUIDWithRetries(tbl, maxRetries)
     end
 
     -- Max retries exceeded
-    return nil
+    return tostring(ZombRand(1000000000, 9999999999))
 end

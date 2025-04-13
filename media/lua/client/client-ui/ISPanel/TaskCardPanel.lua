@@ -52,7 +52,7 @@ function TaskCardPanel:create(taskData)
         "<RGB:0.7,0.7,0.7>Description:<LINE><RGB:1,1,1>%s<LINE><LINE>" ..
         "<RGB:0.7,0.7,0.7>Last Modified By:<LINE><RGB:1,1,1>%s (%s)",
         taskData.title,
-        taskData.description,
+        tostring(taskData.description),
         taskData.lastUserModifiedName,
         taskData.lastUserModifiedID
     )

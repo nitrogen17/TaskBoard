@@ -4,14 +4,15 @@ require("main")
 MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
 
 local PersistencyManager = require("helper/PersistencyManager")
+
 local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
+local TaskFormPanel = require('client-ui/ISPanel/TaskFormPanel')
 
 function MISScrollingListBox:initialise()
     ISScrollingListBox.initialise(self)
-    self:setCapture(true) -- allow capturing mouse input
+    self:setCapture(true)
 end
 
--- Overriding the addItem function
 function MISScrollingListBox:addItem(title, todo)
     table.insert(self.tableTasks, todo)
     ISScrollingListBox.addItem(self, title)  
@@ -25,11 +26,9 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         local task = self.tableTasks[itemIndex]
         local sectionID = self.tableTasks[itemIndex].sectionID
 
-        print("[#######]", self.items[itemIndex].title)
-
         context:addOption(task.title, self, self.onContextOption, itemIndex)
         context:addOption("View Task", self, self.onViewTask, task)
-        context:addOption("Edit Task", self, self.onEditTask)
+        context:addOption("Edit Task", self, self.onEditTask, task)
         context:addOption("Delete", self, self.onDeleteTask, task)
 
         local moveSubMenu = ISContextMenu:getNew(context)
@@ -47,16 +46,12 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         end
     end
 
-    return false -- safely handle empty space clicks
+    return false
 end
 
 function MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
-
-    -- Add new property under self instance
     object.tableTasks = {}
-
-    -- Deselect any item initially
     object.selected = -1
     
     return object
@@ -79,8 +74,19 @@ function MISScrollingListBox:onViewTask(task)
     taskCard:addToUIManager()
 end
 
-function MISScrollingListBox:onEditTask(item)
-    print("[CONTEXT] Edit Task clicked:")
+function MISScrollingListBox:onEditTask(task)
+    print("[CONTEXT] Edit Task clicked:", task.title)
+    local panelWidth, panelHeight = 500, 200
+    local panel = TaskFormPanel:new(
+        (getCore():getScreenWidth() - panelWidth) / 2,
+        (getCore():getScreenHeight() - panelHeight) / 2,
+        panelWidth,
+        panelHeight,
+        "update",
+        task
+    )
+    panel:initialise()
+    panel:addToUIManager()
 end
 
 function MISScrollingListBox:onDeleteTask(task)

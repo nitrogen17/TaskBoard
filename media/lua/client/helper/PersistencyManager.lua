@@ -88,6 +88,8 @@ end
 
 -- DELETE
 function PersistencyManager.deleteTodo(id)
+    print("delete this id: ", id)
+
     if ModData.getOrCreate(TABLE_NAME).todos[id] then
         ModData.getOrCreate(TABLE_NAME).todos[id] = nil
         print("Deleted task with id " .. id)
