@@ -31,8 +31,29 @@ function MISScrollingListBox:onRightMouseDown(x, y)
         print("[Srolling] task: ", task.description)
         print("[Srolling] sectionID: ", sectionID)
 
+        context:addOption("View Task", self, self.onViewTask, task)
+        context:addOption("Edit Task", self, self.onEditTask, task)
+        context:addOption("Delete", self, self.onDeleteTask, task)
 
-        printTable(task)
+        local moveSubMenu = ISContextMenu:getNew(context)
+        context:addSubMenu(context:addOption("Move", self, nil), moveSubMenu)
+
+        o = moveSubMenu
+
+        -- o.borderColor = {r=0.7, g=0.1, b=0.1, a=0.5}
+        -- o.backgroundColor = {r=0.15, g=0.0, b=0.0, a=0.95}
+        -- o.backgroundColorMouseOver = {r=0.5, g=0.0, b=0.0, a=1.0}
+        
+        if sectionID == 1 then
+            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
+            moveSubMenu:addOption("Done", self, self.onMoveTask, task, 3)
+        elseif sectionID == 2 then
+            moveSubMenu:addOption("Done", self, self.onMoveTask, task, 3)
+            moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
+        elseif sectionID == 3 then
+            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
+            moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
+        end
     end
     return false
 end

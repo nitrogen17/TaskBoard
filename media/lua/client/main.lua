@@ -13,7 +13,7 @@
 -- Global Properties:
 -- kb_leftListBox = Left Table
 -- kb_middleListBox = Middle Table
--- kb_righttListBox = Right Table
+-- kb_rightListBox = Right Table
 
 require('ISUI/ISPanel')
 require('CardTemplate')
@@ -36,10 +36,17 @@ function drawAllSections(mainWindow)
     local middleSection = drawMiddleSection(mainWindow, leftSection)
     drawRightSection(mainWindow, middleSection)
 
-    -- mock data
-    for key, value in pairs(kb_DataManager.getMockTasks()) do
-        kb_leftListBox:addItem(value)
+    -- Group todos by section
+    for _, task in pairs(kb_DataManager.getMockTasks()) do
+        if task.sectionID == 1 then
+            kb_leftListBox:addItem(task)
+        elseif task.sectionID == 2 then
+            kb_middleListBox:addItem(task)
+        elseif task.sectionID == 3 then
+            kb_rightListBox:addItem(task)
+        end
     end
+
 end
 
 function drawMainWindow() 
