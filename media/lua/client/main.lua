@@ -36,10 +36,10 @@ function drawAllSections(mainWindow)
     local middleSection = drawMiddleSection(mainWindow, leftSection)
     drawRightSection(mainWindow, middleSection)
 
-    local card1 = createCardInstance()
-    card1.title = "Remove title params"
-
-    kb_leftListBox:addItem(card1)
+    -- mock data
+    for key, value in pairs(kb_DataManager.getMockTasks()) do
+        kb_leftListBox:addItem(value)
+    end
 end
 
 function drawMainWindow() 

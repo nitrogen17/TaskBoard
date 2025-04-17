@@ -16,7 +16,7 @@ CardTemplate = {
 
     color = "", -- string: label color (e.g. "red", "blue", "green", "purple")
 
-    sectionID = 0, -- number: ID of the section/column (e.g. 1 = To Do, 2 = In Progress, 3 = Done)
+    sectionID = 1, -- number: ID of the section/column (e.g. 1 = To Do, 2 = In Progress, 3 = Done)
 
     createdAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was created
     updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was last modified
