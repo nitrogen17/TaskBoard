@@ -2,6 +2,8 @@ require('ISUI/ISScrollingListBox')
 
 MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
 
+local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
+
 function MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
     object.tableTasks = {}
@@ -58,6 +60,11 @@ function MISScrollingListBox:onRightMouseDown(x, y)
     return false
 end
 
+function MISScrollingListBox:onViewTask(task)
+    print("[CONTEXT] View Task clicked:")
+    UIStoryPanel.new(task)
+end
+
 function printTable(t, indent)
     indent = indent or 0
     local prefix = string.rep("  ", indent)
@@ -71,4 +78,70 @@ function printTable(t, indent)
             print(prefix .. tostring(key) .. " = " .. tostring(value))
         end
     end
+end
+
+
+
+
+
+
+local function formatISODate(isoString)
+    local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
+    if year and month and day and hour and min and sec then
+        local timestamp = os.time({
+            year = tonumber(year),
+            month = tonumber(month),
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec),
+            isdst = false
+        })
+        return os.date("%B %d, %Y at %I:%M %p", timestamp)
+    end
+    return isoString -- fallback if parsing fails
+end
+
+require('ISUI/ISPanel');
+require('ISUI/ISRichTextPanel');
+require('ISUI/ISCollapsableWindow');
+
+UIStoryPanel = {};
+
+function UIStoryPanel.new(task)
+    local title = "Task"
+
+    local text = string.format(
+        "Task: %s\n\n%s\n\n%s\n\nCreated by:\n%s\n%s\n\nUpdated by:\n%s\n%s\n",
+        task.title,
+        task.description,
+        task.priority,
+        formatISODate(task.createdAt),
+        task.createdByName,
+        formatISODate(task.updatedAt),
+        task.lastUserModifiedName
+    )
+
+    local self = {};
+    self.tut = ISRichTextPanel:new(0, 0, 380, 300);
+    self.tut:initialise();
+    self.tut:setAnchorBottom(true);
+    self.tut:setAnchorRight(true);
+    self.moreinfo = self.tut:wrapInCollapsableWindow();
+    self.moreinfo:setX((getCore():getScreenWidth() * 0.5) - (self.tut.width * 0.5));
+    self.moreinfo:setY((getCore():getScreenHeight() * 0.5) - (self.tut.height * 0.5));
+    self.moreinfo:setTitle(title);
+
+    self.moreinfo:addToUIManager();
+    self.tut:setWidth(self.moreinfo:getWidth());
+    self.tut:setHeight(self.moreinfo:getHeight() - self.moreinfo:titleBarHeight());
+    self.tut:setY(self.moreinfo:titleBarHeight());
+    self.tut.autosetheight = false;
+    self.tut.clip = true;
+    self.tut:addScrollBars();
+
+    self.tut.textDirty = true;
+    self.tut.text = text;
+    self.tut:paginate();
+    return self;
 end
