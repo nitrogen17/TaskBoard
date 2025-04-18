@@ -37,21 +37,6 @@ function drawAllSections(mainWindow)
     local leftSection = drawLeftSection(mainWindow, sectionHeaderPanel)
     local middleSection = drawMiddleSection(mainWindow, leftSection)
     drawRightSection(mainWindow, middleSection)
-
-    -- Group todos by section
-    for _, task in pairs(kb_DataManager.getMockTasks()) do
-        if task.sectionID == 1 then
-            kb_DataManager.addTask(task)
-            kb_leftListBox:addItem(task)
-        elseif task.sectionID == 2 then
-            kb_DataManager.addTask(task)
-            kb_middleListBox:addItem(task)
-        elseif task.sectionID == 3 then
-            kb_DataManager.addTask(task)
-            kb_rightListBox:addItem(task)
-        end
-    end
-
 end
 
 function drawMainWindow() 

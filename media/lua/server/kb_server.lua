@@ -24,6 +24,10 @@ Events.OnClientCommand.Add(function(module, command, player, args)
             db[k] = nil
         end
         ModData.transmit(MODDATA_KEY)  
+    elseif command == "FetchAllTasks" then
+        sendServerCommand(player, MODDATA_KEY, "FetchAllTasks", { tasks = db })
+    elseif command == "ReloadAllTables" then
+        sendServerCommand(player, MODDATA_KEY, "ReloadAllTables", { tasks = db })
     end
 end)
 

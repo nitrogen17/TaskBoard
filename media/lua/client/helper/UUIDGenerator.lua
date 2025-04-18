@@ -22,7 +22,7 @@ function generateUUIDWithRetries()
 
     -- request latest tasks from the server
     -- must implement callback here before proceeding on the next lines 
-    sendClientCommand(MODDATA_KEY, "RequestAllTasks", {})
+    sendClientCommand(MODDATA_KEY, "FetchAllTasks", {})
 
     local value = tostring(ZombRand(1000000000, 9999999999)) -- Start with a random value
 

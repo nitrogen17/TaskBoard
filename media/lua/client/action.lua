@@ -5,6 +5,7 @@ function onCustomUIKeyPressed(key)
         isWindowVisible = not isWindowVisible
         if mainWindow then
             mainWindow:setVisible(isWindowVisible)
+            sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
         end
     end
 
