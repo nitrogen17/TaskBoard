@@ -41,10 +41,12 @@ kb_TaskFormPanel.priorityLabel = nil
 kb_TaskFormPanel.moreinfo = nil
 
 kb_TaskFormPanel.action = nil
+kb_TaskFormPanel.task = nil
 
 -- This function creates the form and adds it to the UI
 function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.action = action
+
 
     -- Create a new panel for the form
     kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
@@ -97,6 +99,8 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.formPanel:addChild(submitButton)
 
     if kb_TaskFormPanel.action == "edit" then
+        kb_TaskFormPanel.task = task
+
         kb_TaskFormPanel.titleLabel:setText(task.title)
         kb_TaskFormPanel.descriptionLabel:setText(task.description)
 
@@ -133,10 +137,25 @@ function kb_TaskFormPanel.onSubmit()
     local selectedIndex = kb_TaskFormPanel.priorityLabel.selected
     local priority = kb_TaskFormPanel.priorityLabel.options[selectedIndex]
 
+    if kb_TaskFormPanel.action == "create" then
+        local createdTask = createCardInstance()
+        createdTask.id = generateUUIDWithRetries()
+        createdTask.title = title
+        createdTask.description = description
+        createdTask.priority = priority
+
+        sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
+    elseif kb_TaskFormPanel.action == "edit" then
+        sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
+        kb_TaskFormPanel.task = nil  
+    end
+
     -- Process the data (For example, printing to the console)
     print("Title: " .. title)
     print("Description: " .. description)
     print("Priority: " .. priority)
+
+    
 
     -- You can save this data, send it to a server, etc.
     -- You can also close the form after submission

@@ -16,14 +16,18 @@
 --     }
 -- }
 
-function generateUUIDWithRetries(tbl)
+function generateUUIDWithRetries()
     local retryCount = 0
     local maxRetries = 5
+
+    -- request latest tasks from the server
+    -- must implement callback here before proceeding on the next lines 
+    sendClientCommand(MODDATA_KEY, "RequestAllTasks", {})
 
     local value = tostring(ZombRand(1000000000, 9999999999)) -- Start with a random value
 
     while retryCount < maxRetries do
-        if not tbl[value] then
+        if not kb_DataManager.tasks[value] then
             -- Value not found in the table, return it
             return value
         else
