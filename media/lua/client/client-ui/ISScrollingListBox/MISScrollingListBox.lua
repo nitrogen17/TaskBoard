@@ -61,7 +61,7 @@ end
 
 function MISScrollingListBox:onEditTask(task)
     print("[CONTEXT] View Task clicked:")
-    kb_TaskFormPanel.createForm()
+    kb_TaskFormPanel.createForm("edit", task)
 end
 
 local function formatISODate(isoString)

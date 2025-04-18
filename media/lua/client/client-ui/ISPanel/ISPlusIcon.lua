@@ -22,17 +22,8 @@ function ISPlusIcon:render()
 end
 
 function ISPlusIcon:onMouseDown(x, y)
-    local panelWidth, panelHeight = 500, 200
-    local panel = TaskFormPanel:new(
-        (getCore():getScreenWidth() - panelWidth) / 2,
-        (getCore():getScreenHeight() - panelHeight) / 2,
-        panelWidth,
-        panelHeight,
-        "create"
-    )
-    panel:initialise()
-    panel:addToUIManager()
-    panel:bringToTop()
+    print("click ISPlusIcon:onMouseDown(x, y)")
+    kb_TaskFormPanel.createForm("create")
 end
 
 return ISPlusIcon

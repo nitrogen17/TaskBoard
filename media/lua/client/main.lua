@@ -18,6 +18,8 @@
 require('ISUI/ISPanel')
 require('CardTemplate')
 
+local ISPlusIcon = require('client-ui/ISPanel/ISPlusIcon')
+
 mainWindow = {}
 
 function main()
@@ -68,6 +70,9 @@ function drawSectionHeaderPanel(mainWindow)
     mainWindow:addChild(sectionHeaderPanel)
 
     local leftHeaderSection = drawLeftHeaderSection(mainWindow)
+
+    drawPlusIcon(leftHeaderSection)
+
     local middleHeaderSection = drawMiddleHeaderSection(mainWindow, leftHeaderSection)
     drawRightHeaderSection(mainWindow, middleHeaderSection)
 
@@ -82,6 +87,12 @@ function drawLeftHeaderSection(mainWindow)
     mainWindow:addChild(sectionLeftHeaderPanel)
     
     return sectionLeftHeaderPanel
+end
+
+function drawPlusIcon(sectionLeftHeaderPanel) 
+    local plusPanel = ISPlusIcon:new(0, 0, sectionLeftHeaderPanel:getHeight(), sectionLeftHeaderPanel:getHeight())
+    plusPanel:initialise();
+    sectionLeftHeaderPanel:addChild(plusPanel)
 end
 
 function drawMiddleHeaderSection(mainWindow, leftHeaderSection) 

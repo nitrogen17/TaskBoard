@@ -28,6 +28,8 @@ function TaskFormPanel:setTitle(newTitle)
     self.title = newTitle
 end
 
+kb_priorityOptions = {"Low", "Medium", "High"}
+
 -- Define the kb_TaskFormPanel table
 kb_TaskFormPanel = {}
 
@@ -38,8 +40,12 @@ kb_TaskFormPanel.descriptionLabel = nil
 kb_TaskFormPanel.priorityLabel = nil
 kb_TaskFormPanel.moreinfo = nil
 
+kb_TaskFormPanel.action = nil
+
 -- This function creates the form and adds it to the UI
 function kb_TaskFormPanel.createForm(action, task)
+    kb_TaskFormPanel.action = action
+
     -- Create a new panel for the form
     kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
     kb_TaskFormPanel.formPanel:initialise()
@@ -77,13 +83,9 @@ function kb_TaskFormPanel.createForm(action, task)
 
 
     kb_TaskFormPanel.priorityLabel = ISComboBox:new(10, kb_TaskFormPanel.priorityTag:getY() + kb_TaskFormPanel.priorityTag:getHeight() + 10, 280, 27)
-    -- for _, color in ipairs(colorOptions) do
-    --     self.colorDropdown:addOption(color)
-    -- end
-
-    kb_TaskFormPanel.priorityLabel:addOption("Low")
-    kb_TaskFormPanel.priorityLabel:addOption("Medium")
-    kb_TaskFormPanel.priorityLabel:addOption("High")
+    for _, priority in ipairs(kb_priorityOptions) do
+        kb_TaskFormPanel.priorityLabel:addOption(priority)
+    end
 
     kb_TaskFormPanel.priorityLabel:initialise()
     kb_TaskFormPanel.priorityLabel:instantiate()
@@ -93,6 +95,19 @@ function kb_TaskFormPanel.createForm(action, task)
     local submitButton = ISButton:new(10, 320, 280, 30, "Submit", nil, kb_TaskFormPanel.onSubmit)
     submitButton:initialise()
     kb_TaskFormPanel.formPanel:addChild(submitButton)
+
+    if kb_TaskFormPanel.action == "edit" then
+        kb_TaskFormPanel.titleLabel:setText(task.title)
+        kb_TaskFormPanel.descriptionLabel:setText(task.description)
+
+        local selectedIndex = 1
+        for i, priority in ipairs(kb_priorityOptions) do
+            if string.lower(priority) == string.lower(task.priority or "") then
+                selectedIndex = i
+            end
+        end
+        kb_TaskFormPanel.priorityLabel.selected = selectedIndex
+    end
 
 
     kb_TaskFormPanel.moreinfo = MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
@@ -105,7 +120,8 @@ function kb_TaskFormPanel.createForm(action, task)
     
     kb_TaskFormPanel.moreinfo:addChild(kb_TaskFormPanel.formPanel)     
 
-    kb_TaskFormPanel.moreinfo:addToUIManager();
+    kb_TaskFormPanel.moreinfo:addToUIManager()
+    kb_TaskFormPanel.moreinfo:bringToTop()
 end
 
 -- This function handles the form submission
