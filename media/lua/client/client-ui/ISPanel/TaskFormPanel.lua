@@ -128,12 +128,9 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.moreinfo:bringToTop()
 end
 
--- This function handles the form submission
 function kb_TaskFormPanel.onSubmit()
-    -- Retrieve the values from the form
     local title = kb_TaskFormPanel.titleLabel:getText() or ""        -- Default to empty string if nil or empty
     local description = kb_TaskFormPanel.descriptionLabel:getText() or ""  -- Default to empty string if nil or empty
-    -- local priority = kb_TaskFormPanel.priorityLabel:getText() or ""      -- Default to empty string if nil or empty
     local selectedIndex = kb_TaskFormPanel.priorityLabel.selected
     local priority = kb_TaskFormPanel.priorityLabel.options[selectedIndex]
 
@@ -146,6 +143,15 @@ function kb_TaskFormPanel.onSubmit()
 
         sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
     elseif kb_TaskFormPanel.action == "edit" then
+        -- kb_TaskFormPanel.task.lastUserModifiedID = 
+        -- kb_TaskFormPanel.task.
+        -- kb_TaskFormPanel.task.
+
+        kb_TaskFormPanel.task.title = title
+        kb_TaskFormPanel.task.description = description
+        kb_TaskFormPanel.task.priority = priority
+        kb_TaskFormPanel.task.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+
         sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil  
     end

@@ -37,6 +37,15 @@ function reloadAllTablesInClient(tasks)
     kb_middleListBox:clear()
     kb_rightListBox:clear()
 
+    -- Sort function by updatedAt ascending (older updates first, newer last)
+    local function sortByUpdatedAtAsc(a, b)
+        return a.updatedAt > b.updatedAt
+    end
+
+    table.sort(kb_leftListBox, sortByUpdatedAtAsc)
+    table.sort(kb_middleListBox, sortByUpdatedAtAsc)
+    table.sort(kb_rightListBox, sortByUpdatedAtAsc)
+
     for _, task in pairs(tasks) do
         if task.sectionID == 1 then
             kb_leftListBox:addItem(task)

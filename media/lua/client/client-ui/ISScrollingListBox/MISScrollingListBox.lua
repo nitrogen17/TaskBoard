@@ -55,14 +55,24 @@ function MISScrollingListBox:onRightMouseDown(x, y)
 end
 
 function MISScrollingListBox:onViewTask(task)
-    print("[CONTEXT] View Task clicked:")
     kb_TaskFormPanel1.new(task)
 end
 
 function MISScrollingListBox:onEditTask(task)
-    print("[CONTEXT] View Task clicked:")
     kb_TaskFormPanel.createForm("edit", task)
 end
+
+function MISScrollingListBox:onDeleteTask(task)
+    sendClientCommand(MODDATA_KEY, "DeleteTask", task)
+end
+
+function MISScrollingListBox:onMoveTask(task, targetSection)
+    local newTask = task
+    newTask.sectionID = targetSection
+    newTask.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    sendClientCommand(MODDATA_KEY, "UpdateTask", task)
+end
+
 
 local function formatISODate(isoString)
     local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
