@@ -141,6 +141,9 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.description = description
         createdTask.priority = priority
 
+        createdTask.createdByName = getPlayer(0):getUsername()
+        createdTask.lastUserModifiedName = getPlayer(0):getUsername()
+
         sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
     elseif kb_TaskFormPanel.action == "edit" then
         -- kb_TaskFormPanel.task.lastUserModifiedID = 
@@ -150,6 +153,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
         kb_TaskFormPanel.task.priority = priority
+        kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
         kb_TaskFormPanel.task.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
 
         sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)

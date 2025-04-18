@@ -2,6 +2,8 @@ require('ISUI/ISScrollingListBox')
 
 MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
 
+local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
+
 function MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
     object.tableTasks = {}
@@ -55,7 +57,11 @@ function MISScrollingListBox:onRightMouseDown(x, y)
 end
 
 function MISScrollingListBox:onViewTask(task)
-    kb_TaskFormPanel1.new(task)
+    -- kb_TaskFormPanel1.new(task)
+
+    local panel = TaskCardPanel:new()
+    panel:initialise(task)
+    panel:addToUIManager()
 end
 
 function MISScrollingListBox:onEditTask(task)
@@ -69,6 +75,7 @@ end
 function MISScrollingListBox:onMoveTask(task, targetSection)
     local newTask = task
     newTask.sectionID = targetSection
+    newTask.lastUserModifiedName = getPlayer(0):getUsername()
     newTask.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
     sendClientCommand(MODDATA_KEY, "UpdateTask", task)
 end

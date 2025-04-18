@@ -12,7 +12,24 @@ function TaskCardPanel:initialise(taskData)
     self:create(taskData)
 end
 
-function TaskCardPanel:create(taskData)
+local function formatISODate(isoString)
+    local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
+    if year and month and day and hour and min and sec then
+        local timestamp = os.time({
+            year = tonumber(year),
+            month = tonumber(month),
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec),
+            isdst = false
+        })
+        return os.date("%B %d, %Y at %I:%M %p", timestamp)
+    end
+    return isoString 
+end
+
+function TaskCardPanel:create(task)
     local padding = 16
     local innerWidth = self.width - padding * 2
 
@@ -24,11 +41,11 @@ function TaskCardPanel:create(taskData)
 
     local sectionStatus
 
-    if taskData.sectionID == 1 then
+    if task.sectionID == 1 then
         sectionStatus = "To Do"
-    elseif taskData.sectionID == 2 then
+    elseif task.sectionID == 2 then
         sectionStatus = "In Progress"
-    elseif taskData.sectionID == 3 then
+    elseif task.sectionID == 3 then
         sectionStatus = "Done"
     else
         sectionStatus = "Unknown"
@@ -47,14 +64,14 @@ function TaskCardPanel:create(taskData)
     self.richText.backgroundColor = {r=0.1, g=0.1, b=0.1, a=1}
 
     self.richText.text = string.format(
-        "<TEXTSIZE:medium>" ..
-        "<RGB:0.7,0.7,0.7>Task Title:<LINE><RGB:1,1,1>%s<LINE>" ..
-        "<RGB:0.7,0.7,0.7>Description:<LINE><RGB:1,1,1>%s<LINE><LINE>" ..
-        "<RGB:0.7,0.7,0.7>Last Modified By:<LINE><RGB:1,1,1>%s (%s)",
-        taskData.title,
-        tostring(taskData.description),
-        taskData.lastUserModifiedName,
-        taskData.lastUserModifiedID
+        "%s\n\n%s\n\n%s\n\nCreated by:\n%s\n%s\n\nModified by:\n%s\n%s\n",
+        task.title,
+        task.description,
+        task.priority,
+        formatISODate(task.createdAt),
+        task.createdByName,
+        formatISODate(task.updatedAt),
+        task.lastUserModifiedName
     )
 
     self.richText:paginate()

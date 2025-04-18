@@ -23,6 +23,11 @@ local ISPlusIcon = require('client-ui/ISPanel/ISPlusIcon')
 mainWindow = {}
 
 function main()
+    if isClient then
+        print("This code is running on the client.")
+    elseif isServer then
+        print("This code is running on the server")
+    end
     drawKanbanBoard()
 end
 
