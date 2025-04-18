@@ -1,11 +1,6 @@
-require('main')
 
+
+-- Example function to test the form creation
 function test()
-    print("main0: ", mainWindow)
-    main()
-    print("main1: ", mainWindow)
-    print("main1A: ", rightListBox)
-    destroyKanbanBoard()
-    print("main2: ",mainWindow)
-    print("main2A: ", rightListBox)
+    kb_TaskFormPanel.createForm()
 end

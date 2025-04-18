@@ -1,201 +1,128 @@
-require "ISUI/ISPanel"
-require "ISUI/ISButton"
-require "ISUI/ISLabel"
-require "ISUI/ISTextEntryBox"
-require "ISUI/ISComboBox"
-require("main")
+require('ISUI/ISPanel')
+require('ISUI/ISTextEntryBox')
+require('ISUI/ISButton')
+require('ISUI/ISComboBox')
 
-MISPanel = ISPanel:derive("MISPanel")
+require('ISUI/ISPanel')
 
-local PersistencyManager = require("helper/PersistencyManager")
+TaskFormPanel = ISPanel:derive("ISPanel");
 
-colorOptions = {"Red", "Green", "Blue", "Yellow"}
-
-function MISPanel:prerender()
-    ISPanel.prerender(self)
+function TaskFormPanel:prerender()
+    -- ISPanel.prerender(self);
+    
+    -- Use the title set from the client
     local text = self.title
-    local font = UIFont.Medium
-    local textWidth = getTextManager():MeasureStringX(font, text)
-    local textHeight = getTextManager():MeasureStringY(font, text)
-    local xPos = (self:getWidth() - textWidth) / 2
-    local yPos = (self:getHeight() - textHeight) / 2 - 4
-    self:drawText(text, xPos, yPos, 1, 1, 1, 1, font)
+    local font = UIFont.Small
+    local textWidth = getTextManager():MeasureStringX(font, text) -- Get text width
+    local textHeight = getTextManager():MeasureStringY(font, text) -- Get text height
+    
+    -- Calculate the position to center the text
+    local xPos = 10
+    local yPos = (self:getHeight() - textHeight) / 2
+    
+    self:drawText(text, xPos, yPos, 1, 1, 1, 1, font);
 end
 
-function MISPanel:setTitle(newTitle)
+-- Setter function to update the title from the client
+function TaskFormPanel:setTitle(newTitle)
     self.title = newTitle
 end
 
-TaskFormPanel = ISPanel:derive("TaskFormPanel")
+-- Define the kb_TaskFormPanel table
+kb_TaskFormPanel = {}
 
-function TaskFormPanel:new(x, y, width, height, mode, task)
-    local o = ISPanel:new(x, y, width, height)
-    setmetatable(o, self)
-    self.__index = self
-    o.borderColor = {r=1, g=1, b=1, a=0.9}
-    o.backgroundColor = {r=0.1, g=0.1, b=0.1, a=0.9}
-    o.moveWithMouse = true
-    o.colorDropdown = {}
-    o.mode = mode or "create"
-    o.task = task
-    return o
+-- Declare the form panel and inputs inside the table
+kb_TaskFormPanel.formPanel = nil
+kb_TaskFormPanel.titleLabel = nil
+kb_TaskFormPanel.descriptionLabel = nil
+kb_TaskFormPanel.priorityLabel = nil
+kb_TaskFormPanel.moreinfo = nil
+
+-- This function creates the form and adds it to the UI
+function kb_TaskFormPanel.createForm()
+    -- Create a new panel for the form
+    kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
+    kb_TaskFormPanel.formPanel:initialise()
+    kb_TaskFormPanel.formPanel:setAnchorLeft(true)
+    kb_TaskFormPanel.formPanel:setAnchorTop(true)
+
+    kb_TaskFormPanel.formPanel.moveWithMouse = true
+
+    kb_TaskFormPanel.titleTag = TaskFormPanel:new(0, 15, 280, 20)
+    kb_TaskFormPanel.titleTag:initialise()
+    kb_TaskFormPanel.titleTag:setTitle("Title")
+    -- kb_TaskFormPanel.titleTag.backgroundColor = {r=1, g=0, b=0, a=1} -- Deep black
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.titleTag)
+
+    -- Title Textbox
+    kb_TaskFormPanel.titleLabel = ISTextEntryBox:new("", 10, kb_TaskFormPanel.titleTag:getY() + kb_TaskFormPanel.titleTag:getHeight() + 10, 280, 20)
+    kb_TaskFormPanel.titleLabel:initialise()
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.titleLabel)
+
+
+    kb_TaskFormPanel.descriptionTag = TaskFormPanel:new(0, kb_TaskFormPanel.titleLabel:getY() + kb_TaskFormPanel.titleLabel:getHeight() + 10, 280, 20)
+    kb_TaskFormPanel.descriptionTag:initialise()
+    kb_TaskFormPanel.descriptionTag:setTitle("Description")
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.descriptionTag)
+
+    -- -- Description Textbox
+    kb_TaskFormPanel.descriptionLabel = ISTextEntryBox:new("", 10, kb_TaskFormPanel.descriptionTag:getY() + kb_TaskFormPanel.descriptionTag:getHeight() + 10, 280, 60)
+    kb_TaskFormPanel.descriptionLabel:initialise()
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.descriptionLabel)
+
+    kb_TaskFormPanel.priorityTag = TaskFormPanel:new(0, kb_TaskFormPanel.descriptionLabel:getY() + kb_TaskFormPanel.descriptionLabel:getHeight() + 30, 280, 20)
+    kb_TaskFormPanel.priorityTag:initialise()
+    kb_TaskFormPanel.priorityTag:setTitle("Priority")
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.priorityTag)
+
+
+    kb_TaskFormPanel.priorityLabel = ISComboBox:new(10, kb_TaskFormPanel.priorityTag:getY() + kb_TaskFormPanel.priorityTag:getHeight() + 10, 280, 27)
+    -- for _, color in ipairs(colorOptions) do
+    --     self.colorDropdown:addOption(color)
+    -- end
+
+    kb_TaskFormPanel.priorityLabel:addOption("Low")
+    kb_TaskFormPanel.priorityLabel:addOption("Medium")
+    kb_TaskFormPanel.priorityLabel:addOption("High")
+
+    kb_TaskFormPanel.priorityLabel:initialise()
+    kb_TaskFormPanel.priorityLabel:instantiate()
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.priorityLabel)
+
+    -- Submit Button
+    local submitButton = ISButton:new(10, 320, 280, 30, "Submit", nil, kb_TaskFormPanel.onSubmit)
+    submitButton:initialise()
+    kb_TaskFormPanel.formPanel:addChild(submitButton)
+
+
+    kb_TaskFormPanel.moreinfo = MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
+    kb_TaskFormPanel.moreinfo:initialise();
+    kb_TaskFormPanel.moreinfo:setX((getCore():getScreenWidth() * 0.5) - (kb_TaskFormPanel.moreinfo:getWidth() * 0.5))
+    kb_TaskFormPanel.moreinfo:setY((getCore():getScreenHeight() * 0.5) - (kb_TaskFormPanel.moreinfo:getHeight() * 0.5))
+    kb_TaskFormPanel.moreinfo:setTitle("Task");
+
+    kb_TaskFormPanel.formPanel:setY(kb_TaskFormPanel.moreinfo:titleBarHeight())
+    
+    kb_TaskFormPanel.moreinfo:addChild(kb_TaskFormPanel.formPanel)     
+
+    kb_TaskFormPanel.moreinfo:addToUIManager();
 end
 
-function TaskFormPanel:initialise()
-    ISPanel.initialise(self)
+-- This function handles the form submission
+function kb_TaskFormPanel.onSubmit()
+    -- Retrieve the values from the form
+    local title = kb_TaskFormPanel.titleLabel:getText() or ""        -- Default to empty string if nil or empty
+    local description = kb_TaskFormPanel.descriptionLabel:getText() or ""  -- Default to empty string if nil or empty
+    -- local priority = kb_TaskFormPanel.priorityLabel:getText() or ""      -- Default to empty string if nil or empty
+    local selectedIndex = kb_TaskFormPanel.priorityLabel.selected
+    local priority = kb_TaskFormPanel.priorityLabel.options[selectedIndex]
 
-    local function centerX(parentWidth, elementWidth)
-        return (parentWidth - elementWidth) / 2
-    end
+    -- Process the data (For example, printing to the console)
+    print("Title: " .. title)
+    print("Description: " .. description)
+    print("Priority: " .. priority)
 
-    local fieldWidth = 220
-    local fieldHeight = 22
-    local labelWidth = 100
-    local labelHeight = 22
-    local startX = 20
-    local fieldX = startX + labelWidth + 120
-    local paddingY = 32
-    local startY = 40
-
-    local titleHeight = 35
-    local titlePanel = MISPanel:new(0, 0, self:getWidth(), titleHeight)
-    local panelTitle = self.mode == "update" and "Edit Task" or "Create Task"
-    titlePanel:setTitle(panelTitle)
-    titlePanel.moveWithMouse = true  
-    titlePanel:initialise()
-    self:addChild(titlePanel)
-
-    local fields = {
-        {name="Title", key="title"},
-        {name="Description", key="description"},
-        {name="Color", key="color", type="dropdown"}
-    }
-
-    local newTask = createCardInstance()
-
-    self.fields = {}
-
-    for i, field in ipairs(fields) do
-        local y = startY + (i - 1) * paddingY
-
-        local label = ISLabel:new(startX, y, labelHeight, field.name, 1, 1, 1, 1, UIFont.Small, true)
-        self:addChild(label)
-
-        if field.type == "dropdown" then
-            self.colorDropdown = ISComboBox:new(fieldX, y, fieldWidth, fieldHeight)
-            for _, color in ipairs(colorOptions) do
-                self.colorDropdown:addOption(color)
-            end
-            self.colorDropdown:initialise()
-            self.colorDropdown:instantiate()
-            self:addChild(self.colorDropdown)
-            self.fields[field.key] = self.colorDropdown
-        else
-            local input = ISTextEntryBox:new("", fieldX, y, fieldWidth, fieldHeight)
-            input:initialise()
-            input:instantiate()
-            self:addChild(input)
-            self.fields[field.key] = input
-        end
-    end
-
-    local buttonY = startY + #fields * paddingY + 20
-    local buttonWidth = 100
-    local buttonHeight = 26
-    local buttonSpacing = 12
-    local totalButtonWidth = buttonWidth * 2 + buttonSpacing
-    local buttonStartX = centerX(self:getWidth(), totalButtonWidth)
-
-    self.saveButton = ISButton:new(buttonStartX, buttonY, buttonWidth, buttonHeight, "Save", self, TaskFormPanel.onSave)
-    self.saveButton:initialise()
-    self:addChild(self.saveButton)
-
-    self.closeButton = ISButton:new(buttonStartX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight, "Close", self, TaskFormPanel.onClose)
-    self.closeButton:initialise()
-    self:addChild(self.closeButton)
-
-    if self.mode == "update" then
-        self:setData(self.task)
-    end
-
+    -- You can save this data, send it to a server, etc.
+    -- You can also close the form after submission
+    kb_TaskFormPanel.moreinfo:removeFromUIManager()
 end
-
-function TaskFormPanel:setData(task)
-        for key, input in pairs(self.fields) do
-            if key == "color" then
-                local selectedIndex = 1
-                for i, color in ipairs(colorOptions) do
-                    if string.lower(color) == string.lower(self.task.color or "") then
-                        selectedIndex = i
-                    end
-                end
-                self.colorDropdown.selected = selectedIndex
-            elseif key == "description" then
-                input:setText(self.task.description)
-            elseif key == "title" then
-                input:setText(self.task.title)
-            end
-        end    
-end
-
-function TaskFormPanel:onSave()
-    local card = createCardInstance()
-
-    for key, input in pairs(self.fields) do
-        if key ~= "color" then
-            card[key] = input:getText()
-        else 
-            local selectedIndex = self.colorDropdown.selected
-            local selectedColor = self.colorDropdown:getOptionText(selectedIndex)
-            card[key] = selectedColor
-        end
-    end
-
-    if self.mode == "create" then
-        local player = getSpecificPlayer(0)
-
-        card.id = generateUUIDWithRetries(PersistencyManager.fetchTodos())
-        card.sectionID = 1
-        card.lastUserModifiedID = player:getOnlineID()
-        card.lastUserModifiedName = player:getDisplayName()
-
-        PersistencyManager.createTodo(card)
-
-        clearDataToSections()
-        renderDataToSections() 
-
-        self:removeFromUIManager()
-    elseif self.mode == "update" then
-        for key, input in pairs(self.fields) do
-            if key == "color" then
-                local selectedIndex = input.selected
-                local selectedColor = input:getOptionText(selectedIndex)
-                self.task.color = selectedColor
-            elseif key == "description" then
-                self.task.description = input:getText()
-            elseif key == "title" then
-                self.task.title = input:getText()
-            end
-        end
-
-        PersistencyManager.updateTodo(self.task.id, self.task)
-
-        clearDataToSections()
-        renderDataToSections() 
-
-        self:removeFromUIManager()
-    end
-
-    print("Saved Task (Card Instance):")
-    for k, v in pairs(card) do
-        if type(v) ~= "table" then
-            print(k .. ": " .. tostring(v))
-        end
-    end    
-end
-
-function TaskFormPanel:onClose()
-    self:removeFromUIManager()
-end
-
-return TaskFormPanel

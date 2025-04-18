@@ -56,7 +56,12 @@ end
 
 function MISScrollingListBox:onViewTask(task)
     print("[CONTEXT] View Task clicked:")
-    UIStoryPanel.new(task)
+    kb_TaskFormPanel1.new(task)
+end
+
+function MISScrollingListBox:onEditTask(task)
+    print("[CONTEXT] View Task clicked:")
+    kb_TaskFormPanel.createForm()
 end
 
 local function formatISODate(isoString)
@@ -80,9 +85,9 @@ require('ISUI/ISPanel');
 require('ISUI/ISRichTextPanel');
 require('ISUI/ISCollapsableWindow');
 
-UIStoryPanel = {};
+kb_TaskFormPanel1 = {};
 
-function UIStoryPanel.new(task)
+function kb_TaskFormPanel1.new(task)
     local title = "Task"
 
     local text = string.format(
