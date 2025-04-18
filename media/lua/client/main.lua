@@ -52,10 +52,11 @@ end
 function drawMainWindow() 
     local mainWindow = MISCollapsableWindow:new(0, 0, getCore():getScreenWidth() * 0.5, getCore():getScreenHeight() * 0.6)
     mainWindow:setX((getCore():getScreenWidth() * 0.5) - (mainWindow:getWidth() * 0.5))
-    mainWindow:setY((getCore():getScreenHeight() * 0.5) - (mainWindow:getHeight() * 0.5))
+    mainWindow:setY((getCore():getScreenHeight() * 0.5) - (mainWindow:getHeight() * 0.5) - 25)
 
     mainWindow:initialise()
     mainWindow:addToUIManager()
+    mainWindow:setVisible(false)
 
     return mainWindow
 end

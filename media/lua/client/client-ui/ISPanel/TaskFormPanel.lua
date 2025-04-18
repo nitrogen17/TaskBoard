@@ -39,7 +39,7 @@ kb_TaskFormPanel.priorityLabel = nil
 kb_TaskFormPanel.moreinfo = nil
 
 -- This function creates the form and adds it to the UI
-function kb_TaskFormPanel.createForm()
+function kb_TaskFormPanel.createForm(action, task)
     -- Create a new panel for the form
     kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
     kb_TaskFormPanel.formPanel:initialise()
