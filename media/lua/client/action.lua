@@ -5,7 +5,18 @@ function onCustomUIKeyPressed(key)
         isWindowVisible = not isWindowVisible
         if mainWindow then
             mainWindow:setVisible(isWindowVisible)
-            sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
+            -- sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
+
+            for _, task in pairs(kb_DataManager.getMockTasks()) do
+                if task.sectionID == 1 then
+                    kb_leftListBox:addItem(task)
+                elseif task.sectionID == 2 then
+                    kb_middleListBox:addItem(task)
+                elseif task.sectionID == 3 then
+                    kb_rightListBox:addItem(task)
+                end
+            end
+            
         end
     end
 
