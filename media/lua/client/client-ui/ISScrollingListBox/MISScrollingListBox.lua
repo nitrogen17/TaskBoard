@@ -84,7 +84,7 @@ function MISScrollingListBox:doDrawItem(y, item, alt)
     -- Assignee and Due Date
     local assigneeText = (card.lastUserModifiedName or "Unassigned")
     -- local dueText = (card.updatedAt or "No Due Date")
-    local dueText = (card.updatedAt or "No Due Date")
+    local dueText = (formatISODate(card.updatedAt) or "No Due Date")
     
     self:drawText(assigneeText, textX, textY, 0.9, 0.9, 0.9, 1, UIFont.Small)
     self:drawTextRight(dueText, x + width - padding, textY, 0.9, 0.9, 0.9, 1, UIFont.Small)
@@ -259,8 +259,24 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     sendClientCommand(MODDATA_KEY, "UpdateTask", task)
 end
 
+function formatISODateForCard(isoString)
+    local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
+    if year and month and day and hour and min and sec then
+        local timestamp = os.time({
+            year = tonumber(year),
+            month = tonumber(month),
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec),
+            isdst = false
+        })
+        return os.date("%B %d, %Y", timestamp)
+    end
+    return isoString 
+end
 
-local function formatISODate(isoString)
+function formatISODate(isoString)
     local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
     if year and month and day and hour and min and sec then
         local timestamp = os.time({
