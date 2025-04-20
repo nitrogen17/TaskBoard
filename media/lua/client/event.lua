@@ -15,17 +15,14 @@ MODDATA_KEY = "SimpleModData"
 
 -- for Create, Edit and Delete event on the server
 Events.OnReceiveGlobalModData.Add(function(key, data)
-    print("[Client] Events.OnReceiveGlobalModData.Add(function(key, data)")
     if key ~= MODDATA_KEY then return end
 
-    for taskID, task in pairs(data) do
-        -- print("  TaskID:", taskID, "Title:", task.title)
-        printTable(task)
-    end
+    -- for taskID, task in pairs(data) do
+    --     -- print("  TaskID:", taskID, "Title:", task.title)
+    --     printTable(task)
+    -- end
 
     reloadAllTablesInClient(data)
-
-    -- You can now update UI or local cache here if needed
 end)
 
 function reloadAllTablesInClient(tasks)

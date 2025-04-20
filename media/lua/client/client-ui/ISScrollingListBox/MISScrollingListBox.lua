@@ -235,8 +235,20 @@ function MISScrollingListBox:onRightMouseDown(x, y)
     return false
 end
 
+
+-- -- Utility to print both attribute names and their values
+-- function printTask(task)
+--     for key, value in pairs(task) do
+--         if type(value) ~= "table" then
+--             print(tostring(key) .. " = " .. tostring(value))
+--         end
+--     end
+-- end
+
 function MISScrollingListBox:onViewTask(task)
     -- kb_TaskFormPanel1.new(task)
+
+    -- printTask(task)
 
     local panel = TaskCardPanel:new()
     panel:initialise(task)

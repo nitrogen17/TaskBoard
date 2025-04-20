@@ -1,6 +1,24 @@
 -- Server
 MODDATA_KEY = "SimpleModData"
 
+function generateUUIDWithRetries()
+    local retryCount = 0
+    local maxRetries = 5
+
+    local value = tostring(ZombRand(1000000000, 9999999999))
+
+    while retryCount < maxRetries do
+        if not ModData.getOrCreate(MODDATA_KEY)[value] then
+            return value
+        else
+            retryCount = retryCount + 1
+            value = tostring(ZombRand(1000000000, 9999999999))
+        end
+    end
+
+    return tostring(ZombRand(1000000000, 9999999999))
+end
+
 Events.OnClientCommand.Add(function(module, command, player, args)
     if module ~= MODDATA_KEY then return end
 
@@ -9,6 +27,7 @@ Events.OnClientCommand.Add(function(module, command, player, args)
     if command == "RequestAllTasks" then
         sendServerCommand(player, MODDATA_KEY, "SendAllTasks", { tasks = db })
     elseif command == "CreateTask" then
+        args.id = generateUUIDWithRetries()
         db[args.id] = args
         ModData.transmit(MODDATA_KEY)
     elseif command == "UpdateTask" then

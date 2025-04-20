@@ -136,7 +136,6 @@ function kb_TaskFormPanel.onSubmit()
 
     if kb_TaskFormPanel.action == "create" then
         local createdTask = createCardInstance()
-        createdTask.id = generateUUIDWithRetries()
         createdTask.title = title
         createdTask.description = description
         createdTask.priority = priority
