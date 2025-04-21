@@ -13,6 +13,10 @@ Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
 MODDATA_KEY = "SimpleModData"
 
+-- Global Property for holding the tasks
+kb_DataManager = {}
+kb_DataManager.tasks = {}
+
 -- for Create, Edit and Delete event on the server
 Events.OnReceiveGlobalModData.Add(function(key, data)
     if key ~= MODDATA_KEY then return end

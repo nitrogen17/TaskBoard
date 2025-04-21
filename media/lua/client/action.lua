@@ -28,7 +28,6 @@ function onCustomUIKeyPressed(key)
 
     if key == 43 then
         print("[Debug] press key 43")
-        -- sendClientCommand("SimpleModData", "SayHello", { text = "Hi Server - New!" })
         sendClientCommand(MODDATA_KEY, "RequestAllTasks", {})
     end
 
