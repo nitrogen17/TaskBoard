@@ -8,32 +8,25 @@ require('ISUI/ISPanel')
 TaskFormPanel = ISPanel:derive("ISPanel");
 
 function TaskFormPanel:prerender()
-    -- ISPanel.prerender(self);
-    
-    -- Use the title set from the client
     local text = self.title
     local font = UIFont.Small
-    local textWidth = getTextManager():MeasureStringX(font, text) -- Get text width
-    local textHeight = getTextManager():MeasureStringY(font, text) -- Get text height
-    
-    -- Calculate the position to center the text
+    local textWidth = getTextManager():MeasureStringX(font, text)
+    local textHeight = getTextManager():MeasureStringY(font, text)
+
     local xPos = 10
     local yPos = (self:getHeight() - textHeight) / 2
     
     self:drawText(text, xPos, yPos, 1, 1, 1, 1, font);
 end
 
--- Setter function to update the title from the client
 function TaskFormPanel:setTitle(newTitle)
     self.title = newTitle
 end
 
 kb_priorityOptions = {"Low", "Medium", "High"}
 
--- Define the kb_TaskFormPanel table
 kb_TaskFormPanel = {}
 
--- Declare the form panel and inputs inside the table
 kb_TaskFormPanel.formPanel = nil
 kb_TaskFormPanel.titleLabel = nil
 kb_TaskFormPanel.descriptionLabel = nil
@@ -43,12 +36,9 @@ kb_TaskFormPanel.moreinfo = nil
 kb_TaskFormPanel.action = nil
 kb_TaskFormPanel.task = nil
 
--- This function creates the form and adds it to the UI
 function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.action = action
 
-
-    -- Create a new panel for the form
     kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
     kb_TaskFormPanel.formPanel:initialise()
     kb_TaskFormPanel.formPanel:setAnchorLeft(true)
@@ -59,21 +49,17 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.titleTag = TaskFormPanel:new(0, 15, 280, 20)
     kb_TaskFormPanel.titleTag:initialise()
     kb_TaskFormPanel.titleTag:setTitle("Title")
-    -- kb_TaskFormPanel.titleTag.backgroundColor = {r=1, g=0, b=0, a=1} -- Deep black
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.titleTag)
 
-    -- Title Textbox
     kb_TaskFormPanel.titleLabel = ISTextEntryBox:new("", 10, kb_TaskFormPanel.titleTag:getY() + kb_TaskFormPanel.titleTag:getHeight() + 10, 280, 20)
     kb_TaskFormPanel.titleLabel:initialise()
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.titleLabel)
-
 
     kb_TaskFormPanel.descriptionTag = TaskFormPanel:new(0, kb_TaskFormPanel.titleLabel:getY() + kb_TaskFormPanel.titleLabel:getHeight() + 10, 280, 20)
     kb_TaskFormPanel.descriptionTag:initialise()
     kb_TaskFormPanel.descriptionTag:setTitle("Description")
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.descriptionTag)
 
-    -- -- Description Textbox
     kb_TaskFormPanel.descriptionLabel = ISTextEntryBox:new("", 10, kb_TaskFormPanel.descriptionTag:getY() + kb_TaskFormPanel.descriptionTag:getHeight() + 10, 280, 60)
     kb_TaskFormPanel.descriptionLabel:initialise()
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.descriptionLabel)
@@ -93,7 +79,6 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.priorityLabel:instantiate()
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.priorityLabel)
 
-    -- Submit Button
     local submitButton = ISButton:new(10, 320, 280, 30, "Submit", nil, kb_TaskFormPanel.onSubmit)
     submitButton:initialise()
     kb_TaskFormPanel.formPanel:addChild(submitButton)
@@ -113,7 +98,6 @@ function kb_TaskFormPanel.createForm(action, task)
         kb_TaskFormPanel.priorityLabel.selected = selectedIndex
     end
 
-
     kb_TaskFormPanel.moreinfo = MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
     kb_TaskFormPanel.moreinfo:initialise();
     kb_TaskFormPanel.moreinfo:setX((getCore():getScreenWidth() * 0.5) - (kb_TaskFormPanel.moreinfo:getWidth() * 0.5))
@@ -129,8 +113,8 @@ function kb_TaskFormPanel.createForm(action, task)
 end
 
 function kb_TaskFormPanel.onSubmit()
-    local title = kb_TaskFormPanel.titleLabel:getText() or ""        -- Default to empty string if nil or empty
-    local description = kb_TaskFormPanel.descriptionLabel:getText() or ""  -- Default to empty string if nil or empty
+    local title = kb_TaskFormPanel.titleLabel:getText() or ""
+    local description = kb_TaskFormPanel.descriptionLabel:getText() or ""
     local selectedIndex = kb_TaskFormPanel.priorityLabel.selected
     local priority = kb_TaskFormPanel.priorityLabel.options[selectedIndex]
 
@@ -145,10 +129,6 @@ function kb_TaskFormPanel.onSubmit()
 
         sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
     elseif kb_TaskFormPanel.action == "edit" then
-        -- kb_TaskFormPanel.task.lastUserModifiedID = 
-        -- kb_TaskFormPanel.task.
-        -- kb_TaskFormPanel.task.
-
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
         kb_TaskFormPanel.task.priority = priority
