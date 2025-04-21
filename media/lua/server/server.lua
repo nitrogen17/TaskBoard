@@ -1,5 +1,5 @@
 -- Server
-MODDATA_KEY = "SimpleModData"
+MODDATA_KEY = "KB.KanbanBoard"
 
 function generateUUID()
     local db = ModData.getOrCreate(MODDATA_KEY)

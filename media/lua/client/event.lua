@@ -11,7 +11,7 @@ require 'test'
 Events.OnGameStart.Add(main)
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
-MODDATA_KEY = "SimpleModData"
+MODDATA_KEY = "KB.KanbanBoard"
 
 -- Global Property for holding the tasks
 kb_DataManager = {}
