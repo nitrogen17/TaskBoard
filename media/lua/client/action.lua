@@ -1,84 +1,39 @@
+-- Keyboard Reference: 
+-- https://theindiestone.com/forums/index.php?/topic/9799-key-code-reference/
+
 function onCustomUIKeyPressed(key)
     if key == 22 then
-        print("$$ press key")
+        print("[Debug] press key 22")
 
         isWindowVisible = not isWindowVisible
         if mainWindow then
             mainWindow:setVisible(isWindowVisible)
             sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
-
-            -- for _, task in pairs(kb_DataManager.getMockTasks()) do
-            --     if task.sectionID == 1 then
-            --         kb_leftListBox:addItem(task)
-            --     elseif task.sectionID == 2 then
-            --         kb_middleListBox:addItem(task)
-            --     elseif task.sectionID == 3 then
-            --         kb_rightListBox:addItem(task)
-            --     end
-            -- end
-            
         end
     end
 
     if key == 25 then
-        print("$$ press ke 25")
-        local task = {
-            id = generateUUIDWithRetries(),
-            title = "Fortify Base",
-            description = "Nail planks on all windows and doors of the safehouse to improve defenses.",
-            color = "red",
-            sectionID = 1,
-            createdAt = "2025-04-15T10:32:00Z",
-            updatedAt = "2025-04-15T10:32:00Z",
-            dueDate = "2025-04-18",
-            startDate = "",
-            completedDate = "",
-            lastUserModifiedID = "u001",
-            lastUserModifiedName = "Alex",
-            createdByID = "u001",
-            createdByName = "Alex",
-            assigneeID = "u002",
-            assigneeName = "Jordan",
-            watchers = { "u003", "u004" },
-            priority = "High",
-            type = "Task",
-            category = "Crafting",
-            tags = { "base", "urgent" },
-            attachments = {},
-            checklist = {},
-            comments = {},
-            relatedCards = {},
-            parentCardID = "",
-            dependencies = {},
-            status = "Requested",
-            customFields = {
-                estimateHours = 3,
-                difficulty = "Medium",
-                xpReward = 50
-            },
-            automationRules = {}
-        }
-        
-        sendClientCommand(MODDATA_KEY, "CreateTask", task)
+        print("[Debug] press key 25")
     end
 
     if key == 26 then
+        print("[Debug] press key 26")
         sendClientCommand(MODDATA_KEY, "UpdateTask", task)
     end
 
     if key == 27 then
-        print("$$ press key 27")
+        print("[Debug] press key 27")
         sendClientCommand(MODDATA_KEY, "DeleteTask", { id = taskID })
     end
 
     if key == 43 then
-        print("$$ press key 43")
+        print("[Debug] press key 43")
         -- sendClientCommand("SimpleModData", "SayHello", { text = "Hi Server - New!" })
         sendClientCommand(MODDATA_KEY, "RequestAllTasks", {})
     end
 
     if key == 40 then
-        print("$$ press key 40")
+        print("[Debug] press key 40")
         sendClientCommand(MODDATA_KEY, "DeleteAllTasks", {})
     end
 end
