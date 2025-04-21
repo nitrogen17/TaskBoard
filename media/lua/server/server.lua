@@ -24,9 +24,7 @@ Events.OnClientCommand.Add(function(module, command, player, args)
 
     local db = ModData.getOrCreate(MODDATA_KEY)
 
-    if command == "RequestAllTasks" then
-        sendServerCommand(player, MODDATA_KEY, "SendAllTasks", { tasks = db })
-    elseif command == "CreateTask" then
+    if command == "CreateTask" then
         args.id = generateUUIDWithRetries()
         db[args.id] = args
         ModData.transmit(MODDATA_KEY)
