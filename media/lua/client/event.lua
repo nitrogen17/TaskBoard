@@ -26,34 +26,49 @@ Events.OnReceiveGlobalModData.Add(function(key, data)
 end)
 
 function reloadAllTablesInClient(tasks)
-    kb_leftListBox.tableTasks = {}
-    kb_middleListBox.tableTasks = {}
-    kb_rightListBox.tableTasks = {}
-
+    -- Clear UI and internal data
     kb_leftListBox:clear()
     kb_middleListBox:clear()
     kb_rightListBox:clear()
 
-    -- Sort function by updatedAt ascending (older updates first, newer last)
-    local function sortByUpdatedAtAsc(a, b)
+    kb_leftListBox.tableTasks = {}
+    kb_middleListBox.tableTasks = {}
+    kb_rightListBox.tableTasks = {}
+
+    -- Prepare section maps
+    local sectionMap = {
+        [1] = {},
+        [2] = {},
+        [3] = {}
+    }
+
+    -- Group tasks by section
+    for _, task in pairs(tasks) do
+        if sectionMap[task.sectionID] then
+            table.insert(sectionMap[task.sectionID], task)
+        end
+    end
+
+    -- Sort each section by updatedAt descending (newer last)
+    local function sortByUpdatedAtDesc(a, b)
         return a.updatedAt > b.updatedAt
     end
 
-    table.sort(kb_leftListBox, sortByUpdatedAtAsc)
-    table.sort(kb_middleListBox, sortByUpdatedAtAsc)
-    table.sort(kb_rightListBox, sortByUpdatedAtAsc)
+    table.sort(sectionMap[1], sortByUpdatedAtDesc)
+    table.sort(sectionMap[2], sortByUpdatedAtDesc)
+    table.sort(sectionMap[3], sortByUpdatedAtDesc)
 
-    for _, task in pairs(tasks) do
-        if task.sectionID == 1 then
-            kb_leftListBox:addItem(task)
-        elseif task.sectionID == 2 then
-            kb_middleListBox:addItem(task)
-        elseif task.sectionID == 3 then
-            kb_rightListBox:addItem(task)
-        end
+    -- Add sorted tasks to respective list boxes
+    for _, task in ipairs(sectionMap[1]) do
+        kb_leftListBox:addItem(task)
+    end
+    for _, task in ipairs(sectionMap[2]) do
+        kb_middleListBox:addItem(task)
+    end
+    for _, task in ipairs(sectionMap[3]) do
+        kb_rightListBox:addItem(task)
     end
 end
-
 
 Events.OnServerCommand.Add(function(module, command, args)
     if module ~= MODDATA_KEY then return end
