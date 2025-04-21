@@ -159,14 +159,5 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task = nil  
     end
 
-    -- Process the data (For example, printing to the console)
-    print("Title: " .. title)
-    print("Description: " .. description)
-    print("Priority: " .. priority)
-
-    
-
-    -- You can save this data, send it to a server, etc.
-    -- You can also close the form after submission
     kb_TaskFormPanel.moreinfo:removeFromUIManager()
 end

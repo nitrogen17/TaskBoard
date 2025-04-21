@@ -22,7 +22,6 @@ function ISPlusIcon:render()
 end
 
 function ISPlusIcon:onMouseDown(x, y)
-    print("click ISPlusIcon:onMouseDown(x, y)")
     kb_TaskFormPanel.createForm("create")
 end
 
