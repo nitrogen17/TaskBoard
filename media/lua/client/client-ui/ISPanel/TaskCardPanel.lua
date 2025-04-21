@@ -6,7 +6,6 @@ require('ISUI/ISButton')
 
 local TaskCardPanel = ISPanel:derive("TaskCardPanel")
 
--- Constructor to accept dynamic task data
 function TaskCardPanel:initialise(taskData)
     ISPanel.initialise(self)
     self:create(taskData)
@@ -33,7 +32,6 @@ function TaskCardPanel:create(task)
     local padding = 16
     local innerWidth = self.width - padding * 2
 
-    -- Header: Status Bar
     self.header = ISPanel:new(0, 0, self.width, 40)
     self.header.backgroundColor = {r=0.15, g=0.15, b=0.15, a=1}
     self.header.moveWithMouse = true
@@ -54,7 +52,6 @@ function TaskCardPanel:create(task)
     self.statusLabel = ISLabel:new(16, 12, 20, sectionStatus, 1, 1, 1, 1, UIFont.Medium, true)
     self.header:addChild(self.statusLabel)
 
-    -- Content Area (Rich Text Panel)
     self.richText = ISRichTextPanel:new(padding, 50, innerWidth, self.height - 110)
     self.richText:initialise()
     self.richText.autosetheight = false
@@ -77,7 +74,6 @@ function TaskCardPanel:create(task)
     self.richText:paginate()
     self:addChild(self.richText)
 
-    -- OK Button
     local buttonWidth = 100
     local buttonHeight = 30
     self.okButton = ISButton:new(
@@ -110,7 +106,7 @@ function TaskCardPanel:new()
     o:setY((getCore():getScreenHeight() * 0.5) - (o:getHeight() * 0.5))
 
     o.borderColor = {r=0.5, g=0.5, b=0.5, a=1}
-    o.backgroundColor = {r=0, g=0, b=0, a=1} -- Deep black
+    o.backgroundColor = {r=0, g=0, b=0, a=1}
     o.moveWithMouse = true
 
     return o
