@@ -9,6 +9,8 @@ function onCustomUIKeyPressed(key)
         if mainWindow then
             mainWindow:setVisible(isWindowVisible)
             sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
+        else
+            mainWindow = nil
         end
     end
 
