@@ -4,16 +4,16 @@ A simple and immersive **Kanban-style task board** for Project Zomboid. Organize
 
 ---
 
-## 🔧 Features
+## Features
 
-- ➕ Add, edit, and delete tasks
-- 📌 Drag and drop tasks between three columns
-- 🧠 Helps manage goals like base building, crafting, or roleplay quests
-- 🎮 Opens via a **toolbar icon** below the map
+- Add, edit, and delete tasks
+- Drag and drop tasks between three columns
+- Helps manage goals like base building, crafting, or roleplay quests
+- Opens via a **toolbar icon** below the map
 
 ---
 
-## 📦 How to Install (Local Mod)
+## How to Install (Local Mod)
 
 ### 1. Locate the Zomboid Mods Folder
 
@@ -42,7 +42,7 @@ Replace `<YourUsername>` with your actual system username.
 
 ---
 
-## 🎮 How to Use
+## How to Use
 
 1. Enter a game world (new or existing)
 2. Click the **note icon** on the left toolbar (below the map)
@@ -52,7 +52,7 @@ Replace `<YourUsername>` with your actual system username.
 
 ---
 
-## 🧠 Technical Notes
+## Technical Notes
 
 - Built using Lua and the native UI API
 - Data is stored with `ModData` per-player
@@ -61,7 +61,7 @@ Replace `<YourUsername>` with your actual system username.
 
 ---
 
-## 📃 mod.info
+## mod.info
 
 ```ini
 name=Kanban Board
