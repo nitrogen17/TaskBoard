@@ -4,12 +4,16 @@ MODDATA_KEY = "KB.KanbanBoard"
 function generateUUID()
     local db = ModData.getOrCreate(MODDATA_KEY)
 
+    local function padWithZeros(num)
+        return string.format("%010d", num) -- Ensures the number is 10 digits long with leading zeros
+    end
+
     for i = 1, 5 do
-        local id = tostring(ZombRand(1000000000, 9999999999))
+        local id = padWithZeros(ZombRand(0, 1000000000)) -- Generate a number and pad it
         if not db[id] then return id end
     end
 
-    return tostring(ZombRand(1000000000, 9999999999))
+    return padWithZeros(ZombRand(0, 1000000000)) -- Fallback in case of collision
 end
 
 Events.OnClientCommand.Add(function(module, command, player, args)
