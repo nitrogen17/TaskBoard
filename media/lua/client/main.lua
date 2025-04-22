@@ -63,7 +63,7 @@ function drawSectionHeaderPanel(mainWindow)
     
 
     local middleHeaderSection = drawMiddleHeaderSection(mainWindow, leftHeaderSection)
-    drawPlusIconDebug(middleHeaderSection)
+    -- drawPlusIconDebug(middleHeaderSection)
 
     drawRightHeaderSection(mainWindow, middleHeaderSection)
 
