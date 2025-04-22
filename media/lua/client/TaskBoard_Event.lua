@@ -2,9 +2,8 @@
 -- https://pzwiki.net/wiki/Lua_event
 
 -- Hook
-require 'main'
-require 'action'
-require 'test'
+require 'TaskBoard_Main'
+require 'TaskBoard_Action'
 
 -- Event
 --Events.OnGameStart.Add(main)
