@@ -1,6 +1,6 @@
-# Kanban Board - A Project Zomboid Mod
+# Task Board - A Project Zomboid Mod
 
-A simple and immersive **Kanban-style task board** for Project Zomboid. Organize your survival priorities with categorized tasks: **Requested**, **In Progress**, and **Done** — all from a custom button in your in-game toolbar.
+A simple and immersive **Kanban-style task board** for Project Zomboid. Organize your survival priorities with categorized tasks: **To Do**, **In Progress**, and **Done** — all from a custom button in your in-game toolbar.
 
 ---
 
@@ -8,8 +8,7 @@ A simple and immersive **Kanban-style task board** for Project Zomboid. Organize
 
 - Add, edit, and delete tasks
 - Drag and drop tasks between three columns
-- Helps manage goals like base building, crafting, or roleplay quests
-- Opens via a **toolbar icon** below the map
+- Opens via a **toolbar icon** besides the map
 
 ---
 
@@ -30,7 +29,7 @@ Replace `<YourUsername>` with your actual system username.
 
 ### 2. Install the Mod
 
-- Copy this mod folder (`KanbanBoard`) into your `mods` directory.
+- Copy this mod folder (`TaskBoard`) into your `mods` directory.
 - Do not rename the folder.
 
 ### 3. Enable the Mod
@@ -46,7 +45,7 @@ Replace `<YourUsername>` with your actual system username.
 
 1. Enter a game world (new or existing)
 2. Click the **note icon** on the left toolbar (below the map)
-3. Create new tasks in the **Requested** column
+3. Create new tasks in the **To do** column
 4. Drag tasks to **In Progress** or **Done** as needed
 5. Tasks are saved and persist between sessions
 
@@ -64,7 +63,8 @@ Replace `<YourUsername>` with your actual system username.
 ## mod.info
 
 ```ini
-name=Kanban Board
-id=KanbanBoard
-description=A simple kanban-style task organizer for Project Zomboid survivors.
+name=TaskBoard
+id=TaskBoard
+description=The Task Board is an in-game task management system that redefines how you handle objectives in Project Zomboid. It seamlessly introduces a sleek, intuitive, and immersive Kanban-style board into your UI — positioned exactly where team members expect to find and complete tasks related to safehouse operations. Inspired by modern productivity platforms like Trello, Asana, and Jira, the Task Board brings the structure and efficiency of real-world task management into your survival experience. It allows you to create tasks, organize objectives, plan your actions, and maintain focus — all directly within the game, without disrupting immersion or relying on external tools or notes.
 version=1.0.0
+```
