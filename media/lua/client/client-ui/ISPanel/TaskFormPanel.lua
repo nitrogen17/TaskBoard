@@ -113,6 +113,12 @@ function kb_TaskFormPanel.createForm(action, task)
 end
 
 function kb_TaskFormPanel.onSubmit()
+    local titleText = kb_TaskFormPanel.titleLabel:getText()
+    if titleText == nil or titleText:match("^%s*$") then
+        kb_TaskFormPanel.moreinfo:removeFromUIManager()
+        return
+    end
+
     local title = kb_TaskFormPanel.titleLabel:getText() or ""
     local description = kb_TaskFormPanel.descriptionLabel:getText() or ""
     local selectedIndex = kb_TaskFormPanel.priorityLabel.selected
