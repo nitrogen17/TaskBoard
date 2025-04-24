@@ -2,7 +2,7 @@
 -- Type: CardTemplate
 -- Pass by value
 
--- Usage: 
+-- Usage:
 --local card1 = createCardInstance()
 --card1.title = "Build Barricades"
 
@@ -18,8 +18,10 @@ CardTemplate = {
 
     sectionID = 1, -- number: ID of the section/column (e.g. 1 = To Do, 2 = In Progress, 3 = Done)
 
-    createdAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was created
-    updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was last modified
+    createdAt = "", -- string (timestamp): when card was created (real time)
+    updatedAt = "", -- string (timestamp): when card was last modified (real time)
+    createdAtGame = "", -- string (timestamp): when card was created (game time)
+    updatedAtGame = "", -- string (timestamp): when card was last modified (game time)
     dueDate = "", -- string (e.g. "2025-04-20") or nil
     startDate = "", -- string (optional): planned start date
     completedDate = "", -- string: date when task was completed

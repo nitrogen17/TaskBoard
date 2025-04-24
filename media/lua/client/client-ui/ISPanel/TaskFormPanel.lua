@@ -2,8 +2,8 @@ require('ISUI/ISPanel')
 require('ISUI/ISTextEntryBox')
 require('ISUI/ISButton')
 require('ISUI/ISComboBox')
-
 require('ISUI/ISPanel')
+require('TaskBoard_Utils')
 
 TaskFormPanel = ISPanel:derive("ISPanel");
 
@@ -15,7 +15,7 @@ function TaskFormPanel:prerender()
 
     local xPos = 10
     local yPos = (self:getHeight() - textHeight) / 2
-    
+
     self:drawText(text, xPos, yPos, 1, 1, 1, 1, font);
 end
 
@@ -105,8 +105,8 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.moreinfo:setTitle("Task");
 
     kb_TaskFormPanel.formPanel:setY(kb_TaskFormPanel.moreinfo:titleBarHeight())
-    
-    kb_TaskFormPanel.moreinfo:addChild(kb_TaskFormPanel.formPanel)     
+
+    kb_TaskFormPanel.moreinfo:addChild(kb_TaskFormPanel.formPanel)
 
     kb_TaskFormPanel.moreinfo:addToUIManager()
     kb_TaskFormPanel.moreinfo:bringToTop()
@@ -130,6 +130,11 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.description = description
         createdTask.priority = priority
 
+        createdTask.createdAt = TaskBoard_Utils.getCurrentRealTime()
+        createdTask.updatedAt = createdTask.createdAt
+        createdTask.createdAtGame = TaskBoard_Utils.getCurrentGameTime()
+        createdTask.updatedAtGame = createdTask.createdAtGame
+
         createdTask.createdByName = getPlayer(0):getUsername()
         createdTask.lastUserModifiedName = getPlayer(0):getUsername()
 
@@ -139,10 +144,11 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.description = description
         kb_TaskFormPanel.task.priority = priority
         kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
-        kb_TaskFormPanel.task.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+        kb_TaskFormPanel.task.updatedAt = TaskBoard_Utils.getCurrentRealTime()
+        kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
 
         sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
-        kb_TaskFormPanel.task = nil  
+        kb_TaskFormPanel.task = nil
     end
 
     kb_TaskFormPanel.moreinfo:removeFromUIManager()
