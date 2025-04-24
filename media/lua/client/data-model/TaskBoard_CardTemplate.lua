@@ -9,6 +9,17 @@
 --local card2 = createCardInstance()
 --card2.title = "Search for Food"
 
+function getCurrentGameTime()
+    return string.format(
+        "%04d-%02d-%02dT%02d:%02d:00Z",
+        getGameTime():getYear(),
+        getGameTime():getMonth() + 1,
+        getGameTime():getDay(),
+        getGameTime():getHour(),
+        getGameTime():getMinutes()
+    )
+end
+
 CardTemplate = {
     id = "", -- string: unique identifier (e.g. "1000000018")
     title = "", -- string: short title of the card
@@ -18,8 +29,8 @@ CardTemplate = {
 
     sectionID = 1, -- number: ID of the section/column (e.g. 1 = To Do, 2 = In Progress, 3 = Done)
 
-    createdAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was created
-    updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was last modified
+    createdAt = getCurrentGameTime(), -- number (timestamp): when card was created
+    updatedAt = getCurrentGameTime(), -- number (timestamp): when card was last modified
     dueDate = "", -- string (e.g. "2025-04-20") or nil
     startDate = "", -- string (optional): planned start date
     completedDate = "", -- string: date when task was completed

@@ -10,7 +10,7 @@ require 'TaskBoard_Action'
 Events.OnGameStart.Add(main)
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
-MODDATA_KEY = "KB.KanbanBoard"
+MODDATA_KEY = "KB.KanbanBoard.SP"
 
 -- Global Property for holding the tasks
 kb_DataManager = {}

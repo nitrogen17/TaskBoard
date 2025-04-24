@@ -5,6 +5,8 @@ require('ISUI/ISComboBox')
 
 require('ISUI/ISPanel')
 
+require('Server/TaskBoard_Server')
+
 TaskFormPanel = ISPanel:derive("ISPanel");
 
 function TaskFormPanel:prerender()
@@ -132,16 +134,17 @@ function kb_TaskFormPanel.onSubmit()
 
         createdTask.createdByName = getPlayer(0):getUsername()
         createdTask.lastUserModifiedName = getPlayer(0):getUsername()
+ 
+        TaskBoard_PersistencyManager.action("CreateTask", createdTask)
 
-        sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
     elseif kb_TaskFormPanel.action == "edit" then
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
         kb_TaskFormPanel.task.priority = priority
         kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
-        kb_TaskFormPanel.task.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+        kb_TaskFormPanel.task.updatedAt = getCurrentGameTime()
 
-        sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
+        TaskBoard_PersistencyManager.action("UpdateTask", kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil  
     end
 

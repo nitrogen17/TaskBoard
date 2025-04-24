@@ -61,7 +61,7 @@ function TaskCardPanel:create(task)
     self.richText.backgroundColor = {r=0.1, g=0.1, b=0.1, a=1}
 
     self.richText.text = string.format(
-        "%s\n\n%s\n\n\n%s\n\nCreated by:\n%s\n%s\n\nModified by:\n%s\n%s\n",
+        "%s\n\n%s\n\n\n%s\n\nCreated at:\n%s\n%s\n\nModified at:\n%s\n%s\n",
         task.title,
         task.description,
         task.priority,

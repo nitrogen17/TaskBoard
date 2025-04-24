@@ -1,5 +1,6 @@
 -- Server
-MODDATA_KEY = "KB.KanbanBoard"
+MODDATA_KEY = "KB.KanbanBoard.SP"
+TaskBoard_PersistencyManager = {}
 
 function generateUUID()
     local db = ModData.getOrCreate(MODDATA_KEY)
@@ -16,26 +17,27 @@ function generateUUID()
     return padWithZeros(ZombRand(0, 1000000000)) -- Fallback in case of collision
 end
 
-Events.OnClientCommand.Add(function(module, command, player, args)
-    if module ~= MODDATA_KEY then return end
+function TaskBoard_PersistencyManager.action(command, task)
+    print("[Debug] created task with in TaskBoard_PersistencyManager 1")
 
     local db = ModData.getOrCreate(MODDATA_KEY)
-    local transmit = function() ModData.transmit(MODDATA_KEY) end
+    local transmit = function() reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY)) end
 
     if command == "CreateTask" then
-        args.id = generateUUID()
-        db[args.id] = args
+        print("[Debug] created task with in TaskBoard_PersistencyManager")
+        task.id = generateUUID()
+        db[task.id] = task
         transmit()
-    elseif command == "UpdateTask" and db[args.id] then
-        db[args.id] = args
+    elseif command == "UpdateTask" and db[task.id] then
+        db[task.id] = task
         transmit()
     elseif command == "DeleteTask" then
-        db[args.id] = nil
+        db[task.id] = nil
         transmit()
     elseif command == "DeleteAllTasks" then
         table.wipe(db)
         transmit()
     elseif command == "FetchAllTasks" or command == "ReloadAllTables" then
-        sendServerCommand(player, MODDATA_KEY, command, { tasks = db })
+        reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
     end
-end)
+end

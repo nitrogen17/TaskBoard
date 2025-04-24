@@ -67,7 +67,7 @@ function MISScrollingListBox:onEditTask(task)
 end
 
 function MISScrollingListBox:onDeleteTask(task)
-    sendClientCommand(MODDATA_KEY, "DeleteTask", task)
+    TaskBoard_PersistencyManager.action("DeleteTask", task)
 end
 
 function MISScrollingListBox:onMoveTask(task, targetSection)
@@ -75,7 +75,7 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     newTask.sectionID = targetSection
     newTask.lastUserModifiedName = getPlayer(0):getUsername()
     newTask.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
-    sendClientCommand(MODDATA_KEY, "UpdateTask", task)
+    TaskBoard_PersistencyManager.action("UpdateTask", task)
 end
 
 function formatISODateForCard(isoString)
