@@ -25,7 +25,7 @@ local function formatISODate(isoString)
         })
         return os.date("%B %d, %Y at %I:%M %p", timestamp)
     end
-    return isoString 
+    return isoString
 end
 
 function TaskCardPanel:create(task)
@@ -60,14 +60,15 @@ function TaskCardPanel:create(task)
     self.richText.moveWithMouse = true
     self.richText.backgroundColor = {r=0.1, g=0.1, b=0.1, a=1}
 
+    local useInGameTime = SandboxVars.TaskBoard.UseInGameTime
     self.richText.text = string.format(
         "%s\n\n%s\n\n\n%s\n\nCreated by:\n%s\n%s\n\nModified by:\n%s\n%s\n",
         task.title,
         task.description,
         task.priority,
-        formatISODate(task.createdAt),
+        formatISODate(useInGameTime and task.createdAtGame or task.createdAt),
         task.createdByName,
-        formatISODate(task.updatedAt),
+        formatISODate(useInGameTime and task.updatedAtGame or task.updatedAt),
         task.lastUserModifiedName
     )
 
