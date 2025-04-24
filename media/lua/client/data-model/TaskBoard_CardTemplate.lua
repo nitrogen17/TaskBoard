@@ -25,6 +25,7 @@ CardTemplate = {
     dueDate = "", -- string (e.g. "2025-04-20") or nil
     startDate = "", -- string (optional): planned start date
     completedDate = "", -- string: date when task was completed
+    datesSetInRealTime = true, -- boolean: true if dates are set in real time, false if in-game time
 
     lastUserModifiedID = "", -- string: user ID of the last person who modified the card
     lastUserModifiedName = "", -- string: name of the last modifier

@@ -146,6 +146,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
         kb_TaskFormPanel.task.updatedAt = TaskBoard_Utils.getCurrentRealTime()
         kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
+        kb_TaskFormPanel.task.datesSetInRealTime = not SandboxVars.TaskBoard.UseInGameTime
 
         sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil
