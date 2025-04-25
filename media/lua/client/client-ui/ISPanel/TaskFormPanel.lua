@@ -133,7 +133,8 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.createdByName = getPlayer(0):getUsername()
         createdTask.lastUserModifiedName = getPlayer(0):getUsername()
 
-        sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
+        TaskBoard_Core.create(createdTask)
+
     elseif kb_TaskFormPanel.action == "edit" then
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
@@ -141,7 +142,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
         kb_TaskFormPanel.task.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
 
-        sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
+        TaskBoard_Core.update(kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil  
     end
 

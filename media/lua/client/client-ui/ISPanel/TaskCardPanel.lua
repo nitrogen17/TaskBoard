@@ -63,7 +63,7 @@ function TaskCardPanel:create(task)
     self.richText.text = string.format(
         "%s\n\n%s\n\n\n%s\n\nCreated by:\n%s\n%s\n\nModified by:\n%s\n%s\n",
         task.title,
-        task.description,
+        (task.description ~= "" and task.description or "no description"),
         task.priority,
         formatISODate(task.createdAt),
         task.createdByName,

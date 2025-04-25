@@ -20,11 +20,6 @@ kb_DataManager.tasks = {}
 Events.OnReceiveGlobalModData.Add(function(key, data)
     if key ~= MODDATA_KEY then return end
 
-    -- for taskID, task in pairs(data) do
-    --     -- print("  TaskID:", taskID, "Title:", task.title)
-    --     printTable(task)
-    -- end
-
     reloadAllTablesInClient(data)
 end)
 
@@ -71,27 +66,8 @@ end
 Events.OnServerCommand.Add(function(module, command, args)
     if module ~= MODDATA_KEY then return end
  
-    if command == "FetchAllTasks" then
-        kb_DataManager.tasks = args.tasks
-    end
-
     if command == "ReloadAllTables" then
         kb_DataManager.tasks = args.tasks
         reloadAllTablesInClient(kb_DataManager.tasks)
     end
 end)
-
-function printTable(t, indent)
-    indent = indent or 0
-    local prefix = string.rep("  ", indent)
-
-    for key, value in pairs(t) do
-        if type(value) == "table" then
-            print(prefix .. tostring(key) .. " = {")
-            printTable(value, indent + 1)
-            print(prefix .. "}")
-        else
-            print(prefix .. tostring(key) .. " = " .. tostring(value))
-        end
-    end
-end
