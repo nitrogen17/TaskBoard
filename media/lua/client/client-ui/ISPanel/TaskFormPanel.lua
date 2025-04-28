@@ -138,7 +138,8 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.createdByName = getPlayer(0):getUsername()
         createdTask.lastUserModifiedName = getPlayer(0):getUsername()
 
-        sendClientCommand(MODDATA_KEY, "CreateTask", createdTask)
+        TaskBoard_Core.create(createdTask)
+
     elseif kb_TaskFormPanel.action == "edit" then
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
@@ -148,7 +149,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
         kb_TaskFormPanel.task.datesSetInRealTime = not SandboxVars.TaskBoard.UseInGameTime
 
-        sendClientCommand(MODDATA_KEY, "UpdateTask", kb_TaskFormPanel.task)
+        TaskBoard_Core.update(kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil
     end
 
