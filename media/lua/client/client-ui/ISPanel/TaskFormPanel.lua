@@ -135,9 +135,10 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.createdAtGame = TaskBoard_Utils.getCurrentGameTime()
         createdTask.updatedAtGame = createdTask.createdAtGame
 
-        createdTask.createdByName = getPlayer(0):getUsername()
+        local player = getPlayer(0)
+        createdTask.createdByName = player:getUsername()
         createdTask.lastUserModifiedName = createdTask.createdByName
-        createdTask.createdByCharacterName = getPlayer(0):getDisplayName()
+        createdTask.createdByCharacterName = TaskBoard_Utils.getCharacterName(player)
         createdTask.lastUserModifiedCharacterName = createdTask.createdByCharacterName
 
         TaskBoard_Core.create(createdTask)
@@ -146,8 +147,10 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.title = title
         kb_TaskFormPanel.task.description = description
         kb_TaskFormPanel.task.priority = priority
-        kb_TaskFormPanel.task.lastUserModifiedName = getPlayer(0):getUsername()
-        kb_TaskFormPanel.task.lastUserModifiedCharacterName = getPlayer(0):getDisplayName()
+
+        local player = getPlayer(0)
+        kb_TaskFormPanel.task.lastUserModifiedName = player:getUsername()
+        kb_TaskFormPanel.task.lastUserModifiedCharacterName = TaskBoard_Utils.getCharacterName(player)
         kb_TaskFormPanel.task.updatedAt = TaskBoard_Utils.getCurrentRealTime()
         kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
         kb_TaskFormPanel.task.datesSetInRealTime = not SandboxVars.TaskBoard.UseInGameTime -- this is for due dates, state dates and the like.
