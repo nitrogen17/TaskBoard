@@ -1,0 +1,5 @@
+Sandbox_EN = {
+    Sandbox_TaskBoard = "TaskBoard Configuration",
+    Sandbox_TaskBoard_UseInGameTime = "Use In-Game Time",
+    Sandbox_TaskBoard_UseInGameTime_tooltip = "Pertains to dates used in the task board, such as creation date of a task. By default, time used is real-world time.",
+}

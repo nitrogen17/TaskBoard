@@ -1,0 +1,8 @@
+VERSION = 1,
+
+option TaskBoard.UseInGameTime {
+    type = boolean,
+    default = false,
+    page = TaskBoard,
+    translation = TaskBoard_UseInGameTime,
+}
