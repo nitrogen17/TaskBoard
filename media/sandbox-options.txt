@@ -6,3 +6,10 @@ option TaskBoard.UseInGameTime {
     page = TaskBoard,
     translation = TaskBoard_UseInGameTime,
 }
+
+option TaskBoard.UseCharacterName {
+    type = boolean,
+    default = false,
+    page = TaskBoard,
+    translation = TaskBoard_UseCharacterName,
+}

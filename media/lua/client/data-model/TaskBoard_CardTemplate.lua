@@ -29,10 +29,13 @@ CardTemplate = {
 
     lastUserModifiedID = "", -- string: user ID of the last person who modified the card
     lastUserModifiedName = "", -- string: name of the last modifier
+    lastUserModifiedCharacterName = "", -- string: name of the character who last modified the card
     createdByID = "", -- string: user ID of the creator
     createdByName = "", -- string: name of the creator
+    createdByCharacterName = "", -- string: name of the character who created the card
     assigneeID = "", -- string: ID of the person assigned to the card
     assigneeName = "", -- string: name of the assignee
+    assigneeCharacterName = "", -- string: name of the character assigned to the card
 
     watchers = {}, -- table of string user IDs: people watching the card for updates
 

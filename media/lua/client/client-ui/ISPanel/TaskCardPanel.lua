@@ -61,15 +61,16 @@ function TaskCardPanel:create(task)
     self.richText.backgroundColor = {r=0.1, g=0.1, b=0.1, a=1}
 
     local useInGameTime = SandboxVars.TaskBoard.UseInGameTime
+    local useCharacterName = SandboxVars.TaskBoard.UseCharacterName
     self.richText.text = string.format(
         "%s\n\n%s\n\n\n%s\n\nCreated by:\n%s\n%s\n\nModified by:\n%s\n%s\n",
         task.title,
         (task.description ~= "" and task.description or "no description"),
         task.priority,
         formatISODate(useInGameTime and task.createdAtGame or task.createdAt),
-        task.createdByName,
+        useCharacterName and task.createdByCharacterName or task.createdByName,
         formatISODate(useInGameTime and task.updatedAtGame or task.updatedAt),
-        task.lastUserModifiedName
+        useCharacterName and task.lastUserModifiedCharacterName or task.lastUserModifiedName
     )
 
     self.richText:paginate()
