@@ -2,14 +2,14 @@ VERSION = 1,
 
 option TaskBoard.UseInGameTime {
     type = boolean,
-    default = false,
+    default = true,
     page = TaskBoard,
     translation = TaskBoard_UseInGameTime,
 }
 
 option TaskBoard.UseCharacterName {
     type = boolean,
-    default = false,
+    default = true,
     page = TaskBoard,
     translation = TaskBoard_UseCharacterName,
 }
