@@ -2,6 +2,21 @@ MODDATA_KEY = "KB.KanbanBoard"
 
 TaskBoard_Core = {}
 
+local function generateUUID()
+    local db = ModData.getOrCreate(MODDATA_KEY)
+
+    local function padWithZeros(num)
+        return string.format("%010d", num)
+    end
+
+    for i = 1, 5 do
+        local id = padWithZeros(ZombRand(0, 1000000000))
+        if not db[id] then return id end
+    end
+
+    return padWithZeros(ZombRand(0, 1000000000))
+end
+
 local function handleTaskAction(action, task)
     local db = ModData.getOrCreate(MODDATA_KEY)
 
@@ -75,19 +90,4 @@ function TaskBoard_Core.delete(task)
         handleTaskAction("DeleteTask", task)
         reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
     end
-end
-
-function generateUUID()
-    local db = ModData.getOrCreate(MODDATA_KEY)
-
-    local function padWithZeros(num)
-        return string.format("%010d", num)
-    end
-
-    for i = 1, 5 do
-        local id = padWithZeros(ZombRand(0, 1000000000))
-        if not db[id] then return id end
-    end
-
-    return padWithZeros(ZombRand(0, 1000000000))
 end

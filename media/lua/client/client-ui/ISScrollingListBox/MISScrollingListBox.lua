@@ -7,7 +7,7 @@ local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
 function MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
     object.tableTasks = {}
-    
+
     return object
 end
 
@@ -18,7 +18,7 @@ end
 
 function MISScrollingListBox:addItem(task)
     table.insert(self.tableTasks, task)
-    ISScrollingListBox.addItem(self, task.title)  
+    ISScrollingListBox.addItem(self, task.title)
 end
 
 function MISScrollingListBox:doDrawItem(y, item, alt)
@@ -73,8 +73,13 @@ end
 function MISScrollingListBox:onMoveTask(task, targetSection)
     local newTask = task
     newTask.sectionID = targetSection
-    newTask.lastUserModifiedName = getPlayer(0):getUsername()
-    newTask.updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+
+    local player = getPlayer(0)
+    newTask.lastUserModifiedName = player:getUsername()
+    newTask.lastUserModifiedCharacterName = TaskBoard_Utils.getCharacterName(player)
+    newTask.updatedAt = TaskBoard_Utils.getCurrentRealTime()
+    newTask.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
+
     sendClientCommand(MODDATA_KEY, "UpdateTask", task)
 end
 
@@ -92,7 +97,7 @@ function formatISODateForCard(isoString)
         })
         return os.date("%B %d, %Y", timestamp)
     end
-    return isoString 
+    return isoString
 end
 
 function formatISODate(isoString)
@@ -109,5 +114,5 @@ function formatISODate(isoString)
         })
         return os.date("%B %d, %Y at %I:%M %p", timestamp)
     end
-    return isoString 
+    return isoString
 end
