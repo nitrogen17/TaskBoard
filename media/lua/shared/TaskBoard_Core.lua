@@ -14,7 +14,7 @@ local function generateUUID()
         if not db[id] then return id end
     end
 
-    return padWithZeros(ZombRand(0, 1000000000))
+    error("Failed to generate a unique ID after 5 attempts.")
 end
 
 local function handleTaskAction(action, task)

@@ -1,5 +1,6 @@
 local allowedTaskBoardFurnitures = {
     "location_business_office_generic_01_7",
+    "location_business_office_generic_01_15",
 }
 
 local function isFurnitureWhitelisted(furniture)
@@ -84,11 +85,12 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
 end
 
 local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
-    local square = getPlayer():getCurrentSquare()
     for _, object in ipairs(worldobjects) do
         if object and instanceof(object, "IsoObject") then
             local modData = object:getModData()
             local currentName = getFurnitureName(object)
+            local square = object:getSquare()
+
             -- Designed to be flexible. Feature will not break if the whitelist changes.
             if isFurnitureWhitelisted(object) and not modData.isTaskBoard then
                 context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
