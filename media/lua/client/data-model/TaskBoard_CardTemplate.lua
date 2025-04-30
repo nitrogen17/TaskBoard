@@ -2,7 +2,7 @@
 -- Type: CardTemplate
 -- Pass by value
 
--- Usage: 
+-- Usage:
 --local card1 = createCardInstance()
 --card1.title = "Build Barricades"
 
@@ -18,18 +18,24 @@ CardTemplate = {
 
     sectionID = 1, -- number: ID of the section/column (e.g. 1 = To Do, 2 = In Progress, 3 = Done)
 
-    createdAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was created
-    updatedAt = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- number (timestamp): when card was last modified
+    createdAt = "", -- string (timestamp): when card was created (real time)
+    updatedAt = "", -- string (timestamp): when card was last modified (real time)
+    createdAtGame = "", -- string (timestamp): when card was created (game time)
+    updatedAtGame = "", -- string (timestamp): when card was last modified (game time)
     dueDate = "", -- string (e.g. "2025-04-20") or nil
     startDate = "", -- string (optional): planned start date
     completedDate = "", -- string: date when task was completed
+    datesSetInRealTime = true, -- boolean: true if dates are set in real time, false if in-game time
 
     lastUserModifiedID = "", -- string: user ID of the last person who modified the card
     lastUserModifiedName = "", -- string: name of the last modifier
+    lastUserModifiedCharacterName = "", -- string: name of the character who last modified the card
     createdByID = "", -- string: user ID of the creator
     createdByName = "", -- string: name of the creator
+    createdByCharacterName = "", -- string: name of the character who created the card
     assigneeID = "", -- string: ID of the person assigned to the card
     assigneeName = "", -- string: name of the assignee
+    assigneeCharacterName = "", -- string: name of the character assigned to the card
 
     watchers = {}, -- table of string user IDs: people watching the card for updates
 
