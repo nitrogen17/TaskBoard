@@ -85,8 +85,11 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
 end
 
 local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
+    local square = getPlayer():getCurrentSquare()
+    local processedObjects = {}
     for _, object in ipairs(worldobjects) do
-        if object and instanceof(object, "IsoObject") then
+        if object and instanceof(object, "IsoObject") and not processedObjects[object] then
+            processedObjects[object] = true
             local modData = object:getModData()
             local currentName = getFurnitureName(object)
             local square = object:getSquare()
