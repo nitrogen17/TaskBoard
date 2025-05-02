@@ -67,7 +67,7 @@ function kb_MISScrollingListBox:onEditTask(task)
 end
 
 function kb_MISScrollingListBox:onDeleteTask(task)
-    sendClientCommand(MODDATA_KEY, "DeleteTask", task)
+    TaskBoard_Core.delete(TaskBoard_mainWindowFurniture, task)
 end
 
 function kb_MISScrollingListBox:onMoveTask(task, targetSection)
