@@ -33,7 +33,7 @@ function TaskBoard_Utils.deepCopy(orig)
     if orig_type == 'table' then
         copy = {}
         for k, v in pairs(orig) do
-            copy[k] = deepCopy(v)
+            copy[k] = TaskBoard_Utils.deepCopy(v)
         end
     else
         copy = orig

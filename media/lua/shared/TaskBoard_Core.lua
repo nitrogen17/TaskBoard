@@ -1,3 +1,5 @@
+require("TaskBoard_Server") --HMMM...
+
 TaskBoard_Core = {}
 
 TaskBoard_allowedTaskBoardFurnitures = {
@@ -35,6 +37,8 @@ local function handleTaskAction(furniture, action, task)
     end
 
     furniture:transmitModData()
+    TaskBoard_Server.sendPacket("TaskBoardUpdated", furniture)
+
     return modData.tasks
 end
 
