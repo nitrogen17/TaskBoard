@@ -141,7 +141,7 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.createdByCharacterName = TaskBoard_Utils.getCharacterName(player)
         createdTask.lastUserModifiedCharacterName = createdTask.createdByCharacterName
 
-        TaskBoard_Core.create(createdTask)
+        TaskBoard_Core.create(mainWindowID, createdTask)
 
     elseif kb_TaskFormPanel.action == "edit" then
         kb_TaskFormPanel.task.title = title
@@ -155,7 +155,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
         kb_TaskFormPanel.task.datesSetInRealTime = not SandboxVars.TaskBoard.UseInGameTime -- this is for due dates, state dates and the like.
 
-        TaskBoard_Core.update(kb_TaskFormPanel.task)
+        TaskBoard_Core.update(mainWindowID, kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil
     end
 

@@ -84,6 +84,14 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
     modal:addToUIManager()
 end
 
+local function onOpenTaskBoard(furniture)
+    if not furniture then return end
+
+    TaskBoard_Core.reloadAllTables(getPlayer(), furniture)
+
+    mainWindow:setVisible(true)
+end
+
 local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
     local square = getPlayer():getCurrentSquare()
     local processedObjects = {}
@@ -99,6 +107,7 @@ local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
                 context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
             end
             if modData.isTaskBoard then
+                context:addOption("Open Task Board (" .. currentName .. ")", object, onOpenTaskBoard, object)
                 context:addOption("Remove Task Board (" .. currentName .. ")", worldobjects, onRemoveTaskBoard, square, object)
             end
         end

@@ -8,7 +8,7 @@ require 'TaskBoard_Action'
 -- Event
 --Events.OnGameStart.Add(main)
 Events.OnGameStart.Add(main)
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+-- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
 MODDATA_KEY = "KB.KanbanBoard"
 
@@ -17,13 +17,17 @@ kb_DataManager = {}
 kb_DataManager.tasks = {}
 
 -- for Create, Edit and Delete event on the server
-Events.OnReceiveGlobalModData.Add(function(key, data)
-    if key ~= MODDATA_KEY then return end
+-- Events.OnReceiveGlobalModData.Add(function(key, data)
+--     if key ~= MODDATA_KEY then return end
 
-    reloadAllTablesInClient(data)
-end)
+--     reloadAllTablesInClient(data)
+-- end)
 
-function reloadAllTablesInClient(tasks)
+function reloadAllTablesInClient(furniture)
+    if not furniture then return end
+
+    local tasks = furniture:getModData().tasks or {}
+
     kb_leftListBox:clear()
     kb_middleListBox:clear()
     kb_rightListBox:clear()
@@ -63,11 +67,11 @@ function reloadAllTablesInClient(tasks)
     end
 end
 
-Events.OnServerCommand.Add(function(module, command, args)
-    if module ~= MODDATA_KEY then return end
- 
-    if command == "ReloadAllTables" then
-        kb_DataManager.tasks = args.tasks
-        reloadAllTablesInClient(kb_DataManager.tasks)
-    end
-end)
+-- Events.OnServerCommand.Add(function(module, command, args)
+--     if module ~= MODDATA_KEY then return end
+
+--     if command == "ReloadAllTables" then
+--         kb_DataManager.tasks = args.tasks
+--         reloadAllTablesInClient(kb_DataManager.tasks)
+--     end
+-- end)

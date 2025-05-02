@@ -80,7 +80,7 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     newTask.updatedAt = TaskBoard_Utils.getCurrentRealTime()
     newTask.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
 
-    sendClientCommand(MODDATA_KEY, "UpdateTask", task)
+    TaskBoard_Core.update(mainWindowID, newTask)
 end
 
 function formatISODateForCard(isoString)

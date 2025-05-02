@@ -7,7 +7,7 @@
 -- All functions acts as fileprivate since the file must be require first to other lua files.
 -- All properties were declare local or private except the 3 table reference.
 
--- Debug: 
+-- Debug:
 -- panel.backgroundColor = {r=0, g=0, b=1, a=1}
 
 -- Global Properties:
@@ -22,9 +22,11 @@ local ISPlusIcon = require('client-ui/ISPanel/ISPlusIcon')
 local ISPlusIconDebug = require('client-ui/ISPanel/ISPlusIconDebug')
 
 mainWindow = {}
+mainWindowID = nil
 
 function main()
     drawKanbanBoard()
+    mainWindowID = -1
 end
 
 function drawKanbanBoard()
@@ -40,7 +42,7 @@ function drawAllSections(mainWindow)
     drawRightSection(mainWindow, middleSection)
 end
 
-function drawMainWindow() 
+function drawMainWindow()
     local mainWindow = MISCollapsableWindow:new(0, 0, getCore():getScreenWidth() * 0.5, getCore():getScreenHeight() * 0.6)
     mainWindow:setX((getCore():getScreenWidth() * 0.5) - (mainWindow:getWidth() * 0.5))
     mainWindow:setY((getCore():getScreenHeight() * 0.5) - (mainWindow:getHeight() * 0.5) - 25)
@@ -52,7 +54,7 @@ function drawMainWindow()
     return mainWindow
 end
 
-function drawSectionHeaderPanel(mainWindow) 
+function drawSectionHeaderPanel(mainWindow)
     local sectionHeaderPanel = ISPanel:new(0, mainWindow:titleBarHeight(), mainWindow.width, mainWindow:titleBarHeight() * 2)
     sectionHeaderPanel:initialise()
     sectionHeaderPanel.backgroundColor = {r=0, g=0, b=0, a=1}
@@ -60,7 +62,7 @@ function drawSectionHeaderPanel(mainWindow)
 
     local leftHeaderSection = drawLeftHeaderSection(mainWindow)
     drawPlusIcon(leftHeaderSection)
-    
+
 
     local middleHeaderSection = drawMiddleHeaderSection(mainWindow, leftHeaderSection)
     -- drawPlusIconDebug(middleHeaderSection)
@@ -76,23 +78,23 @@ function drawLeftHeaderSection(mainWindow)
     sectionLeftHeaderPanel:setTitle("To Do")
 
     mainWindow:addChild(sectionLeftHeaderPanel)
-    
+
     return sectionLeftHeaderPanel
 end
 
-function drawPlusIcon(sectionLeftHeaderPanel) 
+function drawPlusIcon(sectionLeftHeaderPanel)
     local plusPanel = ISPlusIcon:new(0, 0, sectionLeftHeaderPanel:getHeight(), sectionLeftHeaderPanel:getHeight())
     plusPanel:initialise();
     sectionLeftHeaderPanel:addChild(plusPanel)
 end
 
-function drawPlusIconDebug(middleHeaderSection) 
+function drawPlusIconDebug(middleHeaderSection)
     local plusPanelDebug = ISPlusIconDebug:new(0, 0, middleHeaderSection:getHeight(), middleHeaderSection:getHeight())
     plusPanelDebug:initialise();
     middleHeaderSection:addChild(plusPanelDebug)
 end
 
-function drawMiddleHeaderSection(mainWindow, leftHeaderSection) 
+function drawMiddleHeaderSection(mainWindow, leftHeaderSection)
     local sectionMiddleHeaderPanel = MISPanel:new(leftHeaderSection:getWidth(), mainWindow:titleBarHeight(), mainWindow.width / 3, mainWindow:titleBarHeight() * 2)
     sectionMiddleHeaderPanel:initialise()
     sectionMiddleHeaderPanel:setTitle("In Progress")
@@ -101,7 +103,7 @@ function drawMiddleHeaderSection(mainWindow, leftHeaderSection)
     return sectionMiddleHeaderPanel
 end
 
-function drawRightHeaderSection(mainWindow, middleHeaderSection) 
+function drawRightHeaderSection(mainWindow, middleHeaderSection)
     local sectionRightHeaderPanel = MISPanel:new(middleHeaderSection:getWidth() * 2, mainWindow:titleBarHeight(), mainWindow.width / 3, mainWindow:titleBarHeight() * 2)
     sectionRightHeaderPanel:initialise()
     sectionRightHeaderPanel:setTitle("Done")
@@ -117,7 +119,7 @@ function drawLeftSection(mainWindow, sectionHeaderPanel)
 
     childLeftPanel:addChild(kb_leftListBox)
     mainWindow:addChild(childLeftPanel)
-    
+
     return childLeftPanel
 end
 
