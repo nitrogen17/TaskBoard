@@ -1,0 +1,1 @@
+-- Implement migration logic here from global mod data to furniture mod data.

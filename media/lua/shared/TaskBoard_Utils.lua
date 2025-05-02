@@ -1,5 +1,7 @@
 TaskBoard_Utils = {}
 
+TaskBoard_mainWindowFurniture = nil
+
 function TaskBoard_Utils.getCurrentGameTime()
     return string.format(
         "%04d-%02d-%02dT%02d:%02d:00Z",
@@ -19,6 +21,40 @@ function TaskBoard_Utils.getCharacterName(player)
     local playerDescriptor = player:getDescriptor()
     local fullName = playerDescriptor:getForename() .. " " .. playerDescriptor:getSurname()
     return fullName:match("^%s*(.-)%s*$") -- Trim leading and trailing whitespaces
+end
+
+function TaskBoard_Utils.setMainWindowFurniture(furniture)
+    TaskBoard_mainWindowFurniture = furniture -- refactor?
+end
+
+function TaskBoard_Utils.deepCopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for k, v in pairs(orig) do
+            copy[k] = deepCopy(v)
+        end
+    else
+        copy = orig
+    end
+    return copy
+end
+
+function TaskBoard_Utils.isFurnitureWhitelisted(furniture)
+    if not furniture then return false end
+
+    local sprite = furniture:getSprite()
+    if sprite then
+        local spriteName = sprite:getName()
+        for _, allowedSpriteName in ipairs(TaskBoard_allowedTaskBoardFurnitures) do
+            if spriteName == allowedSpriteName then
+                return true
+            end
+        end
+    end
+
+    return false
 end
 
 return TaskBoard_Utils

@@ -62,21 +62,3 @@ CardTemplate = {
 
     automationRules = {} -- table of rule objects: { trigger = "", action = "", params = {} }
 }
-
-function createCardInstance()
-    local function deepCopy(orig)
-        local orig_type = type(orig)
-        local copy
-        if orig_type == 'table' then
-            copy = {}
-            for k, v in pairs(orig) do
-                copy[k] = deepCopy(v)
-            end
-        else
-            copy = orig
-        end
-        return copy
-    end
-
-    return deepCopy(CardTemplate)
-end

@@ -1,3 +1,3 @@
 require "ISUI/ISCollapsableWindow"
 
-MISCollapsableWindow = ISCollapsableWindow:derive("MISCollapsableWindow");
+kb_MISCollapsableWindow = ISCollapsableWindow:derive("MISCollapsableWindow");

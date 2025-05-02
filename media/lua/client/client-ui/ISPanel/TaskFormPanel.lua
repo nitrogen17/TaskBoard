@@ -98,7 +98,7 @@ function kb_TaskFormPanel.createForm(action, task)
         kb_TaskFormPanel.priorityLabel.selected = selectedIndex
     end
 
-    kb_TaskFormPanel.moreinfo = MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
+    kb_TaskFormPanel.moreinfo = kb_MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
     kb_TaskFormPanel.moreinfo:initialise();
     kb_TaskFormPanel.moreinfo:setX((getCore():getScreenWidth() * 0.5) - (kb_TaskFormPanel.moreinfo:getWidth() * 0.5))
     kb_TaskFormPanel.moreinfo:setY((getCore():getScreenHeight() * 0.5) - (kb_TaskFormPanel.moreinfo:getHeight() * 0.5))
@@ -110,6 +110,10 @@ function kb_TaskFormPanel.createForm(action, task)
 
     kb_TaskFormPanel.moreinfo:addToUIManager()
     kb_TaskFormPanel.moreinfo:bringToTop()
+end
+
+function kb_TaskFormPanel.createCardInstance()
+    return TaskBoard_Utils.deepCopy(CardTemplate)
 end
 
 function kb_TaskFormPanel.onSubmit()
@@ -125,7 +129,7 @@ function kb_TaskFormPanel.onSubmit()
     local priority = kb_TaskFormPanel.priorityLabel.options[selectedIndex]
 
     if kb_TaskFormPanel.action == "create" then
-        local createdTask = createCardInstance()
+        local createdTask = kb_TaskFormPanel.createCardInstance()
         createdTask.title = title
         createdTask.description = description
         createdTask.priority = priority
@@ -141,7 +145,7 @@ function kb_TaskFormPanel.onSubmit()
         createdTask.createdByCharacterName = TaskBoard_Utils.getCharacterName(player)
         createdTask.lastUserModifiedCharacterName = createdTask.createdByCharacterName
 
-        TaskBoard_Core.create(mainWindowID, createdTask)
+        TaskBoard_Core.create(TaskBoard_mainWindowFurniture, createdTask)
 
     elseif kb_TaskFormPanel.action == "edit" then
         kb_TaskFormPanel.task.title = title
@@ -155,7 +159,7 @@ function kb_TaskFormPanel.onSubmit()
         kb_TaskFormPanel.task.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
         kb_TaskFormPanel.task.datesSetInRealTime = not SandboxVars.TaskBoard.UseInGameTime -- this is for due dates, state dates and the like.
 
-        TaskBoard_Core.update(mainWindowID, kb_TaskFormPanel.task)
+        TaskBoard_Core.update(TaskBoard_mainWindowFurniture, kb_TaskFormPanel.task)
         kb_TaskFormPanel.task = nil
     end
 

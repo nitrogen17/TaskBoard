@@ -1,6 +1,10 @@
 TaskBoard_Core = {}
 
--- Generate a unique ID for tasks
+TaskBoard_allowedTaskBoardFurnitures = {
+    "location_business_office_generic_01_7",
+    "location_business_office_generic_01_15",
+}
+
 local function generateUUID(furniture)
     local modData = furniture:getModData()
     modData.tasks = modData.tasks or {}
@@ -17,7 +21,6 @@ local function generateUUID(furniture)
     error("Failed to generate a unique ID after 1000 attempts.")
 end
 
--- Handle task actions for a specific furniture
 local function handleTaskAction(furniture, action, task)
     local modData = furniture:getModData()
     modData.tasks = modData.tasks or {}
@@ -25,41 +28,64 @@ local function handleTaskAction(furniture, action, task)
     if action == "CreateTask" then
         task.id = generateUUID(furniture)
         modData.tasks[task.id] = task
-
-    elseif action == "UpdateTask" and task.id then
+    elseif action == "UpdateTask" and task.id and modData.tasks[task.id] ~= nil then
         modData.tasks[task.id] = task
-
     elseif action == "DeleteTask" and task.id then
         modData.tasks[task.id] = nil
-
-    elseif action == "DeleteAllTasks" then
-        modData.tasks = {}
-
-    elseif action == "FetchAllTasks" then
-        return modData.tasks
     end
 
-    -- Sync modData in multiplayer
     furniture:transmitModData()
     return modData.tasks
 end
 
--- Reload all tasks for a specific furniture
+local function reloadAllTablesInClient(furniture)
+    if not furniture then return end
+
+    local tasks = furniture:getModData().tasks or {}
+
+    kb_leftListBox:clear()
+    kb_middleListBox:clear()
+    kb_rightListBox:clear()
+
+    kb_leftListBox.tableTasks = {}
+    kb_middleListBox.tableTasks = {}
+    kb_rightListBox.tableTasks = {}
+
+    local sectionMap = {
+        [1] = {},
+        [2] = {},
+        [3] = {}
+    }
+
+    for _, task in pairs(tasks) do
+        if sectionMap[task.sectionID] then
+            table.insert(sectionMap[task.sectionID], task)
+        end
+    end
+
+    local function sortByUpdatedAtDesc(a, b)
+        return a.updatedAt > b.updatedAt
+    end
+
+    table.sort(sectionMap[1], sortByUpdatedAtDesc)
+    table.sort(sectionMap[2], sortByUpdatedAtDesc)
+    table.sort(sectionMap[3], sortByUpdatedAtDesc)
+
+    for _, task in ipairs(sectionMap[1]) do
+        kb_leftListBox:addItem(task)
+    end
+    for _, task in ipairs(sectionMap[2]) do
+        kb_middleListBox:addItem(task)
+    end
+    for _, task in ipairs(sectionMap[3]) do
+        kb_rightListBox:addItem(task)
+    end
+end
+
 function TaskBoard_Core.reloadAllTables(player, furniture)
     if not furniture then return end
 
-    -- local modData = furniture:getModData()
-    -- modData.tasks = modData.tasks or {}
-
-    -- if isClient() then
-    --     sendClientCommand("TaskBoard", "ReloadAllTables", { tasks = modData.tasks })
-    -- elseif isServer() then
-    --     sendServerCommand(player, "TaskBoard", "ReloadAllTables", { tasks = modData.tasks })
-    -- else
-    --     reloadAllTablesInClient(modData.tasks)
-    -- end
-
-    mainWindowID = furniture
+    TaskBoard_mainWindowFurniture = furniture
     reloadAllTablesInClient(furniture)
 end
 
@@ -67,143 +93,20 @@ end
 function TaskBoard_Core.create(furniture, task)
     if not furniture then return end
 
-    -- if isClient() then
-    --     sendClientCommand("TaskBoard", "CreateTask", { furniture = furniture, task = task })
-    -- elseif isServer() then
-    --     handleTaskAction(furniture, "CreateTask", task)
-    -- else
-    --     handleTaskAction(furniture, "CreateTask", task)
-    --     reloadAllTablesInClient(furniture:getModData().tasks)
-    -- end
-
     handleTaskAction(furniture, "CreateTask", task)
     reloadAllTablesInClient(furniture)
 end
 
--- Update an existing task for a specific furniture
 function TaskBoard_Core.update(furniture, task)
     if not furniture or not task.id then return end
-
-    -- if isClient() then
-    --     sendClientCommand("TaskBoard", "UpdateTask", { furniture = furniture, task = task })
-    -- elseif isServer() then
-    --     handleTaskAction(furniture, "UpdateTask", task)
-    -- else
-    --     handleTaskAction(furniture, "UpdateTask", task)
-    --     reloadAllTablesInClient(furniture:getModData().tasks)
-    -- end
 
     handleTaskAction(furniture, "UpdateTask", task)
     reloadAllTablesInClient(furniture)
 end
 
--- Delete a task for a specific furniture
 function TaskBoard_Core.delete(furniture, task)
     if not furniture or not task.id then return end
-
-    -- if isClient() then
-    --     sendClientCommand("TaskBoard", "DeleteTask", { furniture = furniture, task = task })
-    -- elseif isServer() then
-    --     handleTaskAction(furniture, "DeleteTask", task)
-    -- else
-    --     handleTaskAction(furniture, "DeleteTask", task)
-    --     reloadAllTablesInClient(furniture:getModData().tasks)
-    -- end
 
     handleTaskAction(furniture, "DeleteTask", task)
     reloadAllTablesInClient(furniture)
 end
-
--- MODDATA_KEY = "KB.KanbanBoard"
-
--- TaskBoard_Core = {}
-
--- local function generateUUID()
---     local db = ModData.getOrCreate(MODDATA_KEY)
-
---     local function padWithZeros(num)
---         return string.format("%010d", num)
---     end
-
---     for i = 1, 5 do
---         local id = padWithZeros(ZombRand(0, 1000000000))
---         if not db[id] then return id end
---     end
-
---     error("Failed to generate a unique ID after 5 attempts.")
--- end
-
--- local function handleTaskAction(action, task)
---     local db = ModData.getOrCreate(MODDATA_KEY)
-
---     if action == "CreateTask" then
---         task.id = generateUUID()
---         db[task.id] = task
-
---     elseif action == "UpdateTask" and task.id then
---         db[task.id] = task
-
---     elseif action == "DeleteTask" and task.id then
---         db[task.id] = nil
-
---     elseif action == "DeleteAllTasks" then
---         table.wipe(db)
-
---     elseif action == "FetchAllTasks" then
---         return db
-
---     elseif action == "AssignTasks" then
---         db = task
---     end
-
---     return db
--- end
-
--- function TaskBoard_Core.reloadAllTables(player)
---     if isClient() then
---         sendClientCommand(MODDATA_KEY, "ReloadAllTables", {})
---     elseif isServer() then
---         local db = handleTaskAction("FetchAllTasks")
---         sendServerCommand(player, MODDATA_KEY, "ReloadAllTables", { tasks = db })
---     else
---         reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
---     end
--- end
-
--- function TaskBoard_Core.create(task)
---     if isClient() then
---         sendClientCommand(MODDATA_KEY, "CreateTask", task)
---     elseif isServer() then
---         handleTaskAction("CreateTask", task)
---         ModData.transmit(MODDATA_KEY)
---     else
---         handleTaskAction("CreateTask", task)
---         reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
---     end
--- end
-
--- function TaskBoard_Core.update(task)
---     if not task.id then return end
-
---     if isClient() then
---         sendClientCommand(MODDATA_KEY, "UpdateTask", task)
---     elseif isServer() then
---         handleTaskAction("UpdateTask", task)
---         ModData.transmit(MODDATA_KEY)
---     else
---         handleTaskAction("UpdateTask", task)
---         reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
---     end
--- end
-
--- function TaskBoard_Core.delete(task)
---     if isClient() then
---         sendClientCommand(MODDATA_KEY, "DeleteTask", task)
---     elseif isServer() then
---         handleTaskAction("DeleteTask", task)
---         ModData.transmit(MODDATA_KEY)
---     else
---         handleTaskAction("DeleteTask", task)
---         reloadAllTablesInClient(ModData.getOrCreate(MODDATA_KEY))
---     end
--- end

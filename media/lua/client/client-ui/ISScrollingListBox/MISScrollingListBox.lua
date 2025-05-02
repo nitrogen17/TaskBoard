@@ -1,33 +1,33 @@
 require('ISUI/ISScrollingListBox')
 
-MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
+kb_MISScrollingListBox = ISScrollingListBox:derive("MISScrollingListBox")
 
 local TaskCardPanel = require('client-ui/ISPanel/TaskCardPanel')
 
-function MISScrollingListBox:new(x, y, width, height)
+function kb_MISScrollingListBox:new(x, y, width, height)
     local object = ISScrollingListBox.new(self, x, y, width, height)
     object.tableTasks = {}
 
     return object
 end
 
-function MISScrollingListBox:initialise()
+function kb_MISScrollingListBox:initialise()
     ISScrollingListBox.initialise(self)
     self:setCapture(true)
 end
 
-function MISScrollingListBox:addItem(task)
+function kb_MISScrollingListBox:addItem(task)
     table.insert(self.tableTasks, task)
     ISScrollingListBox.addItem(self, task.title)
 end
 
-function MISScrollingListBox:doDrawItem(y, item, alt)
+function kb_MISScrollingListBox:doDrawItem(y, item, alt)
     self.selected = -1
     ISScrollingListBox.doDrawItem(self, y, item, alt)
     return y + item.height
 end
 
-function MISScrollingListBox:onRightMouseDown(x, y)
+function kb_MISScrollingListBox:onRightMouseDown(x, y)
     local itemIndex = self:rowAt(x, y)
 
     if itemIndex and self.tableTasks[itemIndex] then
@@ -56,21 +56,21 @@ function MISScrollingListBox:onRightMouseDown(x, y)
     return false
 end
 
-function MISScrollingListBox:onViewTask(task)
+function kb_MISScrollingListBox:onViewTask(task)
     local panel = TaskCardPanel:new()
     panel:initialise(task)
     panel:addToUIManager()
 end
 
-function MISScrollingListBox:onEditTask(task)
+function kb_MISScrollingListBox:onEditTask(task)
     kb_TaskFormPanel.createForm("edit", task)
 end
 
-function MISScrollingListBox:onDeleteTask(task)
+function kb_MISScrollingListBox:onDeleteTask(task)
     sendClientCommand(MODDATA_KEY, "DeleteTask", task)
 end
 
-function MISScrollingListBox:onMoveTask(task, targetSection)
+function kb_MISScrollingListBox:onMoveTask(task, targetSection)
     local newTask = task
     newTask.sectionID = targetSection
 
@@ -80,7 +80,7 @@ function MISScrollingListBox:onMoveTask(task, targetSection)
     newTask.updatedAt = TaskBoard_Utils.getCurrentRealTime()
     newTask.updatedAtGame = TaskBoard_Utils.getCurrentGameTime()
 
-    TaskBoard_Core.update(mainWindowID, newTask)
+    TaskBoard_Core.update(TaskBoard_mainWindowFurniture, newTask)
 end
 
 function formatISODateForCard(isoString)

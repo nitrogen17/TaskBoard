@@ -1,23 +1,4 @@
-local allowedTaskBoardFurnitures = {
-    "location_business_office_generic_01_7",
-    "location_business_office_generic_01_15",
-}
-
-local function isFurnitureWhitelisted(furniture)
-    if not furniture then return false end
-
-    local sprite = furniture:getSprite()
-    if sprite then
-        local spriteName = sprite:getName()
-        for _, allowedSpriteName in ipairs(allowedTaskBoardFurnitures) do
-            if spriteName == allowedSpriteName then
-                return true
-            end
-        end
-    end
-
-    return false
-end
+require('TaskBoard_Utils')
 
 local function getFurnitureName(furniture)
     if not furniture then return "Unknown Furniture" end
@@ -88,8 +69,7 @@ local function onOpenTaskBoard(furniture)
     if not furniture then return end
 
     TaskBoard_Core.reloadAllTables(getPlayer(), furniture)
-
-    mainWindow:setVisible(true)
+    TaskBoard_mainWindow:setVisible(true)
 end
 
 local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
@@ -102,8 +82,7 @@ local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
             local currentName = getFurnitureName(object)
             local square = object:getSquare()
 
-            -- Designed to be flexible. Feature will not break if the whitelist changes.
-            if isFurnitureWhitelisted(object) and not modData.isTaskBoard then
+            if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
                 context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
             end
             if modData.isTaskBoard then
