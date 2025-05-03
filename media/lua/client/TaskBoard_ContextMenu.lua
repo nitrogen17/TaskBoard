@@ -1,3 +1,4 @@
+require('TaskBoard_Server')
 require('TaskBoard_Utils')
 
 local function getFurnitureName(furniture)
@@ -37,6 +38,7 @@ local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
     modData.isTaskBoard = nil
     -- more data here to remove.
     furniture:transmitModData()
+    TaskBoard_Server.sendPacket("TaskBoardDeleted", furniture)
 
     getPlayer():Say("I removed the task board here.")
 end

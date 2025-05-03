@@ -1,27 +1,25 @@
--- local function onSynchronizeFurniture(object)
---     if not object or TaskBoard_mainWindowFurniture ~= object or not TaskBoard_Utils.isFurnitureWhitelisted(object) then
---         return
---     end
+local function processTaskBoardObjects(args, callback)
+    local square = getCell():getGridSquare(args.x, args.y, args.z)
+    local objects = square:getObjects()
+    for i = 0, objects:size() - 1 do
+        local object = objects:get(i)
+        if object:getModData().isTaskBoard and TaskBoard_mainWindowFurniture == object then
+            callback(object)
+        end
+    end
+end
 
---     local modData = object:getModData()
---     if modData.isTaskBoard then
---         TaskBoard_Core.reloadAllTables(getPlayer(), object)
---     end
--- end
-
--- Events.OnObjectModDataChanged.Add(onSynchronizeFurniture)
-
--- Improve this.
 local function onServerCommand(module, command, args)
-    if module == "TaskBoard" and command == "TaskBoardUpdated" then
-        local square = getCell():getGridSquare(args.x, args.y, args.z)
-        if square then
-            for i = 0, square:getObjects():size() - 1 do
-                local object = square:getObjects():get(i)
-                if object:getModData().isTaskBoard and TaskBoard_mainWindowFurniture == object then
-                    TaskBoard_Core.reloadAllTables(getPlayer(), object)
-                end
-            end
+    if module == "TaskBoard" then
+        if command == "TaskBoardUpdated" then
+            processTaskBoardObjects(args, function(object)
+                TaskBoard_Core.reloadAllTables(getPlayer(), object)
+            end)
+        elseif command == "TaskBoardDeleted" then
+            processTaskBoardObjects(args, function(object)
+                TaskBoard_mainWindow:setVisible(false)
+                TaskBoard_mainWindowFurniture = nil
+            end)
         end
     end
 end
