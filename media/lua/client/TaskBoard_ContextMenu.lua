@@ -1,3 +1,4 @@
+require('TaskBoard_Core')
 require('TaskBoard_Server')
 require('TaskBoard_Utils')
 
@@ -18,6 +19,16 @@ local function getFurnitureName(furniture)
     end
 
     return "Unknown Furniture"
+end
+
+local function isWithinRange(player, square, range)
+    if not square then return false end
+    local playerSquare = player:getSquare()
+    if not playerSquare then return false end
+
+    local dx = math.abs(playerSquare:getX() - square:getX())
+    local dy = math.abs(playerSquare:getY() - square:getY())
+    return dx <= range and dy <= range
 end
 
 local function onMakeTaskBoard(worldobjects, square, furniture)
@@ -67,13 +78,6 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
     modal:addToUIManager()
 end
 
-local function onOpenTaskBoard(furniture)
-    if not furniture then return end
-
-    TaskBoard_Core.reloadAllTables(getPlayer(), furniture)
-    TaskBoard_mainWindow:setVisible(true)
-end
-
 local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
     local square = getPlayer():getCurrentSquare()
     local processedObjects = {}
@@ -84,12 +88,14 @@ local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
             local currentName = getFurnitureName(object)
             local square = object:getSquare()
 
-            if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
-                context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
-            end
-            if modData.isTaskBoard then
-                context:addOption("Open Task Board (" .. currentName .. ")", object, onOpenTaskBoard, object)
-                context:addOption("Remove Task Board (" .. currentName .. ")", worldobjects, onRemoveTaskBoard, square, object)
+            if isWithinRange(player, square, 1) then
+                if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
+                    context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
+                end
+                if modData.isTaskBoard then
+                    context:addOption("Open Task Board (" .. currentName .. ")", object, TaskBoard_Utils.onOpenTaskBoard, object)
+                    context:addOption("Remove Task Board (" .. currentName .. ")", worldobjects, onRemoveTaskBoard, square, object)
+                end
             end
         end
     end
