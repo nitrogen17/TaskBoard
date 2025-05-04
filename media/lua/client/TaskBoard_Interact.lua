@@ -1,6 +1,9 @@
 require("TaskBoard_Utils")
 
 local function onInteractKeyPressed(key)
+    local useInteractKey = SandboxVars.TaskBoard.UseInteractKeyWithTaskBoards
+    if not useInteractKey then return end
+
     if key == getCore():getKey("Interact") then
         local player = getPlayer()
         local square = player:getSquare()

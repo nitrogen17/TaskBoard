@@ -13,3 +13,10 @@ option TaskBoard.UseCharacterName {
     page = TaskBoard,
     translation = TaskBoard_UseCharacterName,
 }
+
+option TaskBoard.UseInteractKeyWithTaskBoards {
+    type = boolean,
+    default = false,
+    page = TaskBoard,
+    translation = TaskBoard_UseInteractKeyWithTaskBoards,
+}
