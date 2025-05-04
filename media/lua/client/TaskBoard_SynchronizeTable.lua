@@ -1,4 +1,5 @@
 require('TaskBoard_Core')
+require('TaskBoard_Utils')
 
 local function processTaskBoardObjects(args, callback)
     local square = getCell():getGridSquare(args.x, args.y, args.z)
@@ -19,8 +20,7 @@ local function onServerCommand(module, command, args)
             end)
         elseif command == "TaskBoardDeleted" then
             processTaskBoardObjects(args, function(object)
-                TaskBoard_mainWindow:setVisible(false)
-                TaskBoard_mainWindowFurniture = nil
+                TaskBoard_Utils.closeTaskBoardMainWindow()
             end)
         end
     end

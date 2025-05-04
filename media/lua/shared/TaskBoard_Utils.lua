@@ -83,4 +83,19 @@ function TaskBoard_Utils.getFurnitureName(furniture)
     return "Unknown Furniture"
 end
 
+function TaskBoard_Utils.closeTaskBoardMainWindow()
+    TaskBoard_mainWindow:setVisible(false)
+    TaskBoard_mainWindowFurniture = nil
+end
+
+function TaskBoard_Utils.isWithinRange(player, square, range)
+    if not player or not square then return false end
+    local playerSquare = player:getSquare()
+    if not playerSquare then return false end
+
+    local dx = math.abs(playerSquare:getX() - square:getX())
+    local dy = math.abs(playerSquare:getY() - square:getY())
+    return dx <= range and dy <= range
+end
+
 return TaskBoard_Utils

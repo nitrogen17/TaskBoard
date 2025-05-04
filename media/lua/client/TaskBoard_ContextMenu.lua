@@ -3,16 +3,6 @@ require('TaskBoard_Migrator')
 require('TaskBoard_Server')
 require('TaskBoard_Utils')
 
-local function isWithinRange(player, square, range)
-    if not player or not square then return false end
-    local playerSquare = player:getSquare()
-    if not playerSquare then return false end
-
-    local dx = math.abs(playerSquare:getX() - square:getX())
-    local dy = math.abs(playerSquare:getY() - square:getY())
-    return dx <= range and dy <= range
-end
-
 local function onMakeTaskBoard(worldobjects, square, furniture)
     if not furniture then return end
 
@@ -70,7 +60,7 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
             local currentName = TaskBoard_Utils.getFurnitureName(object)
             local square = object:getSquare()
 
-            if isWithinRange(player, square, 1) then
+            if TaskBoard_Utils.isWithinRange(player, square, 1) then
                 TaskBoard_Migrator.onFillWorldObjectContextMenu(context, worldobjects, object, modData, currentName, square) -- migration plan
                 if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
                     context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
