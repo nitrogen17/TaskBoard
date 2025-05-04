@@ -67,7 +67,25 @@ function kb_MISScrollingListBox:onEditTask(task)
 end
 
 function kb_MISScrollingListBox:onDeleteTask(task)
-    TaskBoard_Core.delete(TaskBoard_mainWindowFurniture, task)
+    local screenWidth = getCore():getScreenWidth()
+    local screenHeight = getCore():getScreenHeight()
+    local dialogWidth = 200
+    local dialogHeight = 100
+    local dialogX = (screenWidth - dialogWidth) / 2
+    local dialogY = (screenHeight - dialogHeight) / 2
+
+    local modal = ISModalDialog:new(
+        dialogX, dialogY, dialogWidth, dialogHeight,
+        "Are you sure you want to delete this task?",
+        true, nil,
+        function(dialog, button)
+            if button.internal == "YES" then
+                TaskBoard_Core.delete(TaskBoard_mainWindowFurniture, task)
+            end
+        end
+    )
+    modal:initialise()
+    modal:addToUIManager()
 end
 
 function kb_MISScrollingListBox:onMoveTask(task, targetSection)
