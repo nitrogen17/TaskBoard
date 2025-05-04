@@ -37,7 +37,7 @@ local function handleTaskAction(furniture, action, task)
     end
 
     furniture:transmitModData()
-    TaskBoard_Server.sendPacket("TaskBoardUpdated", furniture)
+    TaskBoard_Server.getPacket("TaskBoardUpdated", furniture)
 
     return modData.tasks
 end

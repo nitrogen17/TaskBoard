@@ -1,23 +1,56 @@
 TaskBoard_Server = {}
 
-local function updateOpenTaskBoard(furniture)
+local function findTaskBoardOnSquare(square)
+    if not square then return nil end
+    local objects = square:getObjects()
+    for i = 0, objects:size() - 1 do
+        local object = objects:get(i)
+        if object:getModData().isTaskBoard then
+            return object
+        end
+    end
+    return nil
+end
+
+local function sendTaskBoardCommand(command, furniture)
     if isServer() and furniture and instanceof(furniture, "IsoObject") then
         local square = furniture:getSquare()
         if square then
-            sendServerCommand("TaskBoard", "TaskBoardUpdated", {
+            sendServerCommand("TaskBoard", command, {
                 x = square:getX(),
                 y = square:getY(),
                 z = square:getZ()
             })
         end
     end
+end
+
+local function updateOpenTaskBoard(furniture)
+    sendTaskBoardCommand("TaskBoardUpdated", furniture)
 end
 
 local function forceCloseBoard(furniture)
-    if isServer() and furniture and instanceof(furniture, "IsoObject") then
+    sendTaskBoardCommand("TaskBoardDeleted", furniture)
+end
+
+local function onReceivePackets(module, command, player, args)
+    if module == "TaskBoard" then
+        local square = getCell():getGridSquare(args.x, args.y, args.z)
+        local taskBoard = findTaskBoardOnSquare(square)
+
+        if command == "TaskBoardUpdated" and taskBoard then
+            updateOpenTaskBoard(taskBoard)
+        elseif command == "TaskBoardDeleted" and taskBoard then
+            forceCloseBoard(taskBoard)
+        end
+    end
+end
+
+function TaskBoard_Server.getPacket(packetType, furniture)
+    if isClient() and (packetType == "TaskBoardUpdated" or packetType == "TaskBoardDeleted") then
         local square = furniture:getSquare()
         if square then
-            sendServerCommand("TaskBoard", "TaskBoardDeleted", {
+            sendClientCommand("TaskBoard", packetType, {
                 x = square:getX(),
                 y = square:getY(),
                 z = square:getZ()
@@ -26,14 +59,6 @@ local function forceCloseBoard(furniture)
     end
 end
 
-function TaskBoard_Server.sendPacket(packetType, args)
-    if isServer() then
-        if packetType == "TaskBoardUpdated" then
-            updateOpenTaskBoard(args)
-        elseif packetType == "TaskBoardDeleted" then
-            forceCloseBoard(args)
-        end
-    end
-end
+Events.OnClientCommand.Add(onReceivePackets)
 
 return TaskBoard_Server
