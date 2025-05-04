@@ -36,8 +36,12 @@ local function handleTaskAction(furniture, action, task)
         modData.tasks[task.id] = nil
     end
 
-    furniture:transmitModData()
-    TaskBoard_Server.getPacket("TaskBoardUpdated", furniture)
+    data = {
+        action = action,
+        task = task,
+        furniture = furniture,
+    }
+    TaskBoard_Server.getPacket("TaskBoardUpdated", data)
 
     return modData.tasks
 end
