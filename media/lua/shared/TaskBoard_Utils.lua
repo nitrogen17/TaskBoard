@@ -110,23 +110,4 @@ function TaskBoard_Utils.findTaskBoardOnSquare(square)
     return nil
 end
 
-function TaskBoard_Utils.sendTaskCommand(command, furniture, action, task)
-    local square = furniture:getSquare()
-    if not square then return end
-
-    local data = {
-        x = square:getX(),
-        y = square:getY(),
-        z = square:getZ(),
-        action = action,
-        task = task
-    }
-
-    if isClient() then
-        sendClientCommand("TaskBoard", command, data)
-    elseif isServer() then
-        sendServerCommand("TaskBoard", command, data)
-    end
-end
-
 return TaskBoard_Utils

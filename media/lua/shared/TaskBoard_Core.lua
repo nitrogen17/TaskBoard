@@ -37,18 +37,42 @@ local function processTaskAction(furniture, action, task)
     end
 end
 
+local function sendTaskCommand(command, furniture, action, task)
+    local square = furniture:getSquare()
+    if not square then return end
+
+    local data = {
+        x = square:getX(),
+        y = square:getY(),
+        z = square:getZ(),
+        action = action,
+        task = task
+    }
+
+    if isClient() then
+        sendClientCommand("TaskBoard", command, data)
+    elseif isServer() then
+        sendServerCommand("TaskBoard", command, data)
+    end
+end
+
+local function addTasksToListBox(tasks, listBox)
+    listBox:clear()
+    listBox.tableTasks = {}
+
+    table.sort(tasks, function(a, b)
+        return a.updatedAt > b.updatedAt
+    end)
+
+    for _, task in ipairs(tasks) do
+        listBox:addItem(task)
+    end
+end
+
 local function reloadAllTablesInClient(furniture)
     if not furniture then return end
 
     local tasks = furniture:getModData().tasks or {}
-
-    kb_leftListBox:clear()
-    kb_middleListBox:clear()
-    kb_rightListBox:clear()
-
-    kb_leftListBox.tableTasks = {}
-    kb_middleListBox.tableTasks = {}
-    kb_rightListBox.tableTasks = {}
 
     local sectionMap = {
         [1] = {},
@@ -62,23 +86,9 @@ local function reloadAllTablesInClient(furniture)
         end
     end
 
-    local function sortByUpdatedAtDesc(a, b)
-        return a.updatedAt > b.updatedAt
-    end
-
-    table.sort(sectionMap[1], sortByUpdatedAtDesc)
-    table.sort(sectionMap[2], sortByUpdatedAtDesc)
-    table.sort(sectionMap[3], sortByUpdatedAtDesc)
-
-    for _, task in ipairs(sectionMap[1]) do
-        kb_leftListBox:addItem(task)
-    end
-    for _, task in ipairs(sectionMap[2]) do
-        kb_middleListBox:addItem(task)
-    end
-    for _, task in ipairs(sectionMap[3]) do
-        kb_rightListBox:addItem(task)
-    end
+    addTasksToListBox(sectionMap[1], kb_leftListBox)
+    addTasksToListBox(sectionMap[2], kb_middleListBox)
+    addTasksToListBox(sectionMap[3], kb_rightListBox)
 end
 
 function TaskBoard_Core.reloadAllTables(player, furniture)
@@ -92,19 +102,32 @@ function TaskBoard_Core.create(furniture, task)
     if not furniture then return end
 
     processTaskAction(furniture, "CreateTask", task)
-    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "CreateTask", task)
+    sendTaskCommand("TaskBoardTaskUpdated", furniture, "CreateTask", task)
 end
 
 function TaskBoard_Core.update(furniture, task)
     if not furniture or not task.id then return end
 
     processTaskAction(furniture, "UpdateTask", task)
-    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "UpdateTask", task)
+    sendTaskCommand("TaskBoardTaskUpdated", furniture, "UpdateTask", task)
 end
 
 function TaskBoard_Core.delete(furniture, task)
     if not furniture or not task.id then return end
 
     processTaskAction(furniture, "DeleteTask", task)
-    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "DeleteTask", task)
+    sendTaskCommand("TaskBoardTaskUpdated", furniture, "DeleteTask", task)
+end
+
+function TaskBoard_Core.syncTaskAction(taskBoard, args)
+    local modData = taskBoard:getModData()
+    modData.tasks = modData.tasks or {}
+
+    if args.action == "CreateTask" then
+        modData.tasks[args.task.id] = args.task
+    elseif args.action == "UpdateTask" and args.task.id then
+        modData.tasks[args.task.id] = args.task
+    elseif args.action == "DeleteTask" and args.task.id then
+        modData.tasks[args.task.id] = nil
+    end
 end

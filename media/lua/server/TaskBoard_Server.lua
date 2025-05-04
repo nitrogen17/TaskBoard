@@ -1,18 +1,10 @@
+require('TaskBoard_Utils')
+
 TaskBoard_Server = {}
 
 local commandHandlers = {
     TaskBoardTaskUpdated = function(player, args, taskBoard)
-        local modData = taskBoard:getModData()
-        modData.tasks = modData.tasks or {}
-
-        if args.action == "CreateTask" then
-            modData.tasks[args.task.id] = args.task
-        elseif args.action == "UpdateTask" and args.task.id then
-            modData.tasks[args.task.id] = args.task
-        elseif args.action == "DeleteTask" and args.task.id then
-            modData.tasks[args.task.id] = nil
-        end
-
+        TaskBoard_Core.syncTaskAction(taskBoard, args)
         sendServerCommand("TaskBoard", "TaskBoardTaskUpdated", args)
     end,
 
