@@ -57,4 +57,11 @@ function TaskBoard_Utils.isFurnitureWhitelisted(furniture)
     return false
 end
 
+function TaskBoard_Utils.onOpenTaskBoard(furniture)
+    if not furniture then return end
+
+    TaskBoard_Core.reloadAllTables(getPlayer(), furniture)
+    TaskBoard_mainWindow:setVisible(true)
+end
+
 return TaskBoard_Utils
