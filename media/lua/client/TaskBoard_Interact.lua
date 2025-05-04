@@ -14,7 +14,7 @@ local function onInteractKeyPressed(key)
         for i = 0, objects:size() - 1 do
             local object = objects:get(i)
             if object:getModData().isTaskBoard then
-                TaskBoard_Utils.onOpenTaskBoard(object)
+                TaskBoard_Utils.openTaskBoard(object)
                 return
             end
         end

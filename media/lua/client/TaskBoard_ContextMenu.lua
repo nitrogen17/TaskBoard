@@ -9,7 +9,9 @@ local function onMakeTaskBoard(worldobjects, square, furniture)
     local modData = furniture:getModData()
     modData.isTaskBoard = true
     -- more data here to create.
+
     furniture:transmitModData()
+    TaskBoard_Utils.openTaskBoard(furniture)
 
     getPlayer():Say("I created a task board here.")
 end
@@ -21,7 +23,9 @@ local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
     modData.isTaskBoard = nil
     modData.tasks = nil
     -- more data here to remove.
+
     furniture:transmitModData()
+    TaskBoard_Utils.closeTaskBoardMainWindow()
     TaskBoard_Server.getPacket("TaskBoardDeleted", { furniture = furniture })
 
     getPlayer():Say("I removed the task board here.")
@@ -67,7 +71,7 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
                     context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
                 end
                 if modData.isTaskBoard then
-                    context:addOption("Open Task Board (" .. currentName .. ")", object, TaskBoard_Utils.onOpenTaskBoard, object)
+                    context:addOption("Open Task Board (" .. currentName .. ")", object, TaskBoard_Utils.openTaskBoard, object)
                     context:addOption("Remove Task Board (" .. currentName .. ")", worldobjects, onRemoveTaskBoard, square, object)
                 end
             end
