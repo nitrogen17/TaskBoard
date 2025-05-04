@@ -1,39 +1,36 @@
 TaskBoard_Server = {}
 
+local commandHandlers = {
+    TaskBoardTaskUpdated = function(player, args, taskBoard)
+        local modData = taskBoard:getModData()
+        modData.tasks = modData.tasks or {}
+
+        if args.action == "CreateTask" then
+            modData.tasks[args.task.id] = args.task
+        elseif args.action == "UpdateTask" and args.task.id then
+            modData.tasks[args.task.id] = args.task
+        elseif args.action == "DeleteTask" and args.task.id then
+            modData.tasks[args.task.id] = nil
+        end
+
+        sendServerCommand("TaskBoard", "TaskBoardTaskUpdated", args)
+    end,
+
+    TaskBoardDeleted = function(player, args, taskBoard)
+        sendServerCommand("TaskBoard", "TaskBoardDeleted", {
+            x = args.x,
+            y = args.y,
+            z = args.z
+        })
+    end
+}
+
 local function onReceivePackets(module, command, player, args)
-    if module == "TaskBoard" then
-        if command == "TaskBoardTaskUpdated" then
-            local square = getCell():getGridSquare(args.x, args.y, args.z)
-            if square then
-                local objects = square:getObjects()
-                for i = 0, objects:size() - 1 do
-                    local object = objects:get(i)
-                    if object:getModData().isTaskBoard then
-                        local modData = object:getModData()
-                        modData.tasks = modData.tasks or {}
-
-                        if args.action == "CreateTask" then
-                            modData.tasks[args.task.id] = args.task
-                        elseif args.action == "UpdateTask" and args.task.id then
-                            modData.tasks[args.task.id] = args.task
-                        elseif args.action == "DeleteTask" and args.task.id then
-                            modData.tasks[args.task.id] = nil
-                        end
-
-                        sendServerCommand("TaskBoard", "TaskBoardTaskUpdated", args)
-                        break
-                    end
-                end
-            end
-        elseif command == "TaskBoardDeleted" then
-            local square = getCell():getGridSquare(args.x, args.y, args.z)
-            if square then
-                sendServerCommand("TaskBoard", "TaskBoardDeleted", {
-                    x = square:getX(),
-                    y = square:getY(),
-                    z = square:getZ()
-                })
-            end
+    if module == "TaskBoard" and commandHandlers[command] then
+        local square = getCell():getGridSquare(args.x, args.y, args.z)
+        local taskBoard = TaskBoard_Utils.findTaskBoardOnSquare(square)
+        if taskBoard then
+            commandHandlers[command](player, args, taskBoard)
         end
     end
 end

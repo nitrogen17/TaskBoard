@@ -23,27 +23,18 @@ local function generateUUID(furniture)
     error("Failed to generate a unique ID after 1000 attempts.")
 end
 
-local function handleTaskAction(furniture, action, task)
+local function processTaskAction(furniture, action, task)
     local modData = furniture:getModData()
     modData.tasks = modData.tasks or {}
 
     if action == "CreateTask" then
         task.id = generateUUID(furniture)
         modData.tasks[task.id] = task
-    elseif action == "UpdateTask" and task.id and modData.tasks[task.id] ~= nil then
+    elseif action == "UpdateTask" and task.id then
         modData.tasks[task.id] = task
     elseif action == "DeleteTask" and task.id then
         modData.tasks[task.id] = nil
     end
-
-    data = {
-        action = action,
-        task = task,
-        furniture = furniture,
-    }
-    TaskBoard_Server.getPacket("TaskBoardUpdated", data)
-
-    return modData.tasks
 end
 
 local function reloadAllTablesInClient(furniture)
@@ -97,24 +88,23 @@ function TaskBoard_Core.reloadAllTables(player, furniture)
     reloadAllTablesInClient(furniture)
 end
 
--- Create a new task for a specific furniture
 function TaskBoard_Core.create(furniture, task)
     if not furniture then return end
 
-    handleTaskAction(furniture, "CreateTask", task)
-    reloadAllTablesInClient(furniture)
+    processTaskAction(furniture, "CreateTask", task)
+    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "CreateTask", task)
 end
 
 function TaskBoard_Core.update(furniture, task)
     if not furniture or not task.id then return end
 
-    handleTaskAction(furniture, "UpdateTask", task)
-    reloadAllTablesInClient(furniture)
+    processTaskAction(furniture, "UpdateTask", task)
+    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "UpdateTask", task)
 end
 
 function TaskBoard_Core.delete(furniture, task)
     if not furniture or not task.id then return end
 
-    handleTaskAction(furniture, "DeleteTask", task)
-    reloadAllTablesInClient(furniture)
+    processTaskAction(furniture, "DeleteTask", task)
+    TaskBoard_Utils.sendTaskCommand("TaskBoardTaskUpdated", furniture, "DeleteTask", task)
 end

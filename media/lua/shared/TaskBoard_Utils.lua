@@ -98,4 +98,35 @@ function TaskBoard_Utils.isWithinRange(player, square, range)
     return dx <= range and dy <= range
 end
 
+function TaskBoard_Utils.findTaskBoardOnSquare(square)
+    if not square then return nil end
+    local objects = square:getObjects()
+    for i = 0, objects:size() - 1 do
+        local object = objects:get(i)
+        if object:getModData().isTaskBoard then
+            return object
+        end
+    end
+    return nil
+end
+
+function TaskBoard_Utils.sendTaskCommand(command, furniture, action, task)
+    local square = furniture:getSquare()
+    if not square then return end
+
+    local data = {
+        x = square:getX(),
+        y = square:getY(),
+        z = square:getZ(),
+        action = action,
+        task = task
+    }
+
+    if isClient() then
+        sendClientCommand("TaskBoard", command, data)
+    elseif isServer() then
+        sendServerCommand("TaskBoard", command, data)
+    end
+end
+
 return TaskBoard_Utils
