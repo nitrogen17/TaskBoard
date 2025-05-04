@@ -26,7 +26,7 @@ local function forceCloseBoard(furniture)
     end
 end
 
-function TaskBoardServer.sendPacket(packetType, args)
+function TaskBoard_Server.sendPacket(packetType, args)
     if isServer() then
         if packetType == "TaskBoardUpdated" then
             updateOpenTaskBoard(args)
