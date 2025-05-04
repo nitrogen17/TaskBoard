@@ -1,25 +1,7 @@
 require('TaskBoard_Core')
+require('TaskBoard_Migrator') 
 require('TaskBoard_Server')
 require('TaskBoard_Utils')
-
-local function getFurnitureName(furniture)
-    if not furniture then return "Unknown Furniture" end
-
-    local sprite = furniture:getSprite()
-    if sprite then
-        local translationKey = sprite:getProperties():Val("CustomName")
-        if translationKey then
-            local translatedName = getText(translationKey)
-            if translatedName and translatedName ~= "" then
-                return translatedName
-            end
-        end
-
-        return sprite:getName()
-    end
-
-    return "Unknown Furniture"
-end
 
 local function isWithinRange(player, square, range)
     if not square then return false end
@@ -85,10 +67,11 @@ local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
         if object and instanceof(object, "IsoObject") and not processedObjects[object] then
             processedObjects[object] = true
             local modData = object:getModData()
-            local currentName = getFurnitureName(object)
+            local currentName = TaskBoard_Utils.getFurnitureName(object)
             local square = object:getSquare()
 
             if isWithinRange(player, square, 1) then
+                TaskBoard_Migrator.onFillWorldObjectContextMenu(context, worldobjects, object, modData, currentName, square) -- migration plan
                 if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
                     context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
                 end

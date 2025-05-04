@@ -1,3 +1,5 @@
+require('TaskBoard_Core')
+
 local function processTaskBoardObjects(args, callback)
     local square = getCell():getGridSquare(args.x, args.y, args.z)
     local objects = square:getObjects()

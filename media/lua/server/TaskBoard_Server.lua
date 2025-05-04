@@ -1,5 +1,3 @@
-MODDATA_KEY = "KB.KanbanBoard"
-
 TaskBoard_Server = {}
 
 local function updateOpenTaskBoard(furniture)
