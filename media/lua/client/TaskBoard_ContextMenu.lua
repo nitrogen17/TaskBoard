@@ -4,7 +4,7 @@ require('TaskBoard_Server')
 require('TaskBoard_Utils')
 
 local function isWithinRange(player, square, range)
-    if not square then return false end
+    if not player or not square then return false end
     local playerSquare = player:getSquare()
     if not playerSquare then return false end
 
@@ -60,8 +60,8 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
     modal:addToUIManager()
 end
 
-local function onFillWorldObjectContextMenu(player, context, worldobjects, test)
-    local square = getPlayer():getCurrentSquare()
+local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, test)
+    local player = getPlayer(playerNum)
     local processedObjects = {}
     for _, object in ipairs(worldobjects) do
         if object and instanceof(object, "IsoObject") and not processedObjects[object] then
