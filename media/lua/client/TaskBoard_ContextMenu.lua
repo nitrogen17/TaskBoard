@@ -19,9 +19,10 @@ local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
 
     local modData = furniture:getModData()
     modData.isTaskBoard = nil
+    modData.tasks = nil
     -- more data here to remove.
     furniture:transmitModData()
-    TaskBoard_Server.getPacket("TaskBoardDeleted", furniture)
+    TaskBoard_Server.getPacket("TaskBoardDeleted", { furniture = furniture })
 
     getPlayer():Say("I removed the task board here.")
 end

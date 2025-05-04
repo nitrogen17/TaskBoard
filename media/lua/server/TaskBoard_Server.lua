@@ -26,7 +26,14 @@ local function onReceivePackets(module, command, player, args)
                 end
             end
         elseif command == "TaskBoardDeleted" then
-            -- todo
+            local square = getCell():getGridSquare(args.x, args.y, args.z)
+            if square then
+                sendServerCommand("TaskBoard", "TaskBoardDeleted", {
+                    x = square:getX(),
+                    y = square:getY(),
+                    z = square:getZ()
+                })
+            end
         end
     end
 end
@@ -45,7 +52,14 @@ function TaskBoard_Server.getPacket(packetType, args)
                 })
             end
         elseif packetType == "TaskBoardDeleted" then
-            -- todo
+            local square = args.furniture:getSquare()
+            if square then
+                sendClientCommand("TaskBoard", "TaskBoardDeleted", {
+                    x = square:getX(),
+                    y = square:getY(),
+                    z = square:getZ()
+                })
+            end
         end
     end
 end

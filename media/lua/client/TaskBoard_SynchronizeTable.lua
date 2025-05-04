@@ -29,7 +29,17 @@ local function onServerCommand(module, command, args)
                 end
             end
         elseif command == "TaskBoardDeleted" then
-            -- todo
+            local square = getCell():getGridSquare(args.x, args.y, args.z)
+            if square then
+                local objects = square:getObjects()
+                for i = 0, objects:size() - 1 do
+                    local object = objects:get(i)
+                    if TaskBoard_mainWindowFurniture == object then
+                        TaskBoard_Utils.closeTaskBoardMainWindow()
+                        break
+                    end
+                end
+            end
         end
     end
 end
