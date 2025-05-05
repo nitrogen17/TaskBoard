@@ -110,4 +110,8 @@ function TaskBoard_Utils.findTaskBoardOnSquare(square)
     return nil
 end
 
+function TaskBoard_Utils.isSinglePlayer()
+    return not isClient() and not isServer()
+end
+
 return TaskBoard_Utils

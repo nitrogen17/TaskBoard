@@ -33,39 +33,6 @@ local function generateUUID(furniture)
     error("Failed to generate a unique ID after 1000 attempts.")
 end
 
-local function processTaskAction(furniture, action, task)
-    local modData = furniture:getModData()
-    modData.tasks = modData.tasks or {}
-
-    if action == "CreateTask" then
-        task.id = generateUUID(furniture)
-        modData.tasks[task.id] = task
-    elseif action == "UpdateTask" and task.id then
-        modData.tasks[task.id] = task
-    elseif action == "DeleteTask" and task.id then
-        modData.tasks[task.id] = nil
-    end
-end
-
-local function sendTaskCommand(command, furniture, action, task)
-    local square = furniture:getSquare()
-    if not square then return end
-
-    local data = {
-        x = square:getX(),
-        y = square:getY(),
-        z = square:getZ(),
-        action = action,
-        task = task
-    }
-
-    if isClient() then
-        sendClientCommand("TaskBoard", command, data)
-    elseif isServer() then
-        sendServerCommand("TaskBoard", command, data)
-    end
-end
-
 local function addTasksToListBox(tasks, listBox)
     listBox:clear()
     listBox.tableTasks = {}
@@ -101,6 +68,24 @@ local function reloadAllTablesInClient(furniture)
     addTasksToListBox(sectionMap[3], kb_rightListBox)
 end
 
+local function processTaskAction(furniture, action, task)
+    local modData = furniture:getModData()
+    modData.tasks = modData.tasks or {}
+
+    if action == "CreateTask" then
+        task.id = generateUUID(furniture)
+        modData.tasks[task.id] = task
+    elseif action == "UpdateTask" and task.id then
+        modData.tasks[task.id] = task
+    elseif action == "DeleteTask" and task.id then
+        modData.tasks[task.id] = nil
+    end
+
+    if TaskBoard_Utils.isSinglePlayer() then
+        reloadAllTablesInClient(furniture)
+    end
+end
+
 function TaskBoard_Core.reloadAllTables(player, furniture)
     if not furniture then return end
 
@@ -112,21 +97,41 @@ function TaskBoard_Core.create(furniture, task)
     if not furniture then return end
 
     processTaskAction(furniture, "CreateTask", task)
-    sendTaskCommand("TaskBoardTaskUpdated", furniture, "CreateTask", task)
+    TaskBoard_Core.sendTaskCommand("TaskBoardTaskUpdated", furniture, "CreateTask", task)
 end
 
 function TaskBoard_Core.update(furniture, task)
     if not furniture or not task.id then return end
 
     processTaskAction(furniture, "UpdateTask", task)
-    sendTaskCommand("TaskBoardTaskUpdated", furniture, "UpdateTask", task)
+    TaskBoard_Core.sendTaskCommand("TaskBoardTaskUpdated", furniture, "UpdateTask", task)
 end
 
 function TaskBoard_Core.delete(furniture, task)
     if not furniture or not task.id then return end
 
     processTaskAction(furniture, "DeleteTask", task)
-    sendTaskCommand("TaskBoardTaskUpdated", furniture, "DeleteTask", task)
+    TaskBoard_Core.sendTaskCommand("TaskBoardTaskUpdated", furniture, "DeleteTask", task)
+end
+
+
+function TaskBoard_Core.sendTaskCommand(command, furniture, action, task)
+    local square = furniture:getSquare()
+    if not square then return end
+
+    local data = {
+        x = square:getX(),
+        y = square:getY(),
+        z = square:getZ(),
+        action = action,
+        task = task
+    }
+
+    if isClient() then
+        sendClientCommand("TaskBoard", command, data)
+    elseif isServer() then
+        sendServerCommand("TaskBoard", command, data)
+    end
 end
 
 function TaskBoard_Core.syncTaskAction(taskBoard, args)

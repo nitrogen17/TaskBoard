@@ -26,7 +26,7 @@ local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
 
     furniture:transmitModData()
     TaskBoard_Utils.closeTaskBoardMainWindow()
-    TaskBoard_Server.getPacket("TaskBoardDeleted", { furniture = furniture })
+    TaskBoard_Core.sendTaskCommand("TaskBoardDeleted", furniture)
 
     getPlayer():Say("I removed the task board here.")
 end
