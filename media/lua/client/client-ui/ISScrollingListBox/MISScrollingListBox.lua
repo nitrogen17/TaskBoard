@@ -46,11 +46,11 @@ function kb_MISScrollingListBox:onRightMouseDown(x, y)
             moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
             moveSubMenu:addOption("Done", self, self.onMoveTask, task, 3)
         elseif sectionID == 2 then
+            moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
             moveSubMenu:addOption("Done", self, self.onMoveTask, task, 3)
-            moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
         elseif sectionID == 3 then
-            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
             moveSubMenu:addOption("To Do", self, self.onMoveTask, task, 1)
+            moveSubMenu:addOption("In Progress", self, self.onMoveTask, task, 2)
         end
     end
     return false
