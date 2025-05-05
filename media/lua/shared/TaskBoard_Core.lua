@@ -5,6 +5,16 @@ TaskBoard_Core = {}
 TaskBoard_allowedTaskBoardFurnitures = {
     "location_business_office_generic_01_7",
     "location_business_office_generic_01_15",
+    "location_business_office_generic_01_36",
+    "location_business_office_generic_01_37",
+    "location_business_office_generic_01_38",
+    "location_business_office_generic_01_39",
+    "location_business_office_generic_01_53",
+    "location_business_office_generic_01_54",
+    "location_business_office_generic_01_55",
+    "location_business_office_generic_01_50",
+    "location_business_office_generic_01_51",
+    "location_business_office_generic_01_52",
 }
 
 local function generateUUID(furniture)

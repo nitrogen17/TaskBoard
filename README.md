@@ -46,7 +46,7 @@ Replace `<YourUsername>` with your actual system username.
 ## How to Use
 
 1. Enter a game world (new or existing).
-2. Find a Cork Noteboard furniture (more boards will be supported in the future).
+2. Find a supported furniture (see below; more boards will be supported in the future).
 3. Pick it up and bring it to your base.
 4. Place the Cork Noteboard somewhere.
 5. Right-click the placed furniture and click Make Task Board.
@@ -60,3 +60,7 @@ Replace `<YourUsername>` with your actual system username.
 - Built using Lua and the native UI API.
 - Data is stored with `ModData` per furniture.
 - Old version where the task board is global has a migration option to move their currennt tasks to a supported furniture.
+- Supported Furnitures:
+  - **Office Whiteboard** (All segments)
+  - **Cork Noteboard**
+  - **Big Cork Noteboard** (left & right)
