@@ -59,7 +59,7 @@ Replace `<YourUsername>` with your actual system username.
 
 - Built using Lua and the native UI API.
 - Data is stored with `ModData` per furniture.
-- Old version where the task board is global has a migration option to move their currennt tasks to a supported furniture.
+- Old version where the task board is global has a migration option to move their current tasks to a supported furniture.
 - Supported Furnitures:
   - **Office Whiteboard** (All segments)
   - **Cork Noteboard**
