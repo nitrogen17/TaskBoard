@@ -1,5 +1,4 @@
 require('TaskBoard_Core')
-require('TaskBoard_Migrator') 
 require('TaskBoard_Server')
 require('TaskBoard_Utils')
 
