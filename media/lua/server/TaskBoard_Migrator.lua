@@ -45,11 +45,12 @@ function TaskBoard_Migrator.migrateData(args)
 
     for i = 0, objects:size() - 1 do
         local object = objects:get(i)
-        if object and instanceof(object, "IsoObject") and not processedObjects[object] then
+        if object and not processedObjects[object] and TaskBoard_Utils.isFurnitureWhitelisted(object) then
             processedObjects[object] = true
             local modData = object:getModData()
+            modData.tasks = modData.tasks or {}
             for key, value in pairs(globalModData) do
-                modData[key] = value
+                modData.tasks[key] = value
             end
             modData.isTaskBoard = true
             object:transmitModData()
