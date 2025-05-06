@@ -55,7 +55,7 @@ local function onRemoveTaskBoard(worldobjects, square, furniture)
     modal:addToUIManager()
 end
 
-local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, test)
+local function onPreFillWorldObjectContextMenu(playerNum, context, worldobjects, test)
     local player = getPlayer(playerNum)
     local processedObjects = {}
     for _, object in ipairs(worldobjects) do
@@ -66,7 +66,6 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
             local square = object:getSquare()
 
             if TaskBoard_Utils.isWithinRange(player, square, 1) then
-                TaskBoard_Migrator.onFillWorldObjectContextMenu(context, worldobjects, object, modData, currentName, square) -- migration plan
                 if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
                     context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
                 end
@@ -79,4 +78,4 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
     end
 end
 
-Events.OnFillWorldObjectContextMenu.Add(onFillWorldObjectContextMenu)
+Events.OnPreFillWorldObjectContextMenu.Add(onPreFillWorldObjectContextMenu)
