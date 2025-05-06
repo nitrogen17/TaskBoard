@@ -16,6 +16,24 @@ local function onClientCommand(module, command, player, args)
     end
 end
 
+local function onGameStart()
+    if isClient() then
+        ModData.request(MODDATA_KEY)
+    end
+end
+
+local function onReceiveGlobalModData(key, data)
+    if key == MODDATA_KEY then
+        print("Received global mod data for " .. key)
+        local globalModData = ModData.getOrCreate(MODDATA_KEY)
+
+        for k, v in pairs(data) do
+            print("Key: " .. tostring(k) .. ", Value: " .. tostring(v))
+            globalModData[k] = v
+        end
+    end
+end
+
 function TaskBoard_Migrator.requestMigration(furniture)
     if isServer() or not furniture then return end
 
@@ -68,5 +86,7 @@ function TaskBoard_Migrator.onFillWorldObjectContextMenu(context, worldobjects, 
 end
 
 Events.OnClientCommand.Add(onClientCommand)
+Events.OnGameStart.Add(onGameStart)
+Events.OnReceiveGlobalModData.Add(onReceiveGlobalModData)
 
 return TaskBoard_Migrator
