@@ -4,4 +4,6 @@ Sandbox_EN = {
     Sandbox_TaskBoard_UseInGameTime_tooltip = "Pertains to dates used in the task board, such as creation date of a task. If enabled, task board will use in-game time. Otherwise, real-world time is used.",
     Sandbox_TaskBoard_UseCharacterName = "Use Character Name",
     Sandbox_TaskBoard_UseCharacterName_tooltip = "When enabled, the character name will be used in the task board. When disabled, the player's username will be used.",
+    Sandbox_TaskBoard_UseInteractKeyWithTaskBoards = "Use Interact Key to open Task Board",
+    Sandbox_TaskBoard_UseInteractKeyWithTaskBoards_tooltip = "When enabled, the Interact key can be used to open a nearby Task Board on the same tile."
 }

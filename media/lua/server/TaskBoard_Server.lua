@@ -1,20 +1,28 @@
-MODDATA_KEY = "KB.KanbanBoard"
+require('TaskBoard_Utils')
 
-Events.OnClientCommand.Add(function(module, command, player, task)
-    if module ~= MODDATA_KEY then return end
+local commandHandlers = {
+    TaskBoardTaskUpdated = function(player, args, taskBoard)
+        TaskBoard_Core.syncTaskAction(taskBoard, args)
+        sendServerCommand("TaskBoard", "TaskBoardTaskUpdated", args)
+    end,
 
-    local db = ModData.getOrCreate(MODDATA_KEY)
-
-    if command == "CreateTask" then
-        TaskBoard_Core.create(task)
-
-    elseif command == "UpdateTask" then
-        TaskBoard_Core.update(task)
-
-    elseif command == "DeleteTask" then
-        TaskBoard_Core.delete(task)
-
-    elseif command == "ReloadAllTables" then
-        TaskBoard_Core.reloadAllTables(player)
+    TaskBoardDeleted = function(player, args, taskBoard)
+        sendServerCommand("TaskBoard", "TaskBoardDeleted", {
+            x = args.x,
+            y = args.y,
+            z = args.z
+        })
     end
-end)
+}
+
+local function onReceivePackets(module, command, player, args)
+    if module == "TaskBoard" and commandHandlers[command] then
+        local square = getCell():getGridSquare(args.x, args.y, args.z)
+        local taskBoard = TaskBoard_Utils.findTaskBoardOnSquare(square)
+        if taskBoard then
+            commandHandlers[command](player, args, taskBoard)
+        end
+    end
+end
+
+Events.OnClientCommand.Add(onReceivePackets)

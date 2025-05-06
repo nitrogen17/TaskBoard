@@ -6,11 +6,6 @@ require('ISUI/ISButton')
 
 local TaskCardPanel = ISPanel:derive("TaskCardPanel")
 
-function TaskCardPanel:initialise(taskData)
-    ISPanel.initialise(self)
-    self:create(taskData)
-end
-
 local function formatISODate(isoString)
     local year, month, day, hour, min, sec = isoString:match("^(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)")
     if year and month and day and hour and min and sec then
@@ -26,6 +21,11 @@ local function formatISODate(isoString)
         return os.date("%B %d, %Y at %I:%M %p", timestamp)
     end
     return isoString
+end
+
+function TaskCardPanel:initialise(taskData)
+    ISPanel.initialise(self)
+    self:create(taskData)
 end
 
 function TaskCardPanel:create(task)
