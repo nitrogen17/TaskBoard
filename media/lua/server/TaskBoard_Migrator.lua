@@ -69,6 +69,9 @@ local function onReceiveGlobalModData(key, data)
 end
 
 local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, test)
+    local hideMigration = SandboxVars.TaskBoard.HideMigrateTaskBoardContextItem
+    if hideMigration then return end
+
     local globalModData = ModData.get(MODDATA_KEY)
     if not globalModData then return end
 
