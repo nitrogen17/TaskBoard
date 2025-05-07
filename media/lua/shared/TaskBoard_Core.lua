@@ -1,5 +1,3 @@
-require("TaskBoard_Server") --HMMM...
-
 TaskBoard_Core = {}
 
 TaskBoard_allowedTaskBoardFurnitures = {
@@ -18,7 +16,7 @@ TaskBoard_allowedTaskBoardFurnitures = {
 }
 
 local function generateUUID(furniture)
-    local modData = furniture:getModData()
+    local modData = TaskBoard_Core.fetchModData(furniture)
     modData.tasks = modData.tasks or {}
 
     local function padWithZeros(num)
@@ -49,7 +47,7 @@ end
 local function reloadAllTablesInClient(furniture)
     if not furniture then return end
 
-    local tasks = furniture:getModData().tasks or {}
+    local tasks = TaskBoard_Core.fetchModData(furniture).tasks or {}
 
     local sectionMap = {
         [1] = {},
@@ -69,7 +67,7 @@ local function reloadAllTablesInClient(furniture)
 end
 
 local function processTaskAction(furniture, action, task)
-    local modData = furniture:getModData()
+    local modData = TaskBoard_Core.fetchModData(furniture)
     modData.tasks = modData.tasks or {}
 
     if action == "CreateTask" then
@@ -135,7 +133,7 @@ function TaskBoard_Core.sendTaskCommand(command, furniture, action, task)
 end
 
 function TaskBoard_Core.syncTaskAction(taskBoard, args)
-    local modData = taskBoard:getModData()
+    local modData = TaskBoard_Core.fetchModData(taskBoard)
     modData.tasks = modData.tasks or {}
 
     if args.action == "CreateTask" then
@@ -145,4 +143,22 @@ function TaskBoard_Core.syncTaskAction(taskBoard, args)
     elseif args.action == "DeleteTask" and args.task.id then
         modData.tasks[args.task.id] = nil
     end
+end
+
+function TaskBoard_Core.fetchModData(furniture)
+    if not furniture then return nil end
+
+    local modData = furniture:getModData()
+    modData.movableData = modData.movableData or {}
+
+    if not modData.movableData.isTaskBoard and modData.isTaskBoard then
+        modData.movableData.isTaskBoard = modData.isTaskBoard
+        modData.isTaskBoard = nil
+    end
+    if not modData.movableData.tasks and modData.tasks then
+        modData.movableData.tasks = modData.tasks
+        modData.tasks = nil
+    end
+
+    return modData.movableData
 end

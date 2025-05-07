@@ -14,7 +14,7 @@ local function migrateData(args)
     for i = 0, objects:size() - 1 do
         local object = objects:get(i)
         if object and TaskBoard_Utils.isFurnitureWhitelisted(object) then
-            local modData = object:getModData()
+            local modData = TaskBoard_Core.fetchModData(object)
             modData.tasks = modData.tasks or {}
             for key, value in pairs(globalModData) do
                 modData.tasks[key] = value
@@ -88,7 +88,7 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
         for i = 0, objects:size() - 1 do
             local object = objects:get(i)
             if object and TaskBoard_Utils.isFurnitureWhitelisted(object) then
-                local modData = object:getModData()
+                local modData = TaskBoard_Core.fetchModData(object)
                 if not modData.isTaskBoard then
                     local currentName = TaskBoard_Utils.getFurnitureName(object)
                     context:addOption("Migrate Task Board (" .. currentName .. ")", object, requestMigration, object)
