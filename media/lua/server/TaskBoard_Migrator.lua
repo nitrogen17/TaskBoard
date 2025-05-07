@@ -59,12 +59,12 @@ local function onGameStart()
 end
 
 local function onReceiveGlobalModData(key, data)
-    if key == MODDATA_KEY then
-        local globalModData = ModData.getOrCreate(MODDATA_KEY)
+    if key ~= MODDATA_KEY or not data or type(data) ~= "table" then return end
 
-        for k, v in pairs(data) do
-            globalModData[k] = v
-        end
+    local globalModData = ModData.getOrCreate(MODDATA_KEY)
+
+    for k, v in pairs(data) do
+        globalModData[k] = v
     end
 end
 
