@@ -1,9 +1,9 @@
 require('TaskBoard_Utils')
 
-MODDATA_KEY = "KB.KanbanBoard"
+OLD_MOD_DATA_KEY = "KB.KanbanBoard"
 
 local function migrateData(args)
-    local globalModData = ModData.get(MODDATA_KEY)
+    local globalModData = ModData.get(OLD_MOD_DATA_KEY)
     if not globalModData then return end
 
     local square = getCell():getGridSquare(args.x, args.y, args.z)
@@ -54,14 +54,14 @@ end
 
 local function onGameStart()
     if isClient() then
-        ModData.request(MODDATA_KEY)
+        ModData.request(OLD_MOD_DATA_KEY)
     end
 end
 
 local function onReceiveGlobalModData(key, data)
-    if key ~= MODDATA_KEY or not data or type(data) ~= "table" then return end
+    if key ~= OLD_MOD_DATA_KEY or not data or type(data) ~= "table" then return end
 
-    local globalModData = ModData.getOrCreate(MODDATA_KEY)
+    local globalModData = ModData.getOrCreate(OLD_MOD_DATA_KEY)
 
     for k, v in pairs(data) do
         globalModData[k] = v
@@ -72,7 +72,7 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
     local hideMigration = SandboxVars.TaskBoard.HideMigrateTaskBoardContextItem
     if hideMigration then return end
 
-    local globalModData = ModData.get(MODDATA_KEY)
+    local globalModData = ModData.get(OLD_MOD_DATA_KEY)
     if not globalModData then return end
 
     local clickedSquare = nil
