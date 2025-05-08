@@ -1,9 +1,9 @@
 require('TaskBoard_Utils')
 
-MODDATA_KEY = "KB.KanbanBoard"
+OLD_MOD_DATA_KEY = "KB.KanbanBoard"
 
 local function migrateData(args)
-    local globalModData = ModData.get(MODDATA_KEY)
+    local globalModData = ModData.get(OLD_MOD_DATA_KEY)
     if not globalModData then return end
 
     local square = getCell():getGridSquare(args.x, args.y, args.z)
@@ -14,7 +14,7 @@ local function migrateData(args)
     for i = 0, objects:size() - 1 do
         local object = objects:get(i)
         if object and TaskBoard_Utils.isFurnitureWhitelisted(object) then
-            local modData = object:getModData()
+            local modData = TaskBoard_Core.fetchModData(object)
             modData.tasks = modData.tasks or {}
             for key, value in pairs(globalModData) do
                 modData.tasks[key] = value
@@ -54,22 +54,25 @@ end
 
 local function onGameStart()
     if isClient() then
-        ModData.request(MODDATA_KEY)
+        ModData.request(OLD_MOD_DATA_KEY)
     end
 end
 
 local function onReceiveGlobalModData(key, data)
-    if key == MODDATA_KEY then
-        local globalModData = ModData.getOrCreate(MODDATA_KEY)
+    if key ~= OLD_MOD_DATA_KEY or not data or type(data) ~= "table" then return end
 
-        for k, v in pairs(data) do
-            globalModData[k] = v
-        end
+    local globalModData = ModData.getOrCreate(OLD_MOD_DATA_KEY)
+
+    for k, v in pairs(data) do
+        globalModData[k] = v
     end
 end
 
 local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, test)
-    local globalModData = ModData.get(MODDATA_KEY)
+    local hideMigration = SandboxVars.TaskBoard.HideMigrateTaskBoardContextItem
+    if hideMigration then return end
+
+    local globalModData = ModData.get(OLD_MOD_DATA_KEY)
     if not globalModData then return end
 
     local clickedSquare = nil
@@ -85,7 +88,7 @@ local function onFillWorldObjectContextMenu(playerNum, context, worldobjects, te
         for i = 0, objects:size() - 1 do
             local object = objects:get(i)
             if object and TaskBoard_Utils.isFurnitureWhitelisted(object) then
-                local modData = object:getModData()
+                local modData = TaskBoard_Core.fetchModData(object)
                 if not modData.isTaskBoard then
                     local currentName = TaskBoard_Utils.getFurnitureName(object)
                     context:addOption("Migrate Task Board (" .. currentName .. ")", object, requestMigration, object)

@@ -1,3 +1,5 @@
+require("TaskBoard_Core")
+
 TaskBoard_Utils = {}
 
 TaskBoard_mainWindowFurniture = nil
@@ -103,7 +105,7 @@ function TaskBoard_Utils.findTaskBoardOnSquare(square)
     local objects = square:getObjects()
     for i = 0, objects:size() - 1 do
         local object = objects:get(i)
-        if object:getModData().isTaskBoard then
+        if TaskBoard_Core.fetchModData(object).isTaskBoard then
             return object
         end
     end

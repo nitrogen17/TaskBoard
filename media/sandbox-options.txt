@@ -20,3 +20,10 @@ option TaskBoard.UseInteractKeyWithTaskBoards {
     page = TaskBoard,
     translation = TaskBoard_UseInteractKeyWithTaskBoards,
 }
+
+option TaskBoard.HideMigrateTaskBoardContextItem {
+    type = boolean,
+    default = false,
+    page = TaskBoard,
+    translation = TaskBoard_HideMigrateTaskBoardContextItem,
+}

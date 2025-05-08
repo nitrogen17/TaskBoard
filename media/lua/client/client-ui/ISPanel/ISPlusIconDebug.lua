@@ -23,7 +23,7 @@ end
 
 function ISPlusIconDebug:onMouseDown(x, y)
     local dateNow = os.date("!%Y-%m-%dT%H:%M:%SZ")
-    
+
     local mockTasks = {
         {
             id = "1000000011",
@@ -204,7 +204,7 @@ function ISPlusIconDebug:onMouseDown(x, y)
                 xpReward = 20
             },
             automationRules = {}
-        },   
+        },
         {
             id = "1000000016",
             title = "Repair Broken Fence",
@@ -712,7 +712,7 @@ function ISPlusIconDebug:onMouseDown(x, y)
     }
 
     for _, task in pairs(mockTasks) do
-        sendClientCommand(MODDATA_KEY, "CreateTask", task)
+        sendClientCommand(OLD_MOD_DATA_KEY, "CreateTask", task)
     end
 end
 

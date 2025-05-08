@@ -1,3 +1,4 @@
+require("TaskBoard_Core")
 require("TaskBoard_Utils")
 
 local function onInteractKeyPressed(key)
@@ -13,7 +14,7 @@ local function onInteractKeyPressed(key)
         local objects = square:getObjects()
         for i = 0, objects:size() - 1 do
             local object = objects:get(i)
-            if object:getModData().isTaskBoard then
+            if TaskBoard_Core.fetchModData(object).isTaskBoard then
                 TaskBoard_Utils.openTaskBoard(object)
                 return
             end

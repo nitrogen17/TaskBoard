@@ -5,8 +5,9 @@ require('TaskBoard_Utils')
 local function onMakeTaskBoard(worldobjects, square, furniture)
     if not furniture then return end
 
-    local modData = furniture:getModData()
+    local modData = TaskBoard_Core.fetchModData(furniture)
     modData.isTaskBoard = true
+    modData.tasks = {}
     -- more data here to create.
 
     furniture:transmitModData()
@@ -18,7 +19,7 @@ end
 local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
     if not furniture then return end
 
-    local modData = furniture:getModData()
+    local modData = TaskBoard_Core.fetchModData(furniture)
     modData.isTaskBoard = nil
     modData.tasks = nil
     -- more data here to remove.
@@ -60,7 +61,7 @@ local function onPreFillWorldObjectContextMenu(playerNum, context, worldobjects,
     for _, object in ipairs(worldobjects) do
         if object and instanceof(object, "IsoObject") and not processedObjects[object] then
             processedObjects[object] = true
-            local modData = object:getModData()
+            local modData = TaskBoard_Core.fetchModData(object)
             local currentName = TaskBoard_Utils.getFurnitureName(object)
             local square = object:getSquare()
 
