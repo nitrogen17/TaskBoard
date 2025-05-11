@@ -24,6 +24,38 @@ function TaskFormPanel:setTitle(newTitle)
 end
 
 kb_priorityOptions = {"Low", "Medium", "High"}
+kb_tagOptions = {
+    "N/A",
+    "base",
+    "urgent",
+    "dangerous",
+    "night",
+    "security",
+    "food",
+    "supplies",
+    "combat",
+    "base-defense",
+    "scouting",
+    "wilderness",
+    "crafting",
+    "farming",
+    "exploration",
+    "scavenging",
+    "loot",
+    "safehouse",
+    "operation",
+    "skill-leveling",
+    "generator",
+    "fuel",
+    "water",
+    "sustainability",
+    "cleaning",
+    "organization",
+    "inventory",
+    "harvest",
+    "fence",
+    "repair"
+}
 
 kb_TaskFormPanel = {}
 
@@ -39,7 +71,7 @@ kb_TaskFormPanel.task = nil
 function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.action = action
 
-    kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 400)
+    kb_TaskFormPanel.formPanel = ISPanel:new(0, 0, 300, 510)
     kb_TaskFormPanel.formPanel:initialise()
     kb_TaskFormPanel.formPanel:setAnchorLeft(true)
     kb_TaskFormPanel.formPanel:setAnchorTop(true)
@@ -69,7 +101,6 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.priorityTag:setTitle("Priority")
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.priorityTag)
 
-
     kb_TaskFormPanel.priorityLabel = ISComboBox:new(10, kb_TaskFormPanel.priorityTag:getY() + kb_TaskFormPanel.priorityTag:getHeight() + 10, 280, 27)
     for _, priority in ipairs(kb_priorityOptions) do
         kb_TaskFormPanel.priorityLabel:addOption(priority)
@@ -79,7 +110,33 @@ function kb_TaskFormPanel.createForm(action, task)
     kb_TaskFormPanel.priorityLabel:instantiate()
     kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.priorityLabel)
 
-    local submitButton = ISButton:new(10, 320, 280, 30, "Submit", nil, kb_TaskFormPanel.onSubmit)
+    -- Tags
+    kb_TaskFormPanel.tag = TaskFormPanel:new(0, kb_TaskFormPanel.priorityLabel:getY() + kb_TaskFormPanel.priorityLabel:getHeight() + 20, 280, 20)
+    kb_TaskFormPanel.tag:initialise()
+    kb_TaskFormPanel.tag:setTitle("Tags")
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.tag)
+
+    -- firstTagComboBox
+    kb_TaskFormPanel.firstTagComboBox = ISComboBox:new(10, kb_TaskFormPanel.tag:getY() + kb_TaskFormPanel.tag:getHeight() + 12, 280, 27)
+    for _, priority in ipairs(kb_tagOptions) do
+        kb_TaskFormPanel.firstTagComboBox:addOption(priority)
+    end
+
+    kb_TaskFormPanel.firstTagComboBox:initialise()
+    kb_TaskFormPanel.firstTagComboBox:instantiate()
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.firstTagComboBox)
+
+    -- secondTagComboBox
+    kb_TaskFormPanel.secondTagComboBox = ISComboBox:new(10, kb_TaskFormPanel.firstTagComboBox:getY() + kb_TaskFormPanel.firstTagComboBox:getHeight() + 15, 280, 27)
+    for _, priority in ipairs(kb_tagOptions) do
+        kb_TaskFormPanel.secondTagComboBox:addOption(priority)
+    end
+
+    kb_TaskFormPanel.secondTagComboBox:initialise()
+    kb_TaskFormPanel.secondTagComboBox:instantiate()
+    kb_TaskFormPanel.formPanel:addChild(kb_TaskFormPanel.secondTagComboBox)
+
+    local submitButton = ISButton:new(10, 430, 280, 30, "Submit", nil, kb_TaskFormPanel.onSubmit)
     submitButton:initialise()
     kb_TaskFormPanel.formPanel:addChild(submitButton)
 
