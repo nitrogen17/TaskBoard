@@ -33,4 +33,6 @@ option TaskBoard.ResizeableWidgetPadding {
     default = 20,
     min = 0,
     max = 100,
+    page = TaskBoard,
+    translation = TaskBoard_ResizeableWidgetPadding,
 }
