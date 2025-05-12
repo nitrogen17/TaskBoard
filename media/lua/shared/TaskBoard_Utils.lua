@@ -116,4 +116,17 @@ function TaskBoard_Utils.isSinglePlayer()
     return not isClient() and not isServer()
 end
 
+function TaskBoard_Utils.computeLayout(window)
+    local newWidth = window:getWidth()
+    local newHeight = window:getHeight()
+
+    return {
+        sectionWidth = newWidth / 3,
+        headerHeight = window:titleBarHeight() * 2,
+        availableHeight = newHeight - (window:titleBarHeight() + (window:titleBarHeight() * 2) + window:resizeWidgetHeight()) - SandboxVars.TaskBoard.ResizeableWidgetPadding,
+        newWidth = newWidth,
+        newHeight = newHeight
+    }
+end
+
 return TaskBoard_Utils
