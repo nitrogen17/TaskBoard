@@ -92,7 +92,7 @@ local function drawMainWindow()
 end
 
 local function drawLeftSection(window, sectionHeaderPanel)
-    local childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight()))
+    local childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight() + window:resizeWidgetHeight()))
     childLeftPanel:initialise()
 
     kb_leftListBox = kb_MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
