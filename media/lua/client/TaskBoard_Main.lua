@@ -23,6 +23,43 @@ local ISPlusIconDebug = require('client-ui/ISPanel/ISPlusIconDebug')
 
 TaskBoard_mainWindow = {}
 
+local function updateTaskBoardLayout(window)
+    local newWidth = window:getWidth()
+    local newHeight = window:getHeight()
+
+    -- Adjust header panels
+    if kb_sectionLeftHeaderPanel then
+        kb_sectionLeftHeaderPanel:setWidth(newWidth / 3)
+    end
+
+    if kb_sectionMiddleHeaderPanel then
+        kb_sectionMiddleHeaderPanel:setX(newWidth / 3)
+        kb_sectionMiddleHeaderPanel:setWidth(newWidth / 3)
+    end
+
+    if kb_sectionRightHeaderPanel then
+        kb_sectionRightHeaderPanel:setX((newWidth / 3) * 2)
+        kb_sectionRightHeaderPanel:setWidth(newWidth / 3)
+    end
+
+    if kb_childLeftPanel then
+        kb_childLeftPanel:setWidth(newWidth / 3)
+        kb_childLeftPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionLeftHeaderPanel:getHeight()))
+    end
+
+    if kb_childMiddlePanel then
+        kb_childMiddlePanel:setX(newWidth / 3)
+        kb_childMiddlePanel:setWidth(newWidth / 3)
+        kb_childMiddlePanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionMiddleHeaderPanel:getHeight()))
+    end
+
+    if kb_childRightPanel then
+        kb_childRightPanel:setX((newWidth / 3) * 2)
+        kb_childRightPanel:setWidth(newWidth / 3)
+        kb_childRightPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionRightHeaderPanel:getHeight()))
+    end
+end
+
 local function drawLeftHeaderSection(window)
     local sectionLeftHeaderPanel = kb_MISPanel:new(0, window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
     sectionLeftHeaderPanel:initialise()
@@ -67,14 +104,13 @@ local function drawSectionHeaderPanel(window)
     sectionHeaderPanel.backgroundColor = {r=0, g=0, b=0, a=1}
     window:addChild(sectionHeaderPanel)
 
-    local leftHeaderSection = drawLeftHeaderSection(window)
-    drawPlusIcon(leftHeaderSection)
+    kb_sectionLeftHeaderPanel = drawLeftHeaderSection(window)
+    drawPlusIcon(kb_sectionLeftHeaderPanel)
 
+    kb_sectionMiddleHeaderPanel = drawMiddleHeaderSection(window, kb_sectionLeftHeaderPanel)
+    -- drawPlusIconDebug(kb_sectionMiddleHeaderPanel)
 
-    local middleHeaderSection = drawMiddleHeaderSection(window, leftHeaderSection)
-    -- drawPlusIconDebug(middleHeaderSection)
-
-    drawRightHeaderSection(window, middleHeaderSection)
+    kb_sectionRightHeaderPanel = drawRightHeaderSection(window, kb_sectionMiddleHeaderPanel)
 
     return sectionHeaderPanel
 end
@@ -87,45 +123,52 @@ local function drawMainWindow()
     window:initialise()
     window:addToUIManager()
     window:setVisible(false)
+    window:setResizable(true)
+
+    function window:onResize()
+        updateTaskBoardLayout(self)
+    end
 
     return window
 end
 
 local function drawLeftSection(window, sectionHeaderPanel)
-    local childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight() + window:resizeWidgetHeight()))
-    childLeftPanel:initialise()
+    kb_childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight()))
+    kb_childLeftPanel:initialise()
 
-    kb_leftListBox = kb_MISScrollingListBox:new(0, 0, childLeftPanel:getWidth(), childLeftPanel:getHeight())
+    kb_leftListBox = kb_MISScrollingListBox:new(0, 0, kb_childLeftPanel:getWidth(), kb_childLeftPanel:getHeight())
     kb_leftListBox:initialise()
 
-    childLeftPanel:addChild(kb_leftListBox)
-    window:addChild(childLeftPanel)
+    kb_childLeftPanel:addChild(kb_leftListBox)
+    window:addChild(kb_childLeftPanel)
 
-    return childLeftPanel
+    return kb_childLeftPanel
 end
 
 local function drawMiddleSection(window, leftSection)
-    local childMiddlePanel = ISPanel:new(window.width / 3, leftSection:getY(), window.width / 3, leftSection:getHeight())
-    childMiddlePanel:initialise()
+    kb_childMiddlePanel = ISPanel:new(window.width / 3, leftSection:getY(), window.width / 3, leftSection:getHeight())
+    kb_childMiddlePanel:initialise()
 
-    kb_middleListBox = kb_MISScrollingListBox:new(0, 0, childMiddlePanel:getWidth(), childMiddlePanel:getHeight())
+    kb_middleListBox = kb_MISScrollingListBox:new(0, 0, kb_childMiddlePanel:getWidth(), kb_childMiddlePanel:getHeight())
     kb_middleListBox:initialise()
 
-    childMiddlePanel:addChild(kb_middleListBox)
-    window:addChild(childMiddlePanel)
+    kb_childMiddlePanel:addChild(kb_middleListBox)
+    window:addChild(kb_childMiddlePanel)
 
-    return childMiddlePanel
+    return kb_childMiddlePanel
 end
 
 local function drawRightSection(window, middleSection)
-    local childRightPanel = ISPanel:new((window.width / 3) * 2, middleSection:getY(), window.width / 3, middleSection:getHeight())
-    childRightPanel:initialise()
+    kb_childRightPanel = ISPanel:new((window.width / 3) * 2, middleSection:getY(), window.width / 3, middleSection:getHeight())
+    kb_childRightPanel:initialise()
 
-    kb_rightListBox = kb_MISScrollingListBox:new(0, 0, childRightPanel:getWidth(), childRightPanel:getHeight())
+    kb_rightListBox = kb_MISScrollingListBox:new(0, 0, kb_childRightPanel:getWidth(), kb_childRightPanel:getHeight())
     kb_rightListBox:initialise()
 
-    childRightPanel:addChild(kb_rightListBox)
-    window:addChild(childRightPanel)
+    kb_childRightPanel:addChild(kb_rightListBox)
+    window:addChild(kb_childRightPanel)
+
+    return kb_childRightPanel
 end
 
 local function drawAllSections(window)
@@ -139,6 +182,7 @@ end
 local function drawKanbanBoard()
     TaskBoard_mainWindow = drawMainWindow()
     drawAllSections(TaskBoard_mainWindow)
+    updateTaskBoardLayout(TaskBoard_mainWindow)
 end
 
 local function main()
