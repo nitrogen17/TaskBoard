@@ -27,7 +27,10 @@ local function updateTaskBoardLayout(window)
     local newWidth = window:getWidth()
     local newHeight = window:getHeight()
 
-    -- Adjust header panels
+    if kb_sectionHeaderPanel then
+        kb_sectionHeaderPanel:setWidth(newWidth)
+    end
+
     if kb_sectionLeftHeaderPanel then
         kb_sectionLeftHeaderPanel:setWidth(newWidth / 3)
     end
@@ -37,53 +40,69 @@ local function updateTaskBoardLayout(window)
         kb_sectionMiddleHeaderPanel:setWidth(newWidth / 3)
     end
 
+    print("kb_sectionRightHeaderPanel: " .. tostring(kb_sectionRightHeaderPanel))
     if kb_sectionRightHeaderPanel then
+        print("it exists")
         kb_sectionRightHeaderPanel:setX((newWidth / 3) * 2)
         kb_sectionRightHeaderPanel:setWidth(newWidth / 3)
     end
 
-    if kb_childLeftPanel then
+    if kb_childLeftPanel and kb_sectionLeftHeaderPanel then
         kb_childLeftPanel:setWidth(newWidth / 3)
-        kb_childLeftPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionLeftHeaderPanel:getHeight()))
+        kb_childLeftPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionLeftHeaderPanel:getHeight() + window:resizeWidgetHeight()) - 24)
+        if kb_leftListBox then
+            kb_leftListBox:setWidth(kb_childLeftPanel:getWidth())
+            kb_leftListBox:setHeight(kb_childLeftPanel:getHeight())
+        end
     end
 
-    if kb_childMiddlePanel then
+    if kb_childMiddlePanel and kb_sectionMiddleHeaderPanel then
         kb_childMiddlePanel:setX(newWidth / 3)
         kb_childMiddlePanel:setWidth(newWidth / 3)
-        kb_childMiddlePanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionMiddleHeaderPanel:getHeight()))
+        kb_childMiddlePanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionMiddleHeaderPanel:getHeight() + window:resizeWidgetHeight()) - 24)
+        if kb_middleListBox then
+            kb_middleListBox:setWidth(kb_childMiddlePanel:getWidth())
+            kb_middleListBox:setHeight(kb_childMiddlePanel:getHeight())
+        end
     end
 
-    if kb_childRightPanel then
+    if kb_childRightPanel and kb_sectionRightHeaderPanel then
         kb_childRightPanel:setX((newWidth / 3) * 2)
         kb_childRightPanel:setWidth(newWidth / 3)
-        kb_childRightPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionRightHeaderPanel:getHeight()))
+        kb_childRightPanel:setHeight(newHeight - (window:titleBarHeight() + kb_sectionRightHeaderPanel:getHeight() + window:resizeWidgetHeight()) - 24)
+        if kb_rightListBox then
+            kb_rightListBox:setWidth(kb_childRightPanel:getWidth())
+            kb_rightListBox:setHeight(kb_childRightPanel:getHeight())
+        end
     end
 end
 
 local function drawLeftHeaderSection(window)
-    local sectionLeftHeaderPanel = kb_MISPanel:new(0, window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
-    sectionLeftHeaderPanel:initialise()
-    sectionLeftHeaderPanel:setTitle("To Do")
+    kb_sectionLeftHeaderPanel = kb_MISPanel:new(0, window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
+    kb_sectionLeftHeaderPanel:initialise()
+    kb_sectionLeftHeaderPanel:setTitle("To Do")
 
-    window:addChild(sectionLeftHeaderPanel)
+    window:addChild(kb_sectionLeftHeaderPanel)
 
-    return sectionLeftHeaderPanel
+    return kb_sectionLeftHeaderPanel
 end
 
 local function drawMiddleHeaderSection(window, leftHeaderSection)
-    local sectionMiddleHeaderPanel = kb_MISPanel:new(leftHeaderSection:getWidth(), window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
-    sectionMiddleHeaderPanel:initialise()
-    sectionMiddleHeaderPanel:setTitle("In Progress")
-    window:addChild(sectionMiddleHeaderPanel)
+    kb_sectionMiddleHeaderPanel = kb_MISPanel:new(leftHeaderSection:getWidth(), window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
+    kb_sectionMiddleHeaderPanel:initialise()
+    kb_sectionMiddleHeaderPanel:setTitle("In Progress")
+    window:addChild(kb_sectionMiddleHeaderPanel)
 
-    return sectionMiddleHeaderPanel
+    return kb_sectionMiddleHeaderPanel
 end
 
 local function drawRightHeaderSection(window, middleHeaderSection)
-    local sectionRightHeaderPanel = kb_MISPanel:new(middleHeaderSection:getWidth() * 2, window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
-    sectionRightHeaderPanel:initialise()
-    sectionRightHeaderPanel:setTitle("Done")
-    window:addChild(sectionRightHeaderPanel)
+    kb_sectionRightHeaderPanel = kb_MISPanel:new(middleHeaderSection:getWidth() * 2, window:titleBarHeight(), window.width / 3, window:titleBarHeight() * 2)
+    kb_sectionRightHeaderPanel:initialise()
+    kb_sectionRightHeaderPanel:setTitle("Done")
+    window:addChild(kb_sectionRightHeaderPanel)
+
+    return kb_sectionRightHeaderPanel
 end
 
 local function drawPlusIcon(sectionLeftHeaderPanel)
@@ -99,10 +118,10 @@ local function drawPlusIconDebug(middleHeaderSection)
 end
 
 local function drawSectionHeaderPanel(window)
-    local sectionHeaderPanel = ISPanel:new(0, window:titleBarHeight(), window.width, window:titleBarHeight() * 2)
-    sectionHeaderPanel:initialise()
-    sectionHeaderPanel.backgroundColor = {r=0, g=0, b=0, a=1}
-    window:addChild(sectionHeaderPanel)
+    kb_sectionHeaderPanel = ISPanel:new(0, window:titleBarHeight(), window.width, window:titleBarHeight() * 2)
+    kb_sectionHeaderPanel:initialise()
+    kb_sectionHeaderPanel.backgroundColor = {r=0, g=0, b=0, a=1}
+    window:addChild(kb_sectionHeaderPanel)
 
     kb_sectionLeftHeaderPanel = drawLeftHeaderSection(window)
     drawPlusIcon(kb_sectionLeftHeaderPanel)
@@ -112,7 +131,7 @@ local function drawSectionHeaderPanel(window)
 
     kb_sectionRightHeaderPanel = drawRightHeaderSection(window, kb_sectionMiddleHeaderPanel)
 
-    return sectionHeaderPanel
+    return kb_sectionHeaderPanel
 end
 
 local function drawMainWindow()
@@ -133,7 +152,7 @@ local function drawMainWindow()
 end
 
 local function drawLeftSection(window, sectionHeaderPanel)
-    kb_childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight()))
+    kb_childLeftPanel = ISPanel:new(0, window:titleBarHeight() + sectionHeaderPanel:getHeight(), window.width / 3, window.height - (window:titleBarHeight() + sectionHeaderPanel:getHeight() + window:resizeWidgetHeight()) - 24)
     kb_childLeftPanel:initialise()
 
     kb_leftListBox = kb_MISScrollingListBox:new(0, 0, kb_childLeftPanel:getWidth(), kb_childLeftPanel:getHeight())
@@ -203,3 +222,12 @@ end
 
 Events.OnGameStart.Add(main)
 Events.OnTick.Add(closeTaskBoardWindow)
+
+function TaskBoard_Debug_InitializeMainWindow()
+    if TaskBoard_mainWindow then
+        TaskBoard_mainWindow:setVisible(false)
+    end
+    TaskBoard_mainWindow = nil
+    main()
+    print("Re-initialized TaskBoard Main Window.")
+end
