@@ -12,4 +12,7 @@ Sandbox_EN = {
 
     Sandbox_TaskBoard_HideMigrateTaskBoardContextItem = "Hide Migrate Task Board",
     Sandbox_TaskBoard_HideMigrateTaskBoardContextItem_tooltip = "When enabled, the context menu item to migrate a task board will be hidden.",
+
+    Sandbox_TaskBoard_ResizeableWidgetPadding = "Resizable Widget Padding",
+    Sandbox_TaskBoard_ResizeableWidgetPadding_tooltip = "Padding value so that there is a space between the resizable widget and the task list. If they are too close, resizing it will become intermittent.",
 }
