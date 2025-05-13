@@ -88,6 +88,8 @@ local function drawMainWindow()
     window:addToUIManager()
     window:setVisible(false)
 
+    TaskBoard_Title.patchWindowForRename(window)
+
     return window
 end
 
@@ -158,7 +160,6 @@ local function closeTaskBoardWindow()
 end
 
 Events.OnGameStart.Add(main)
-Events.OnTick.Add(closeTaskBoardWindow)
 
 function TaskBoard_Debug_InitializeMainWindow()
     if TaskBoard_mainWindow then
