@@ -159,3 +159,12 @@ end
 
 Events.OnGameStart.Add(main)
 Events.OnTick.Add(closeTaskBoardWindow)
+
+function TaskBoard_Debug_InitializeMainWindow()
+    if TaskBoard_mainWindow then
+        TaskBoard_mainWindow:setVisible(false)
+    end
+    TaskBoard_mainWindow = nil
+    main()
+    print("Re-initialized TaskBoard Main Window.")
+end
