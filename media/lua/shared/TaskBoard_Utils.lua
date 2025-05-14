@@ -74,25 +74,6 @@ function TaskBoard_Utils.getFurnitureName(furniture)
         return modData.boardTitle
     end
 
-    local sprite = furniture:getSprite()
-    if sprite then
-        local translationKey = sprite:getProperties():Val("CustomName")
-        if translationKey then
-            local translatedName = getText(translationKey)
-            if translatedName and translatedName ~= "" then
-                return translatedName
-            end
-        end
-
-        return sprite:getName()
-    end
-
-    return "Unknown Furniture"
-end
-
-function TaskBoard_Utils.getFurnitureName(furniture)
-    if not furniture then return "Unknown Furniture" end
-
     local sprite = furniture.getSprite and furniture:getSprite()
     if sprite then
         local spriteName = sprite:getName()
