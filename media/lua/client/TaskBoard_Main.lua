@@ -21,61 +21,7 @@ require('TaskBoard_CardTemplate')
 local ISPlusIcon = require('client-ui/ISPanel/ISPlusIcon')
 local ISPlusIconDebug = require('client-ui/ISPanel/ISPlusIconDebug')
 
-TaskBoard_mainWindow = {}
-
-local function layoutHeaderPanel(panel, x, y, width, height, title)
-    panel:setX(x)
-    panel:setY(y)
-    panel:setWidth(width)
-    panel:setHeight(height)
-    if title then
-        panel:setTitle(title)
-    end
-end
-
-local function layoutChildPanel(panel, listBox, x, y, width, height)
-    panel:setX(x)
-    panel:setY(y)
-    panel:setWidth(width)
-    panel:setHeight(height)
-
-    if listBox then
-        listBox:setWidth(width)
-        listBox:setHeight(height)
-    end
-end
-
-local function updateTaskBoardLayout(window)
-    local layout = TaskBoard_Utils.computeLayout(window)
-
-    if kb_sectionHeaderPanel then
-        layoutHeaderPanel(kb_sectionHeaderPanel, 0, window:titleBarHeight(), layout.newWidth, layout.headerHeight)
-    end
-
-    if kb_sectionLeftHeaderPanel then
-        layoutHeaderPanel(kb_sectionLeftHeaderPanel, 0, window:titleBarHeight(), layout.sectionWidth, layout.headerHeight)
-    end
-
-    if kb_sectionMiddleHeaderPanel then
-        layoutHeaderPanel(kb_sectionMiddleHeaderPanel, layout.sectionWidth, window:titleBarHeight(), layout.sectionWidth, layout.headerHeight)
-    end
-
-    if kb_sectionRightHeaderPanel then
-        layoutHeaderPanel(kb_sectionRightHeaderPanel, layout.sectionWidth * 2, window:titleBarHeight(), layout.sectionWidth, layout.headerHeight)
-    end
-
-    if kb_childLeftPanel and kb_sectionLeftHeaderPanel then
-        layoutChildPanel(kb_childLeftPanel, kb_leftListBox, 0, window:titleBarHeight() + layout.headerHeight, layout.sectionWidth, layout.availableHeight)
-    end
-
-    if kb_childMiddlePanel and kb_sectionMiddleHeaderPanel then
-        layoutChildPanel(kb_childMiddlePanel, kb_middleListBox, layout.sectionWidth, window:titleBarHeight() + layout.headerHeight, layout.sectionWidth, layout.availableHeight)
-    end
-
-    if kb_childRightPanel and kb_sectionRightHeaderPanel then
-        layoutChildPanel(kb_childRightPanel, kb_rightListBox, layout.sectionWidth * 2, window:titleBarHeight() + layout.headerHeight, layout.sectionWidth, layout.availableHeight)
-    end
-end
+TaskBoard_mainWindow = nil
 
 local function drawPlusIcon(sectionLeftHeaderPanel)
     local plusPanel = ISPlusIcon:new(0, 0, sectionLeftHeaderPanel:getHeight(), sectionLeftHeaderPanel:getHeight())
@@ -126,18 +72,10 @@ local function drawSectionHeaderPanel(window, layout)
 end
 
 local function drawMainWindow()
-    local window = kb_MISCollapsableWindow:new(0, 0, getCore():getScreenWidth() * 0.5, getCore():getScreenHeight() * 0.6)
-    window:setX((getCore():getScreenWidth() * 0.5) - (window:getWidth() * 0.5))
-    window:setY((getCore():getScreenHeight() * 0.5) - (window:getHeight() * 0.5) - 25)
+    local window = kb_MISCollapsableWindow:new()
 
     window:initialise()
     window:addToUIManager()
-    window:setVisible(false)
-    window:setResizable(true)
-
-    function window:onResize()
-        updateTaskBoardLayout(self)
-    end
 
     return window
 end
@@ -194,7 +132,7 @@ local function bringResizeWidgetToFront(window)
 end
 
 local function drawAllSections(window)
-    local layout = TaskBoard_Utils.computeLayout(window)
+    local layout = TaskBoard_Utils.computeLayout(window, window.minWidth, window.minHeight)
 
     drawSectionHeaderPanel(window, layout)
     drawLeftSection(window, layout)
@@ -206,7 +144,7 @@ end
 local function drawKanbanBoard()
     TaskBoard_mainWindow = drawMainWindow()
     drawAllSections(TaskBoard_mainWindow)
-    updateTaskBoardLayout(TaskBoard_mainWindow)
+    TaskBoard_mainWindow:updateTaskBoardLayout()
 end
 
 local function main()
