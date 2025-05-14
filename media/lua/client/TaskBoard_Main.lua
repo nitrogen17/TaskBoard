@@ -181,6 +181,18 @@ local function drawRightSection(window, layout)
     return kb_childRightPanel
 end
 
+local function bringResizeWidgetToFront(window)
+    if window.resizeWidget2 then
+        window:removeChild(window.resizeWidget2)
+        window:addChild(window.resizeWidget2)
+    end
+
+    if window.resizeWidget then
+        window:removeChild(window.resizeWidget)
+        window:addChild(window.resizeWidget)
+    end
+end
+
 local function drawAllSections(window)
     local layout = TaskBoard_Utils.computeLayout(window)
 
@@ -188,6 +200,7 @@ local function drawAllSections(window)
     drawLeftSection(window, layout)
     drawMiddleSection(window, layout)
     drawRightSection(window, layout)
+    bringResizeWidgetToFront(window)
 end
 
 local function drawKanbanBoard()

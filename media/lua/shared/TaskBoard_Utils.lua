@@ -123,7 +123,7 @@ function TaskBoard_Utils.computeLayout(window)
     return {
         sectionWidth = newWidth / 3,
         headerHeight = window:titleBarHeight() * 2,
-        availableHeight = newHeight - (window:titleBarHeight() + (window:titleBarHeight() * 2) + window:resizeWidgetHeight()) - SandboxVars.TaskBoard.ResizeableWidgetPadding,
+        availableHeight = newHeight - (window:titleBarHeight() + (window:titleBarHeight() * 2) + window:resizeWidgetHeight()),
         newWidth = newWidth,
         newHeight = newHeight
     }

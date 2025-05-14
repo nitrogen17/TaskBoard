@@ -27,12 +27,3 @@ option TaskBoard.HideMigrateTaskBoardContextItem {
     page = TaskBoard,
     translation = TaskBoard_HideMigrateTaskBoardContextItem,
 }
-
-option TaskBoard.ResizeableWidgetPadding {
-    type = integer,
-    default = 20,
-    min = 0,
-    max = 100,
-    page = TaskBoard,
-    translation = TaskBoard_ResizeableWidgetPadding,
-}
