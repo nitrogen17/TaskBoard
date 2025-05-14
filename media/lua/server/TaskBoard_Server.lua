@@ -12,7 +12,17 @@ local commandHandlers = {
             y = args.y,
             z = args.z
         })
-    end
+    end,
+
+    TaskBoardTitleUpdated = function(player, args, taskBoard)
+        TaskBoard_Title.set(taskBoard, args.title)
+        sendServerCommand("TaskBoard", "TaskBoardTitleUpdated", {
+            x = args.x,
+            y = args.y,
+            z = args.z,
+            title = args.title
+        })
+    end,
 }
 
 local function onReceivePackets(module, command, player, args)

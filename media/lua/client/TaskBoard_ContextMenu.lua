@@ -8,6 +8,7 @@ local function onMakeTaskBoard(worldobjects, square, furniture)
     local modData = TaskBoard_Core.fetchModData(furniture)
     modData.isTaskBoard = true
     modData.tasks = {}
+    modData.boardTitle = TaskBoard_Utils.getFurnitureName(furniture) .. " Task Board"
     -- more data here to create.
 
     furniture:transmitModData()
