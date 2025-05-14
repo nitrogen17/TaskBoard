@@ -117,17 +117,22 @@ function TaskBoard_Core.delete(furniture, task)
 end
 
 
-function TaskBoard_Core.sendTaskCommand(command, furniture, action, task)
+function TaskBoard_Core.sendTaskCommand(command, furniture, arg1, arg2)
     local square = furniture:getSquare()
     if not square then return end
 
     local data = {
         x = square:getX(),
         y = square:getY(),
-        z = square:getZ(),
-        action = action,
-        task = task
+        z = square:getZ()
     }
+
+    if command == "TaskBoardTaskUpdated" then
+        data.action = arg1
+        data.task = arg2
+    elseif command == "TaskBoardTitleUpdated" then
+        data.title = arg1
+    end
 
     if isClient() then
         sendClientCommand("TaskBoard", command, data)

@@ -13,7 +13,14 @@ local commandHandlers = {
         if TaskBoard_mainWindowFurniture == taskBoard then
             TaskBoard_Utils.closeTaskBoardMainWindow()
         end
-    end
+    end,
+
+    TaskBoardTitleUpdated = function(args, taskBoard)
+        TaskBoard_Title.set(taskBoard, args.title)
+        if TaskBoard_mainWindowFurniture == taskBoard then
+            TaskBoard_Core.reloadAllTables(getPlayer(), taskBoard)
+        end
+    end,
 }
 
 local function onServerCommand(module, command, args)
