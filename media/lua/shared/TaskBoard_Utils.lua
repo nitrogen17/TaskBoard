@@ -85,6 +85,36 @@ function TaskBoard_Utils.getFurnitureName(furniture)
     return "Unknown Furniture"
 end
 
+function TaskBoard_Utils.getFurnitureName(furniture)
+    if not furniture then return "Unknown Furniture" end
+
+    local sprite = furniture.getSprite and furniture:getSprite()
+    if sprite then
+        local spriteName = sprite:getName()
+        local moveableItemType = "Moveables." .. spriteName
+        local item = InventoryItemFactory.CreateItem(moveableItemType)
+        if item then
+            return item:getDisplayName()
+        end
+        local props = sprite.getProperties and sprite:getProperties()
+        local translationKey = props and props:Val("CustomName")
+        if not translationKey or translationKey == "" then
+            translationKey = props and props:Val("Name")
+        end
+        if translationKey and translationKey ~= "" then
+            local translatedName = getText(translationKey)
+            if translatedName and translatedName ~= "" and translatedName ~= translationKey then
+                return translatedName
+            end
+            return translationKey
+        end
+
+        return spriteName
+    end
+
+    return "Unknown Furniture"
+end
+
 function TaskBoard_Utils.closeTaskBoardMainWindow()
     TaskBoard_mainWindow:setVisible(false)
     TaskBoard_mainWindowFurniture = nil
