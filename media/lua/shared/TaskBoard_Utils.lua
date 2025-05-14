@@ -22,11 +22,11 @@ end
 function TaskBoard_Utils.getCharacterName(player)
     local playerDescriptor = player:getDescriptor()
     local fullName = playerDescriptor:getForename() .. " " .. playerDescriptor:getSurname()
-    return fullName:match("^%s*(.-)%s*$") -- Trim leading and trailing whitespaces
+    return fullName:match("^%s*(.-)%s*$")
 end
 
 function TaskBoard_Utils.setMainWindowFurniture(furniture)
-    TaskBoard_mainWindowFurniture = furniture -- refactor?
+    TaskBoard_mainWindowFurniture = furniture
 end
 
 function TaskBoard_Utils.deepCopy(orig)
@@ -119,6 +119,23 @@ end
 
 function TaskBoard_Utils.isSinglePlayer()
     return not isClient() and not isServer()
+end
+
+function TaskBoard_Utils.computeLayout(window)
+    local newWidth = window:getWidth()
+    local newHeight = window:getHeight()
+    local titleBarHeight = window:titleBarHeight()
+    local headerHeight = titleBarHeight * 2
+    local widgetHeight = window:resizeWidgetHeight()
+    local widgetMarginConstant = 2
+
+    return {
+        sectionWidth = newWidth / 3,
+        headerHeight = headerHeight,
+        availableHeight = newHeight - titleBarHeight - headerHeight - widgetHeight - widgetMarginConstant,
+        newWidth = newWidth,
+        newHeight = newHeight
+    }
 end
 
 return TaskBoard_Utils
