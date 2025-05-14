@@ -119,11 +119,15 @@ end
 function TaskBoard_Utils.computeLayout(window)
     local newWidth = window:getWidth()
     local newHeight = window:getHeight()
+    local titleBarHeight = window:titleBarHeight()
+    local headerHeight = titleBarHeight * 2
+    local widegtHeight = window:resizeWidgetHeight()
+    local widgetMarginConstant = 2
 
     return {
         sectionWidth = newWidth / 3,
-        headerHeight = window:titleBarHeight() * 2,
-        availableHeight = newHeight - (window:titleBarHeight() + (window:titleBarHeight() * 2) + window:resizeWidgetHeight()),
+        headerHeight = headerHeight,
+        availableHeight = newHeight - titleBarHeight - headerHeight - widegtHeight - widgetMarginConstant,
         newWidth = newWidth,
         newHeight = newHeight
     }
