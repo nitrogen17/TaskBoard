@@ -22,11 +22,11 @@ end
 function TaskBoard_Utils.getCharacterName(player)
     local playerDescriptor = player:getDescriptor()
     local fullName = playerDescriptor:getForename() .. " " .. playerDescriptor:getSurname()
-    return fullName:match("^%s*(.-)%s*$") -- Trim leading and trailing whitespaces
+    return fullName:match("^%s*(.-)%s*$")
 end
 
 function TaskBoard_Utils.setMainWindowFurniture(furniture)
-    TaskBoard_mainWindowFurniture = furniture -- refactor?
+    TaskBoard_mainWindowFurniture = furniture
 end
 
 function TaskBoard_Utils.deepCopy(orig)
