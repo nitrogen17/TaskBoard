@@ -1,4 +1,5 @@
 require('TaskBoard_Utils')
+require('TaskBoard_Title')
 
 local commandHandlers = {
     TaskBoardTaskUpdated = function(player, args, taskBoard)
