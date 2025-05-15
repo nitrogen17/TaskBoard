@@ -69,17 +69,33 @@ end
 function TaskBoard_Utils.getFurnitureName(furniture)
     if not furniture then return "Unknown Furniture" end
 
-    local sprite = furniture:getSprite()
+    local modData = TaskBoard_Core.fetchModData(furniture)
+    if modData and modData.boardTitle then
+        return modData.boardTitle
+    end
+
+    local sprite = furniture.getSprite and furniture:getSprite()
     if sprite then
-        local translationKey = sprite:getProperties():Val("CustomName")
-        if translationKey then
+        local spriteName = sprite:getName()
+        local moveableItemType = "Moveables." .. spriteName
+        local item = InventoryItemFactory.CreateItem(moveableItemType)
+        if item then
+            return item:getDisplayName()
+        end
+        local props = sprite.getProperties and sprite:getProperties()
+        local translationKey = props and props:Val("CustomName")
+        if not translationKey or translationKey == "" then
+            translationKey = props and props:Val("Name")
+        end
+        if translationKey and translationKey ~= "" then
             local translatedName = getText(translationKey)
-            if translatedName and translatedName ~= "" then
+            if translatedName and translatedName ~= "" and translatedName ~= translationKey then
                 return translatedName
             end
+            return translationKey
         end
 
-        return sprite:getName()
+        return spriteName
     end
 
     return "Unknown Furniture"
