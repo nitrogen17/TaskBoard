@@ -98,7 +98,7 @@ function kb_TaskFormPanel.createForm(action, task)
         kb_TaskFormPanel.priorityLabel.selected = selectedIndex
     end
 
-    kb_TaskFormPanel.moreinfo = kb_MISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
+    kb_TaskFormPanel.moreinfo = kb_TFISCollapsableWindow:new(0, 0, kb_TaskFormPanel.formPanel:getWidth(), kb_TaskFormPanel.formPanel:getHeight());
     kb_TaskFormPanel.moreinfo:initialise();
     kb_TaskFormPanel.moreinfo:setX((getCore():getScreenWidth() * 0.5) - (kb_TaskFormPanel.moreinfo:getWidth() * 0.5))
     kb_TaskFormPanel.moreinfo:setY((getCore():getScreenHeight() * 0.5) - (kb_TaskFormPanel.moreinfo:getHeight() * 0.5))
