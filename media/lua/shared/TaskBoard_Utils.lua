@@ -78,8 +78,8 @@ function TaskBoard_Utils.getFurnitureName(furniture)
     if sprite then
         local spriteName = sprite:getName()
         local moveableItemType = "Moveables." .. spriteName
-        local item = InventoryItemFactory.CreateItem(moveableItemType)
-        if item then
+        local ok, item = pcall(InventoryItemFactory.CreateItem, InventoryItemFactory, moveableItemType)
+        if ok and item then
             return item:getDisplayName()
         end
         local props = sprite.getProperties and sprite:getProperties()
