@@ -63,14 +63,19 @@ local function onPreFillWorldObjectContextMenu(playerNum, context, worldobjects,
         if object and instanceof(object, "IsoObject") and not processedObjects[object] then
             processedObjects[object] = true
             local modData = TaskBoard_Core.fetchModData(object)
-            local currentName = TaskBoard_Utils.getFurnitureName(object)
             local square = object:getSquare()
 
             if TaskBoard_Utils.isWithinRange(player, square, 1) then
-                if TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard then
+                local currentName = "Error Fetching Name"
+                local isTaskBoardAble = TaskBoard_Utils.isFurnitureWhitelisted(object) and not modData.isTaskBoard
+                local isTaskBoard = modData.isTaskBoard
+                if isTaskBoardAble or isTaskBoard then
+                    currentName = TaskBoard_Utils.getFurnitureName(object)
+                end
+                if isTaskBoardAble then
                     context:addOption("Make Task Board (" .. currentName .. ")", worldobjects, onMakeTaskBoard, square, object)
                 end
-                if modData.isTaskBoard then
+                if isTaskBoard then
                     context:addOption("Open Task Board (" .. currentName .. ")", object, TaskBoard_Utils.openTaskBoard, object)
                     context:addOption("Remove Task Board (" .. currentName .. ")", worldobjects, onRemoveTaskBoard, square, object)
                 end
