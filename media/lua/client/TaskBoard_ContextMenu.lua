@@ -23,6 +23,7 @@ local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
     local modData = TaskBoard_Core.fetchModData(furniture)
     modData.isTaskBoard = nil
     modData.tasks = nil
+    modData.boardTitle = nil
     -- more data here to remove.
 
     furniture:transmitModData()
