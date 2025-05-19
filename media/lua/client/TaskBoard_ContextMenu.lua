@@ -14,22 +14,24 @@ local function onMakeTaskBoard(worldobjects, square, furniture)
     furniture:transmitModData()
     TaskBoard_Utils.openTaskBoard(furniture)
 
-    getPlayer():Say("I created a task board here.")
+    TaskBoard_Utils.playerSay("I created a task board here.")
 end
 
 local function onConfirmRemoveTaskBoard(worldobjects, square, furniture)
     if not furniture then return end
 
     local modData = TaskBoard_Core.fetchModData(furniture)
+    local boardName = modData.boardTitle or TaskBoard_Utils.getFurnitureName(furniture)
     modData.isTaskBoard = nil
     modData.tasks = nil
+    modData.boardTitle = nil
     -- more data here to remove.
 
     furniture:transmitModData()
     TaskBoard_Utils.closeTaskBoardMainWindow()
     TaskBoard_Core.sendTaskCommand("TaskBoardDeleted", furniture)
 
-    getPlayer():Say("I removed the task board here.")
+    TaskBoard_Utils.playerSay("I removed the " .. boardName .. ".")
 end
 
 local function onRemoveTaskBoard(worldobjects, square, furniture)
