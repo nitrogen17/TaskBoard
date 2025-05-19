@@ -5,7 +5,7 @@ require('ISUI/ISComboBox')
 require('ISUI/ISPanel')
 require('TaskBoard_Utils')
 
-TaskFormPanel = ISPanel:derive("ISPanel");
+local TaskFormPanel = ISPanel:derive("TaskFormPanel");
 
 function TaskFormPanel:prerender()
     local text = self.title
