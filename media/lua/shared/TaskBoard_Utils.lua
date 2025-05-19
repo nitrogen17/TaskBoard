@@ -149,4 +149,23 @@ function TaskBoard_Utils.computeLayout(window)
     }
 end
 
+function TaskBoard_Utils.playerSay(message)
+    local player = getPlayer()
+    player:Say(message)
+
+    local inv = player:getInventory()
+    if inv then
+        local items = inv:getItems()
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+            if item and item:isTwoWayRadio() and item:isActivated() then
+                local deviceData = item:getDeviceData()
+                if deviceData then
+                    deviceData:sendText(player, message)
+                end
+            end
+        end
+    end
+end
+
 return TaskBoard_Utils
